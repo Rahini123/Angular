@@ -1,0 +1,1166 @@
+<div class="client-table">
+    <p-table #dt [value]="slaresult" tableStyleClass="table" [loading]="isLoading"
+        [rowsPerPageOptions]="[5, 10, 25, 50, 100]" [rows]="5" [paginator]="true" responsiveLayout="scroll"
+        [(selection)]="selectedClient" [rowHover]="true" dataKey="sla_Id"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true"
+        [globalFilterFields]="['sla_Id','clientName']">
+        <ng-template pTemplate="caption">
+            <div class="card">
+                <div class="card-container purple-container overflow-hidden">
+                    <div class="flex">
+                        <div
+                            class="flex-1 flex align-items-center justify-content-start  font-bold text-white m-2 border-round">
+                            <div class="div-tab">
+                                <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+                            </div>
+                        </div>
+
+                        <div
+                            class="flex-1 flex align-items-center justify-content-end  font-bold text-white m-2  border-round">
+                            <span class="p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text"
+                                    (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                                    placeholder="Search..." (keydown.enter)="search($event.target.value)" />
+                            </span>
+                            <button pButton pRipple label="Add" icon="pi pi-plus-circle" class="p-button-success mr-2"
+                                (click)="showDialog()"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th rowspan="2">
+                    <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
+                </th>
+                <th pSortableColumn="clientName" rowspan="2" pResizableColumn>
+                    SLA ID<p-sortIcon field="clientName"></p-sortIcon>
+                </th>
+                <th pSortableColumn="clientName" rowspan="2" pResizableColumn>
+                    Client Name <p-sortIcon field="clientName"></p-sortIcon>
+                </th>
+                <th pSortableColumn="clientDescription" rowspan="2" pResizableColumn>
+                    SLA Policy Name<p-sortIcon field="clientName"></p-sortIcon>
+                </th>
+                <th>Description</th>
+                <th>Status</th>
+                <!-- <th >UrgentPriority</th>
+          <th >UrgentResponseTime</th>
+          <th >UrgentResolveTime</th>
+          <th >HighPriority</th>
+          <th >HighPriorityResponseTime</th>
+          <th >HighPriorityResolveTime</th>
+          <th >MediumPriority</th>
+          <th >MediumPriorityResponseTime</th>
+          <th >MediumPriorityResolveTime</th>
+          <th >LowPriority</th>
+          <th >LowPriorityResponseTime</th>
+          <th >LowPriorityResolveTime</th> -->
+         <th>SLA Type</th>
+         <th>Action</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-slapolicy>
+            <tr>
+                <td>
+                    <!-- <p-tableCheckbox [value]="client"></p-tableCheckbox> -->
+                </td>
+                <!-- <td>{{ client.clientId }}</td> -->
+                <td>{{ slapolicy.sla_Id }}</td>
+                <td>{{ slapolicy.clientName }}</td>
+                <td>{{ slapolicy.slaPolicyName }}</td>
+                <td>{{ slapolicy.description }}</td>
+                <td>
+                    <span *ngFor="let temp of slapolicy.slaPolicyStatus">
+                        <li style="list-style: none">
+                            {{ temp.sla_status_Name }}
+                        </li>
+                    </span>
+                </td>
+                <td>{{slapolicy.slaType}}</td>
+                <!-- <td>{{ slapolicy.slaPolicyStatus }}</td> -->
+                <!-- <td>{{ slapolicy.urgentpriority }}</td>
+          <td>{{ slapolicy.urgentresponseTime }}</td>
+          <td>{{ slapolicy.urgentresolveTime }}</td>
+          <td>{{ slapolicy.highpriority }}</td>
+          <td>{{ slapolicy.highresponseTime }}</td>
+          <td>{{ slapolicy.highresolveTime }}</td>
+          <td>{{ slapolicy.mediumpriority }}</td>
+          <td>{{ slapolicy.mediumresponseTime }}</td>
+          <td>{{ slapolicy.mediumresolveTime }}</td>
+          <td>{{ slapolicy.lowpriority }}</td>
+          <td>{{ slapolicy.lowresponseTime }}</td>
+          <td>{{ slapolicy.lowresolveTime }}</td> -->
+
+                <td style="text-align: right">
+
+
+                    <button pButton pRipple [style]="{ float: 'left' }" icon="pi pi-pencil"
+                        class="p-button-rounded p-button-success" (click)="editslapolicy(slapolicy)"></button>
+                    <button pButton pRipple [style]="{ float: 'left' }" icon="pi pi-trash"
+                        class="p-button-rounded p-button-warning" (click)="deletesla(slapolicy)"></button>
+                </td>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                In total there are {{ slaresult ? slaresult.length : 0 }} SLA Results.
+            </div>
+        </ng-template>
+    </p-table>
+    <p-dialog header="Add SLA Policy" [modal]="true" [autoZIndex]="true" [responsive]="true"
+        [(visible)]="slapolicydialog" width="300" styleClass="addslapolicy">
+        <form class="p-fluid p-grid" (ngSubmit)="saveslapolicy()" [formGroup]="slapolicy">
+            <div class="grid">
+            <div class="col-8">
+            <div class="col-12">
+                <div class="grid">
+                    <div class="col-6">
+                        <div class="p-field grid ">
+                            <div class="col-12">
+                                <label for="clientName">Client Name<span style="color: red">*</span></label>
+                                <span class="p-float-label" styleClass="md-inputfield">
+                                    <p-dropdown [options]="ClientListLov_active" optionLabel="clientName" optionValue="clientName"
+                                        [showClear]="false" [autoDisplayFirst]="true"
+                                        formControlName="clientName"></p-dropdown>
+
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-field grid ">
+                            <div class="col-12">
+                                <label for="slapolicy">Name<span style="color: red">*</span></label>
+                                <span class="p-float-label" styleClass="md-inputfield">
+                                    <input type="text" pInputText required="true" formControlName="slaPolicyName"
+                                        [(ngModel)]="this.name" />
+
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="p-field grid ">
+                            <div class="col-12">
+                                <label for="slapolicy">Description<span style="color: red">*</span></label>
+                                <span class="p-float-label" styleClass="md-inputfield">
+                                    <input type="text" pInputText required="true" formControlName="description"
+                                        [(ngModel)]="this.desc" />
+
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    SLA Targets -
+                    Set Service Level Targets for each ticket priority
+                </div>
+                <div class="d-flex p-0 mb-0">
+                    <div class="p-2 pr-4 flex-fill bg-color bg2">
+                        Priority </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        Respond within </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        Resolve within </div>
+               
+                </div>
+
+                <div class="d-flex p-0 mb-0">
+                    <div class="p-2 flex-fill bg-color bg2 margin-allign">P1-</div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                    
+                        <div class="sections">
+                            <input type="type" pInputText required="true" disabled="true"
+                                formControlName="urgentpriority" [(ngModel)]="this.urgent" class="urgent" />
+
+                        </div>
+                    </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        <div class="grid">
+                            <div class="col-8">
+                                <div class="sections">
+                                    <input type="number" pInputText required="true"
+                                        formControlName="urgentresponseTime" 
+                                        pattern="^[1-9][0-9]*$"
+                                        oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+                                        onKeyDown="
+                                      
+                                        return event.keyCode !== 69" 
+                                        pattern="^[1-9][0-9]*$"
+                                        oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+                                        (keypress)="keyPressAlphaNumericWithCharacters_contactnumber($event)"/>
+
+                                </div>
+                            </div>
+                            <div class="col-4 pt-3 ">
+                                <i class="pi pi-clock" style="margin-right: 6px;"></i>Min
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        <div class="grid">
+                            <div class="col-8">
+                                <div class="sections">
+                                    <input type="number" pInputText required="true"
+                                        formControlName="urgentresolveTime" 
+                                        pattern="^[1-9][0-9]*$"
+                                        oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+                                        onKeyDown="
+                                      
+                                        return event.keyCode !== 69" 
+                                        (keypress)="keyPressAlphaNumericWithCharacters_contactnumber($event)"/>
+                                </div>
+                            </div>
+                            <div class="col-4 pt-3 ">
+                                <i class="pi pi-clock" style="margin-right: 6px;"></i>Hrs
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="d-flex p-0 mb-0">
+                    <div class="p-2 flex-fill bg-color bg2 margin-allign">P2-</div>
+                    <div class="p-2 flex-fill bg-color bg2">
+
+                        <div class="sections">
+                            <input type="type" pInputText required="true" disabled="true" class="high"
+                                [(ngModel)]="this.high" formControlName="highpriority" />
+
+                        </div>
+                    </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        <div class="grid">
+                            <div class="col-8">
+                                <div class="sections">
+                                    <input type="number" pInputText required="true"
+                                        formControlName="highresponseTime"
+                                        pattern="^[1-9][0-9]*$"
+                                        oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+                                         onKeyDown="
+                                      
+                                        return event.keyCode !== 69" 
+                                        (keypress)="keyPressAlphaNumericWithCharacters_contactnumber($event)"/>
+
+                                </div>
+                            </div>
+                            <div class="col-4 pt-3 ">
+                                <i class="pi pi-clock" style="margin-right: 6px;"></i>Hrs
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        <div class="grid">
+                            <div class="col-8">
+                                <div class="sections">
+                                    <input type="number" 
+                                    pattern="^[1-9][0-9]*$"
+                                    oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+                                    onKeyDown="
+                                      
+                                        return event.keyCode !== 69" 
+                                        (keypress)="keyPressAlphaNumericWithCharacters_contactnumber($event)" pInputText required="true" formControlName="highresolveTime" />
+                                </div>
+                            </div>
+                            <div class="col-4 pt-3 ">
+                                <i class="pi pi-clock" style="margin-right: 6px;"></i>Hrs
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="d-flex p-0 mb-0">
+                    <div class="p-2 flex-fill bg-color bg2 margin-allign">P3-</div>
+                    <div class="p-2 flex-fill bg-color bg2">
+
+                        <div class="sections">
+                            <input type="type" pInputText required="true" disabled="true" class="medium"
+                                [(ngModel)]="this.medium" formControlName="mediumpriority" />
+
+                        </div>
+                    </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        <div class="grid">
+                            <div class="col-8">
+                                <div class="sections">
+                                    <input type="number" pInputText required="true"
+                                        formControlName="mediumresponseTime"
+                                        pattern="^[1-9][0-9]*$"
+                                        oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+                                        onKeyDown="
+                                      
+                                        return event.keyCode !== 69" 
+                                        (keypress)="keyPressAlphaNumericWithCharacters_contactnumber($event)" />
+
+                                </div>
+                            </div>
+                            <div class="col-4 pt-3 ">
+                                <i class="pi pi-clock" style="margin-right: 6px;"></i>Hrs
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        <div class="grid">
+                            <div class="col-8">
+                                <div class="sections">
+                                    <input type="number" pInputText required="true"
+                                        formControlName="mediumresolveTime"
+                                        pattern="^[1-9][0-9]*$"
+                                        oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+                                        onKeyDown="
+                                      
+                                        return event.keyCode !== 69" 
+                                        (keypress)="keyPressAlphaNumericWithCharacters_contactnumber($event)" />
+                                </div>
+                            </div>
+                            <div class="col-4 pt-3 ">
+                                <i class="pi pi-clock" style="margin-right: 6px;"></i>Hrs
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="d-flex p-0 mb-0">
+                    <div class="p-2 flex-fill bg-color bg2 margin-allign">P4-</div>
+                    <div class="p-2 flex-fill bg-color bg2">
+
+                        <div class="sections">
+                            <input type="type" pInputText required="true" disabled="true" class="low"
+                                [(ngModel)]="this.low" formControlName="lowpriority" />
+
+                        </div>
+                    </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        <div class="grid">
+                            <div class="col-8">
+                                <div class="sections">
+                                    <input type="number"
+                                    pattern="^[1-9][0-9]*$"
+                                    oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+                                    onKeyDown="
+                                      
+                                    return event.keyCode !== 69" 
+                                    (keypress)="keyPressAlphaNumericWithCharacters_contactnumber($event)" pInputText required="true" formControlName="lowresponseTime" />
+
+                                </div>
+                            </div>
+                            <div class="col-4 pt-3 ">
+                                <i class="pi pi-clock" style="margin-right: 6px;"></i>Hrs
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        <div class="grid">
+                            <div class="col-8">
+                                <div class="sections">
+                                    <input type="number" onKeyDown="
+                                      
+                                    return event.keyCode !== 69" 
+                                    pattern="^[1-9][0-9]*$"
+                                    oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+                                    (keypress)="keyPressAlphaNumericWithCharacters_contactnumber($event)"
+                                     pInputText required="true" formControlName="lowresolveTime" />
+                                </div>
+                            </div>
+                            <div class="col-4 pt-3 ">
+                                <i class="pi pi-clock" style="margin-right: 6px;"></i>Hrs
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+            <div class="col-4">
+                <div class="status">Status :</div>
+                <div *ngFor="let items of slaaddlist">
+                 <span style="float:left;margin-right: 10px;" > <input
+                      type="checkbox"
+                      (change)="onChangeadd($event.target.checked, items)"
+                      [checked]="isItemSelectedadd(items.sla_status_Name)"
+                    /></span>
+                 <span>   {{ items.sla_status_Name }}</span>
+                  </div>
+                  <!-- {{ selected.length }} items selected <br /> -->
+<!-- {{ this.slaaddservice | json }} -->
+            <!-- <p-table #myTab [value]="statussla">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th></th>
+                        <th>Status</th>
+                      
+                    </tr>
+                </ng-template>
+             
+                <ng-template pTemplate="body" let-status>
+                    <tr>
+                        <td>
+
+           <input #inputCheck type="checkbox"  
+                    
+           (click)="getStatussla($event.target.checked,status)"
+            [value]="status"/>
+                        </td>
+                        <td>
+                            {{ status.status }}
+                        </td>
+                       
+                      
+                    </tr>
+                </ng-template>
+            </p-table> -->
+            </div>
+        </div>
+        <div>
+            <div class="col-12">
+                <div class="grid">
+                    <span class="Slapolicy">What happen when due date approches / this SLA is Violated ?</span>
+                    <span class="Slapolicy">Set Esculation Rule when a ticket is not responded to on time </span>
+                </div>
+            </div>
+            <div class="col-12 p-0">  
+                <div class="grid">
+                    
+                    <div class="col-3" style="line-height: 51px;">
+                        Escalation Resolve Rule :
+                    </div>
+                    <div class="col-5">
+                        <p-dropdown #slalabel [options]="SLApolicyservice" name="All" optionLabel="label"
+                        optionValue="label" [filter]="true" [showClear]="true" filterBy="label"
+                        formControlName="escalationResolveRule"
+                        placeholder="Select Escalation Resolve Rule" (onChange)="onChangesla_resolve_rule($event,slalabel.label)"></p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 p-0">  
+                <div class="grid">
+                  
+                    <div class="col-3" style="line-height: 51px;">
+                        Escalation Respond Rule :
+                    </div>
+                    <div class="col-5">
+                        <p-dropdown #slalabelservice [options]="escalationRespondRule" name="All" optionLabel="label"
+                        optionValue="label" [filter]="true" [showClear]="true" filterBy="label"
+                        formControlName="escalationRespondRule"
+                        placeholder="Select Escalation Respond Rule" (onChange)="onChangesla_escalationRespondRule($event,slalabelservice.label)"></p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 p-0">  
+                <div class="grid">
+                  
+                    <div class="col-3" style="line-height: 51px;">
+                        Escalation Resolve Email : <span style="color: red;">*</span>
+                    </div>
+                    <div class="col-5">
+                       <input type="text" formControlName="escalationResolveEmail"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 p-0">  
+                <div class="grid">
+                  
+                    <div class="col-3" style="line-height: 51px;">
+                        Escalation Respond Email : <span style="color: red;">*</span>
+                    </div>
+                    <div class="col-5">
+                       <input type="text" formControlName="escalationRespondEmail"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="col-4">
+                <div class="p-field grid ">
+                    <div class="col-12">
+                        <button pButton label="Save" type="submit" style="float: left !important"></button>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </p-dialog>
+    <p-dialog header="Edit SLA Policy" [modal]="true" [autoZIndex]="true" [responsive]="true"
+        [(visible)]="editslapolicydialog" styleClass="addslapolicy ">
+        <!-- <form class="p-fluid p-grid" (ngSubmit)="saveslapolicy()" [formGroup]="slapolicy">
+            <div class="grid">
+                <div class="col-8">
+            <div class="col-12">
+                <div class="grid">
+
+                    <div class="col-6" style="display:none">
+                        <div class="p-field grid ">
+                            <div class="col-12">
+                                <label for="clientId">Sla Id</label>
+                                <span class="p-float-label" styleClass="md-inputfield">
+                                    <input type="number" id="sla_Id" pInputText required="true" formControlName="sla_Id"
+                                        disabled="true" />
+
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-6">
+                        <div class="p-field grid ">
+                            <div class="col-12">
+                                <label for="clientName">ClientName<span style="color: red">*</span></label>
+                                <span class="p-float-label" styleClass="md-inputfield">
+                                    <p-dropdown [options]="clients" optionLabel="clientName" optionValue="clientName"
+                                        [showClear]="false" [autoDisplayFirst]="true"
+                                        formControlName="clientName"></p-dropdown>
+
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-field grid ">
+                            <div class="col-12">
+                                <label for="slapolicy">Name<span style="color: red">*</span></label>
+                                <span class="p-float-label" styleClass="md-inputfield">
+                                    <input type="text" pInputText required="true" formControlName="slaPolicyName"
+                                        [(ngModel)]="this.name" />
+
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="p-field grid ">
+                            <div class="col-12">
+                                <label for="slapolicy">Description<span style="color: red">*</span></label>
+                                <span class="p-float-label" styleClass="md-inputfield">
+                                    <input type="text" pInputText required="true" formControlName="description"
+                                        [(ngModel)]="this.desc" />
+
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    SLA Targets -
+                    Set Service Level Targets for each ticket priority
+                </div>
+                <div class="d-flex p-0 mb-0">
+                    <div class="p-2 pr-4 flex-fill bg-color bg2">
+                        Priority </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        Respond within </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        Resolve within </div>
+
+                </div>
+
+                <div class="d-flex p-0 mb-0">
+                    <div class="p-2 flex-fill bg-color bg2">
+
+                        <div class="sections">
+                            <input type="type" pInputText required="true" disabled="true"
+                                formControlName="urgentpriority" [(ngModel)]="this.urgent" class="urgent" />
+                           
+
+                        </div>
+                    </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        <div class="grid">
+                            <div class="col-8">
+                                <div class="sections">
+                                    <input type="number" pInputText required="true"
+                                        formControlName="urgentresponseTime" />
+
+                                </div>
+                            </div>
+                            <div class="col-4 pt-3 ">
+                                <i class="pi pi-clock" style="margin-right: 6px;"></i>Min
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        <div class="grid">
+                            <div class="col-8">
+                                <div class="sections">
+                                    <input type="number" pInputText required="true"
+                                        formControlName="urgentresolveTime" />
+                                </div>
+                            </div>
+                            <div class="col-4 pt-3 ">
+                                <i class="pi pi-clock" style="margin-right: 6px;"></i>Hrs
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="d-flex p-0 mb-0">
+                    <div class="p-2 flex-fill bg-color bg2">
+
+
+                        <div class="sections">
+                            <input type="type" pInputText required="true" disabled="true" class="high"
+                                [(ngModel)]="this.high" formControlName="highpriority" />
+
+
+
+
+                        </div>
+
+                    </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        <div class="grid">
+                            <div class="col-8">
+                                <div class="sections">
+                                    <input type="number" pInputText required="true"
+                                        formControlName="highresponseTime" />
+
+                                </div>
+                            </div>
+                            <div class="col-4 pt-3 ">
+                                <i class="pi pi-clock" style="margin-right: 6px;"></i>Hrs
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        <div class="grid">
+                            <div class="col-8">
+                                <div class="sections">
+                                    <input type="number" pInputText required="true" formControlName="highresolveTime" />
+                                </div>
+                            </div>
+                            <div class="col-4 pt-3 ">
+                                <i class="pi pi-clock" style="margin-right: 6px;"></i>Hrs
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="d-flex p-0 mb-0">
+                    <div class="p-2 flex-fill bg-color bg2">
+
+                        <div class="sections">
+                            <input type="type" pInputText required="true" disabled="true" class="medium"
+                                [(ngModel)]="this.medium" formControlName="mediumpriority" />
+
+                        </div>
+                    </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        <div class="grid">
+                            <div class="col-8">
+                                <div class="sections">
+                                    <input type="number" pInputText required="true"
+                                        formControlName="mediumresponseTime" />
+
+                                </div>
+                            </div>
+                            <div class="col-4 pt-3 ">
+                                <i class="pi pi-clock" style="margin-right: 6px;"></i>Hrs
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        <div class="grid">
+                            <div class="col-8">
+                                <div class="sections">
+                                    <input type="number" pInputText required="true"
+                                        formControlName="mediumresolveTime" />
+                                </div>
+                            </div>
+                            <div class="col-4 pt-3 ">
+                                <i class="pi pi-clock" style="margin-right: 6px;"></i>Hrs
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="d-flex p-0 mb-0">
+                    <div class="p-2 flex-fill bg-color bg2">
+
+                        <div class="sections">
+                            <input type="type" pInputText required="true" disabled="true" class="low"
+                                [(ngModel)]="this.low" formControlName="lowpriority" />
+
+                        </div>
+                    </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        <div class="grid">
+                            <div class="col-8">
+                                <div class="sections">
+                                    <input type="number" pInputText required="true" formControlName="lowresponseTime" />
+
+                                </div>
+                            </div>
+                            <div class="col-4 pt-3 ">
+                                <i class="pi pi-clock" style="margin-right: 6px;"></i>Hrs
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        <div class="grid">
+                            <div class="col-8">
+                                <div class="sections">
+                                    <input type="number" pInputText required="true" formControlName="lowresolveTime" />
+                                </div>
+                            </div>
+                            <div class="col-4 pt-3 ">
+                                <i class="pi pi-clock" style="margin-right: 6px;"></i>Hrs
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            
+            <p-table #myTab [value]="statuslistarr">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th></th>
+                        <th>Status</th>
+                      
+                    </tr>
+                </ng-template>
+             
+                <ng-template pTemplate="body" let-status>
+                    <tr>
+                        <td>
+
+           <input #inputCheck type="checkbox"  
+                    
+           (click)="getStatussla($event.target.checked,status)"
+            [value]="status" />
+                        </td>
+                        <td>
+                            {{ status.sla_status_Name }}
+                        </td>
+                       
+                      
+                    </tr>
+                </ng-template>
+            </p-table>
+            </div>
+        </div>
+          
+        </form> -->
+        <form class="p-fluid p-grid" (ngSubmit)="editslapolicyincident()" [formGroup]="slapolicy">
+            <div class="grid">
+            <div class="col-8">
+            <div class="col-12">
+                <div class="grid">
+                    <div class="col-6">
+                        <div class="p-field grid ">
+                            <div class="col-12">
+                                <label for="clientName">Client Name<span style="color: red">*</span></label>
+                                <span class="p-float-label" styleClass="md-inputfield">
+                                    <p-dropdown [options]="ClientListLov_active" optionLabel="clientName" optionValue="clientName"
+                                        [showClear]="false" [autoDisplayFirst]="true"
+                                        formControlName="clientName"></p-dropdown>
+
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-field grid ">
+                            <div class="col-12">
+                                <label for="slapolicy">Name<span style="color: red">*</span></label>
+                                <span class="p-float-label" styleClass="md-inputfield">
+                                    <input type="text" pInputText required="true" formControlName="slaPolicyName"
+                                        [(ngModel)]="this.name" />
+
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="p-field grid ">
+                            <div class="col-12">
+                                <label for="slapolicy">Description<span style="color: red">*</span></label>
+                                <span class="p-float-label" styleClass="md-inputfield">
+                                    <input type="text" pInputText required="true" formControlName="description"
+                                        [(ngModel)]="this.desc" />
+
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    SLA Targets -
+                    Set Service Level Targets for each ticket priority
+                </div>
+                <div class="d-flex p-0 mb-0">
+                    <div class="p-2 pr-4 flex-fill bg-color bg2">
+                        Priority </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        Respond within </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        Resolve within </div>
+               
+                </div>
+
+                <div class="d-flex p-0 mb-0">
+                    <div class="p-2 flex-fill bg-color bg2 margin-allign">P1-</div>
+                    <div class="p-2 flex-fill bg-color bg2">
+
+                        <div class="sections">
+                           <input type="type" pInputText required="true" disabled="true"
+                                formControlName="urgentpriority" [(ngModel)]="this.urgent" class="urgent" />
+
+                        </div>
+                    </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        <div class="grid">
+                            <div class="col-8">
+                                <div class="sections">
+                                    <input type="number" pInputText required="true"
+                                        formControlName="urgentresponseTime" onKeyDown="
+                                      
+                                        return event.keyCode !== 69" 
+                                        pattern="^[1-9][0-9]*$"
+                                        oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+                                        (keypress)="keyPressAlphaNumericWithCharacters_contactnumber($event)" />
+
+                                </div>
+                            </div>
+                            <div class="col-4 pt-3 ">
+                                <i class="pi pi-clock" style="margin-right: 6px;"></i>Min
+                            </div>
+                        </div>
+
+                    </div>
+                   
+                    <div class="p-2 flex-fill bg-color bg2">
+                        <div class="grid">
+                            <div class="col-8">
+                                <div class="sections">
+                                    <input type="number" pInputText required="true"
+                                        formControlName="urgentresolveTime"  onKeyDown="
+                                      
+                                        return event.keyCode !== 69" 
+                                        pattern="^[1-9][0-9]*$"
+                                        oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+                                        (keypress)="keyPressAlphaNumericWithCharacters_contactnumber($event)"/>
+                                </div>
+                            </div>
+                            <div class="col-4 pt-3 ">
+                                <i class="pi pi-clock" style="margin-right: 6px;"></i>Hrs
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+      
+                <div class="d-flex p-0 mb-0">
+                    <div class="p-2 flex-fill bg-color bg2 margin-allign">P2-</div>
+                    <div class="p-2 flex-fill bg-color bg2">
+
+                        <div class="sections">
+                            <input type="type" pInputText required="true" disabled="true" class="high"
+                                [(ngModel)]="this.high" formControlName="highpriority" />
+
+                        </div>
+                    </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        <div class="grid">
+                            <div class="col-8">
+                                <div class="sections">
+                                    <input type="number" pInputText required="true"
+                                        formControlName="highresponseTime" onKeyDown="
+                                      
+                                        return event.keyCode !== 69" 
+                                        pattern="^[1-9][0-9]*$"
+                                        oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+                                        (keypress)="keyPressAlphaNumericWithCharacters_contactnumber($event)"/>
+
+                                </div>
+                            </div>
+                            <div class="col-4 pt-3 ">
+                                <i class="pi pi-clock" style="margin-right: 6px;"></i>Hrs
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        <div class="grid">
+                            <div class="col-8">
+                                <div class="sections">
+                                    <input type="number" pInputText required="true" 
+                                    formControlName="highresolveTime" 
+                                    onKeyDown="
+                                      
+                                        return event.keyCode !== 69" 
+                                        pattern="^[1-9][0-9]*$"
+                                        oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+                                        (keypress)="keyPressAlphaNumericWithCharacters_contactnumber($event)"/>
+                                </div>
+                            </div>
+                            <div class="col-4 pt-3 ">
+                                <i class="pi pi-clock" style="margin-right: 6px;"></i>Hrs
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+               
+                <div class="d-flex p-0 mb-0">
+                    <div class="p-2 flex-fill bg-color bg2 margin-allign">P3-</div>
+                    <div class="p-2 flex-fill bg-color bg2">
+
+                        <div class="sections">
+                            <input type="type" pInputText required="true" disabled="true" class="medium"
+                                [(ngModel)]="this.medium" formControlName="mediumpriority" />
+
+                        </div>
+                    </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        <div class="grid">
+                            <div class="col-8">
+                                <div class="sections">
+                                    <input type="number" pInputText required="true"
+                                        formControlName="mediumresponseTime" onKeyDown="
+                                      
+                                        
+                                        return event.keyCode !== 69" 
+                                        pattern="^[1-9][0-9]*$"
+                                        oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+                                        (keypress)="keyPressAlphaNumericWithCharacters_contactnumber($event)"/>
+
+                                </div>
+                            </div>
+                            <div class="col-4 pt-3 ">
+                                <i class="pi pi-clock" style="margin-right: 6px;"></i>Hrs
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        <div class="grid">
+                            <div class="col-8">
+                                <div class="sections">
+                                    <input type="number" pInputText required="true"
+                                        formControlName="mediumresolveTime"  onKeyDown="
+                                      
+                                        return event.keyCode !== 69" 
+                                        pattern="^[1-9][0-9]*$"
+                                        oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+                                        (keypress)="keyPressAlphaNumericWithCharacters_contactnumber($event)"/>
+                                </div>
+                            </div>
+                            <div class="col-4 pt-3 ">
+                                <i class="pi pi-clock" style="margin-right: 6px;"></i>Hrs
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            
+                <div class="d-flex p-0 mb-0">
+                    <div class="p-2 flex-fill bg-color bg2 margin-allign">P4-</div>
+                    <div class="p-2 flex-fill bg-color bg2">
+
+                        <div class="sections">
+                            <input type="type" pInputText required="true" disabled="true" class="low"
+                                [(ngModel)]="this.low" formControlName="lowpriority" />
+
+                        </div>
+                    </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        <div class="grid">
+                            <div class="col-8">
+                                <div class="sections">
+                                    <input type="number" pInputText required="true" formControlName="lowresponseTime" 
+                                    onKeyDown="
+                                      
+                                        return event.keyCode !== 69" 
+                                        pattern="^[1-9][0-9]*$"
+                                        oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+                                        (keypress)="keyPressAlphaNumericWithCharacters_contactnumber($event)" />
+
+                                </div>
+                            </div>
+                            <div class="col-4 pt-3 ">
+                                <i class="pi pi-clock" style="margin-right: 6px;"></i>Hrs
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="p-2 flex-fill bg-color bg2">
+                        <div class="grid">
+                            <div class="col-8">
+                                <div class="sections">
+                                    <input type="number" pInputText required="true" formControlName="lowresolveTime" 
+                                    onKeyDown="
+                                      
+                                        return event.keyCode !== 69" 
+                                        pattern="^[1-9][0-9]*$"
+                                        oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+                                        (keypress)="keyPressAlphaNumericWithCharacters_contactnumber($event)"/>
+                                </div>
+                            </div>
+                            <div class="col-4 pt-3 ">
+                                <i class="pi pi-clock" style="margin-right: 6px;"></i>Hrs
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div>
+                <div class="col-12">
+                    <div class="grid">
+                        <span class="Slapolicy">What happen when due date approches / this SLA is Violated ?</span>
+                        <span class="Slapolicy">Set Esculation Rule when a ticket is not responded to on time </span>
+                    </div>
+                </div>
+                <div class="col-12 p-0">  
+                    <div class="grid">
+                       
+                        <div class="col-4" style="line-height: 51px;">
+                            Escalation Resolve Rule :
+                        </div>
+                        <div class="col-8">
+                            <p-dropdown #slalabel [options]="SLApolicyservice" name="All" optionLabel="label"
+                            optionValue="label" [filter]="true" [showClear]="true" filterBy="label"
+                            formControlName="escalationResolveRule" 
+                            [placeholder]=" this.esculationresolverule" (onChange)="onChangesla_resolve_rule($event,slalabel.label)"></p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 p-0">  
+                    <div class="grid">
+                      
+                        <div class="col-4" style="line-height: 51px;">
+                            Escalation Respond Rule :
+                        </div>
+                        <div class="col-8">
+                            <p-dropdown #slalabelservice [options]="escalationRespondRule" name="All" optionLabel="label"
+                            optionValue="label" [filter]="true" [showClear]="true" filterBy="label"
+                            formControlName="escalationRespondRule"
+                            [placeholder]="this.esculationresponsrule" (onChange)="onChangesla_escalationRespondRule($event,slalabelservice.label)"></p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 p-0">  
+                    <div class="grid">
+                      
+                        <div class="col-4" style="line-height: 51px;">
+                            Escalation Resolve Email : <span style="color: red;">*</span>
+                        </div>
+                        <div class="col-8">
+                           <input type="text" formControlName="escalationResolveEmail"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 p-0">  
+                    <div class="grid">
+                      
+                        <div class="col-4" style="line-height: 51px;">
+                            Escalation Respond Email : <span style="color: red;">*</span>
+                        </div>
+                        <div class="col-8">
+                           <input type="text" formControlName="escalationRespondEmail"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <div class="col-4">
+                <div class="status">Status :</div>
+                <!-- <h3>items</h3>
+            -->
+                <div *ngFor="let items of slapolicyservices">
+                 <span style="float:left;margin-right: 10px;" > <input
+                      type="checkbox"
+                      (change)="onChange($event.target.checked, items)"
+                      [checked]="isItemSelected(items.sla_status_Name)"
+                    /></span>
+                 <span>   {{ items.sla_status_Name }}</span>
+                  </div>
+                  <!-- {{ selected.length }} items selected <br /> -->
+                  <!-- {{ this.slaservicestatusarray | json }}  -->
+<!-- 
+<h3>Selected</h3>
+-->
+            <!-- <p-table #myTab [value]="statussla">
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th></th>
+                        <th>Status</th>
+                      
+                    </tr>
+                </ng-template>
+             
+                <ng-template pTemplate="body" let-status>
+                    <tr>
+                        <td>
+
+           <input #inputCheck type="checkbox"  
+                    
+           (click)="getStatussla($event.target.checked,status)"
+            [value]="status"/>
+                        </td>
+                        <td>
+                            {{ status.status }}
+                        </td>
+                       
+                      
+                    </tr>
+                </ng-template>
+            </p-table> -->
+            </div>
+            
+        </div>
+       
+            <div class="col-4">
+                <div class="p-field grid ">
+                    <div class="col-12">
+                        <button pButton label="Save" type="submit" style="float: left !important"></button>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+     </p-dialog>
+     <p-toast></p-toast>
+
+</div>
+<p-confirmDialog [style]="{width: '40vw'}"></p-confirmDialog>
+    
+<div id="overlay" *ngIf="progressbar">
+    <span class="abs"> <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i></span>
+   
+    <!-- <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8"  animationDuration=".5s"></p-progressSpinner> -->
+     
+  </div>  

@@ -1,0 +1,24 @@
+<div *ngIf="showdivgeneral" class="div-tab">
+  <p-breadcrumb
+    [model]="breadcrumb"
+    [home]="breadcrumb"
+    class="pr-3"
+  ></p-breadcrumb>
+</div>
+
+<div *ngIf="showdivuser">
+  <p-breadcrumb
+    [model]="breadcrumb"
+    [home]="breadcrumb"
+    class="pr-3"
+  ></p-breadcrumb>
+</div>
+
+<p-tabView class="dark-panel" (onChange)="handleChange($event)">
+  <p-tabPanel header="Error Code" leftIcon="pi pi-fw pi-user">
+    <app-errorcode></app-errorcode>
+  </p-tabPanel>
+  <p-tabPanel header="New Error Code" leftIcon="pi pi-fw pi-user">
+    <app-newerror></app-newerror>
+  </p-tabPanel>
+</p-tabView>

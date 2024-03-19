@@ -1,0 +1,269 @@
+<form>
+  <p-table
+    #dt
+    [value]="errors"
+    [rows]="5"
+    [loading]="isLoading"
+    [rowsPerPageOptions]="[5, 10, 25, 50, 100]"
+    [paginator]="true"
+    responsiveLayout="scroll"
+    [(selection)]="selectedError"
+    [rowHover]="true"
+    dataKey="error_id"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [showCurrentPageReport]="true"
+    [globalFilterFields]="['error_code', 'error_name', 'error_description']"
+  >
+    <ng-template pTemplate="caption">
+      <div class="card">
+        <div class="card-container purple-container overflow-hidden">
+          <div class="flex">
+            <div
+              class="flex-1 flex align-items-center justify-content-start font-bold text-white m-2 border-round"
+            >
+              <div class="div-tab">
+                <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+              </div>
+            </div>
+
+            <div
+              class="flex-1 flex align-items-center justify-content-end font-bold text-white m-2 border-round"
+            >
+              <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    dt.filterGlobal($any($event.target).value, 'contains')
+                  "
+                  placeholder="Search..."
+                  (keydown.enter)="search($event.target.value)"
+                />
+              </span>
+              <!-- <button
+                pButton
+                pRipple
+                label="Add"
+                icon="pi pi-plus-circle"
+                class="p-button-success mr-2"
+                (click)="showDialog()"
+               
+              ></button> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 5%" rowspan="2">
+          <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
+        </th>
+        <!-- <th pSortableColumn="error_id" rowspan="2">
+          Error Id <p-sortIcon field="error_id"></p-sortIcon>
+        </th> -->
+        <th
+          style="width: 10%"
+          pSortableColumn="error_code"
+          rowspan="2"
+          pResizableColumn
+        >
+          Error Code <p-sortIcon field="error_code"></p-sortIcon>
+        </th>
+        <th
+          style="width: 35%"
+          pSortableColumn="error_name"
+          rowspan="2"
+          pResizableColumn
+        >
+          Problem Summary <p-sortIcon field="error_name"></p-sortIcon>
+        </th>
+        <th
+          style="width: 40%"
+          pSortableColumn="error_description"
+          rowspan="2"
+          pResizableColumn
+        >
+          Problem Description<p-sortIcon field="error_description"></p-sortIcon>
+        </th>
+        <th style="width: 10%">Action</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-error>
+      <tr>
+        <td>
+          <!-- <p-tableCheckbox [value]="error"></p-tableCheckbox> -->
+        </td>
+        <!-- <td>{{ error.error_id }}</td> -->
+        <td>{{ error.error_code }}</td>
+        <td>{{ error.error_name }}</td>
+        <td>{{ error.error_description }}</td>
+        <!-- <td *ngFor="let temp of group.agents">
+          <li style="list-style: none;">{{temp.firstName + '' + temp.lastName}}</li>
+        </td>
+        <td *ngFor="let temp of group.agents">
+          <li style="list-style: none;">{{ temp.email}}</li>
+        </td> -->
+        <!-- <td>{{ agent.title }}</td> -->
+
+        <td>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-history"
+            class="p-button-rounded p-button-basic"
+            (click)="editTickets(error)"
+          ></button>
+          <!-- <button
+            pButton
+            pRipple
+            icon="pi pi-pencil"
+            class="p-button-rounded p-button-success"
+            (click)="editError(error)"
+          ></button>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-trash"
+            class="p-button-rounded p-button-warning"
+            (click)="deleteErrorById(error)"
+          ></button> -->
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        In total there are {{ errors ? errors.length : 0 }} Errors.
+      </div>
+    </ng-template>
+  </p-table>
+</form>
+
+<div>
+  <p-dialog
+    #pdFront
+    [(visible)]="errorDialog"
+    [responsive]="true"
+    header="Edit ErrorCode"
+    [modal]="true"
+    styleClass="p-fluid close"
+    [autoZIndex]="true"
+    (click)="pdFront.moveOnTop()"
+  >
+    <form
+      class="p-fluid p-grid"
+      (ngSubmit)="updateError()"
+      [formGroup]="groupForm"
+    >
+      <div class="grid">
+        <div class="col-6" style="display: none">
+          <div class="p-field grid">
+            <div class="col-12">
+              <label for="error_id"
+                >Error Id<span style="color: red">*</span></label
+              >
+              <span class="p-float-label" styleClass="md-inputfield">
+                <input
+                  type="text"
+                  id="error_id"
+                  pInputText
+                  required="true"
+                  formControlName="error_id"
+                  disabled
+                />
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="p-field grid">
+            <div class="col-12"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="col-6">
+          <div class="p-field grid">
+            <div class="col-12">
+              <label for="error_code"
+                >Error Code<span style="color: red">*</span></label
+              >
+              <span class="p-float-label" styleClass="md-inputfield">
+                <input
+                  type="text"
+                  id="error_code"
+                  pInputText
+                  required="true"
+                  formControlName="error_code"
+                />
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="p-field grid">
+            <div class="col-12">
+              <label for="error_name">
+                Problem Summary <span style="color: red">*</span></label
+              >
+              <span class="p-float-label" styleClass="md-inputfield">
+                <input
+                  type="text"
+                  id="error_name"
+                  pInputText
+                  required="true"
+                  formControlName="error_name"
+                />
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="p-field grid">
+            <div class="col-12">
+              <label for="error_description"> Problem Description</label>
+              <span class="p-float-label" styleClass="md-inputfield">
+                <textarea
+                  inputId="textarea"
+                  rows="3"
+                  style="resize: none"
+                  cols="30"
+                  pInputTextarea
+                  id="error_description"
+                  formControlName="error_description"
+                  ngModel
+                ></textarea>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-field">
+        <div class="p-field grid">
+          <div class="col-12">
+            <button
+              pButton
+              label="Update"
+              type="submit"
+              style="float: right !important"
+            ></button>
+          </div>
+        </div>
+        <p-toast></p-toast>
+      </div></form
+  ></p-dialog>
+  <p-dialog
+    header="Title"
+    [(visible)]="display"
+    [responsive]="true"
+    header="Add Error Code"
+    [modal]="true"
+    styleClass="p-fluid close"
+    [autoZIndex]="true"
+  >
+    <app-newerror></app-newerror>
+  </p-dialog>
+</div>

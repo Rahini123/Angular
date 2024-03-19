@@ -1,0 +1,422 @@
+<div class="p-datatable-header">
+  <div class="card ">
+    <div class="card-container purple-container overflow-hidden">
+      <div class="flex">
+        <div class="flex-1 flex align-items-center justify-content-start  font-bold text-white m-2 border-round">
+          <div class="div-tab">
+            <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-tabView class="viewpanel">
+  <p-tabPanel header="IMAP HOST">
+    <p-table #dt [value]="IMAP_List" tableStyleClass="table" [loading]="isLoading"
+      [rowsPerPageOptions]="[5, 10, 25, 50, 100]" [rows]="5" [paginator]="true" responsiveLayout="scroll"
+      [(selection)]="selectedClient" [rowHover]="true" dataKey="sla_Id"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true"
+      [globalFilterFields]="['sla_Id']">
+      <ng-template pTemplate="caption">
+        <div class="card">
+          <div class="card-container purple-container overflow-hidden">
+            <div class="flex">
+
+
+              <div class="flex-1 flex align-items-center justify-content-end font-bold text-white m-2 border-round">
+
+                <button pButton pRipple label="Add" icon="pi pi-plus-circle" class="p-button-success mr-2"
+                  (click)="clickimaphost()"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th rowspan="2">
+            <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
+          </th>
+          <!-- <th pSortableColumn="clientName" rowspan="2" pResizableColumn>
+            IMAP ID<p-sortIcon field="clientName"></p-sortIcon>
+          </th> -->
+          <th pSortableColumn="clientName" rowspan="2" pResizableColumn>
+            IMAP HOST <p-sortIcon field="clientName"></p-sortIcon>
+          </th>
+          <th pSortableColumn="clientDescription" rowspan="2" pResizableColumn>
+            IMAP Port <p-sortIcon field="clientName"></p-sortIcon>
+          </th>
+          <th>IMAP EmailId</th>
+          <th>IMAP Project Name</th>
+<!-- 
+          <th>IMAP ProjectId</th> -->
+          <th>Action</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-imap>
+        <tr>
+          <td>
+            <!-- <p-tableCheckbox [value]="client"></p-tableCheckbox> -->
+          </td>
+
+          <!-- <td>{{ imap.id }}</td> -->
+          <td>{{ imap.imap_host }}</td>
+          <td>{{ imap.port }}</td>
+          <td>{{ imap.username }}</td>
+          <td>{{ imap.projectName }}</td>
+
+          <!-- <td>{{ imap.projectId }}</td> -->
+
+
+
+          <td style="text-align: right">
+            <button pButton pRipple [style]="{ float: 'left' }" icon="pi pi-pencil"
+              class="p-button-rounded p-button-success" (click)="editImtp(imap)"></button>
+            <button pButton pRipple [style]="{ float: 'left' }" icon="pi pi-trash"
+              class="p-button-rounded p-button-warning" (click)="deleteImtp(imap.id)"></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          In total there are {{ IMAP_List ? IMAP_List.length : 0 }} IMAP Results.
+        </div>
+      </ng-template>
+    </p-table>
+  </p-tabPanel>
+  <p-tabPanel header="SMTP HOST">
+    <p-table #dt [value]="SMTP_List" tableStyleClass="table" [loading]="isLoading"
+      [rowsPerPageOptions]="[5, 10, 25, 50, 100]" [rows]="5" [paginator]="true" responsiveLayout="scroll"
+      [(selection)]="selectedClient" [rowHover]="true" dataKey="sla_Id"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true"
+      [globalFilterFields]="['sla_Id']">
+      <ng-template pTemplate="caption">
+        <div class="card">
+          <div class="card-container purple-container overflow-hidden">
+            <div class="flex">
+
+
+              <div class="flex-1 flex align-items-center justify-content-end font-bold text-white m-2 border-round">
+
+                <button pButton pRipple label="Add" icon="pi pi-plus-circle" class="p-button-success mr-2"
+                  (click)="clicksmtphost()"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th rowspan="2">
+            <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
+          </th>
+          <!-- <th pSortableColumn="clientName" rowspan="2" pResizableColumn>
+            SMTP ID<p-sortIcon field="clientName"></p-sortIcon>
+          </th> -->
+          <th pSortableColumn="clientName" rowspan="2" pResizableColumn>
+            SMTP HOST <p-sortIcon field="clientName"></p-sortIcon>
+          </th>
+          <th pSortableColumn="clientDescription" rowspan="2" pResizableColumn>
+            SMTP Port <p-sortIcon field="clientName"></p-sortIcon>
+          </th>
+          <th>SMTP EmailId</th>
+          <th>SMTP Project Name</th>
+
+          <!-- <th>SMTP ProjectId</th> -->
+          <th>Action</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-smtp>
+        <tr>
+          <td>
+            <!-- <p-tableCheckbox [value]="client"></p-tableCheckbox> -->
+          </td>
+
+          <!-- <td>{{ smtp.id }}</td> -->
+          <td>{{ smtp.smtp_host }}</td>
+          <td>{{ smtp.port }}</td>
+          <td>{{ smtp.username }}</td>
+          <td>{{ smtp.projectName }}</td>
+
+          <!-- <td>{{ smtp.projectId }}</td> -->
+
+
+
+          <td style="text-align: right">
+            <button pButton pRipple [style]="{ float: 'left' }" icon="pi pi-pencil"
+              class="p-button-rounded p-button-success" (click)="editsmtp(smtp)"></button>
+            <button pButton pRipple [style]="{ float: 'left' }" icon="pi pi-trash"
+              class="p-button-rounded p-button-warning" (click)="deleteSmtp(smtp.id)"></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          In total there are {{ SMTP_List ? SMTP_List.length : 0 }} SMTP Results.
+        </div>
+      </ng-template>
+    </p-table>
+  </p-tabPanel>
+
+</p-tabView>
+
+<!-- <div class="flex ">
+
+  <div class="bg-width grid p-4">
+
+
+    <div
+      class="grid flex-1 flex align-items-center justify-content-center font-bold m-2 px-5 py-3 border-round  bg-shadow "
+      pRipple (click)="clickimaphost()">
+      <div class="col-12 text-align"> <i class="pi pi-envelope" style="margin-right: 2px;"></i>
+        <i class="pi pi-cog"></i>
+      </div>
+      <div class="col-12 text-align">IMAP HOST</div>
+   
+    </div>
+
+    <div class="grid flex-1 flex align-items-center justify-content-center font-bold m-2 px-5 
+py-3 border-round  bg-shadow " pRipple (click)="clicksmtphost()">
+      <div class="col-12 text-align">
+        <i class="pi pi-envelope" style="margin-right: 2px;"></i>
+        <i class="pi pi-cog"></i>
+      </div>
+      <div class="col-12 text-align">SMTP HOST</div>
+
+    </div>
+
+
+  </div>
+</div> -->
+<div>
+
+</div>
+<p-dialog #pdFront [(visible)]="imaphost" [responsive]="true" header="{{this.header}}" [modal]="true" styleClass=""
+  [autoZIndex]="true" (click)="pdFront.moveOnTop()">
+
+  <form class="p-fluid p-grid" (ngSubmit)="saveImap()" [formGroup]="imap_host_form">
+
+    <div class="grid">
+      <input type="text"  pInputText required="true"
+      formControlName="id" style="display: none;" />
+      <div class="col-6">
+        <div class="p-field grid ">
+          <div class="col-12">
+            <label for="imap_host"> IMAP-HOST </label>
+            <input type="text" value="imap.secureserver.net" id="imap_host" pInputText required="true"
+              formControlName="imap_host" />
+
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="p-field grid ">
+          <div class="col-12">
+            <label for="port"> Port </label>
+            <input type="number" id="imap_host" pInputText required="true" formControlName="port" />
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+
+      <div class="col-12">
+        <div class="p-field grid ">
+          <div class="col-12">
+
+            <label for="projectName"> Project Name </label>
+            <p-dropdown #projectvalue [options]="projectactive" name="All" formControlName="projectName"
+              optionLabel="projectName" optionValue="projectId" [filter]="true" [showClear]="true"
+              dropdownIcon="pi pi-caret-down" filterBy="projectName" [placeholder]="this.labelproject"
+              appendTo="body" (onChange)="onChangeproject($event,projectvalue.label)"></p-dropdown>
+          
+          </div>
+        </div>
+      </div>
+      <div class="col-6" style="display: none;">
+        <div class="p-field grid ">
+          <div class="col-12">
+
+            <label for="username"> Email ID </label>
+
+            <input type="text" id="username" pInputText required="true" formControlName="username" disabled="true" />
+          </div>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="grid">
+
+      <div class="col-6">
+        <div class="p-field grid ">
+          <div class="col-12">
+
+            <label for="username"> Email</label>
+            <input type="username" id="username" pInputText required="true" formControlName="username" disabled="true"/>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="p-field grid ">
+          <div class="col-12">
+            <label for="Password"> Password </label>
+
+            <p-password inputId="password" [feedback]="false" formControlName="password"
+              [toggleMask]="true"></p-password>
+            <!-- <input
+                                type="password"
+                                id="password"
+                                pInputText
+                                required="true"
+                                formControlName="password"
+                              /> -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="p-field grid">
+      <div class=" col-12">
+        <button pButton label="Save" type="submit" style="float: right !important"></button>
+      </div>
+    </div>
+ 
+
+  </form>
+
+
+</p-dialog>
+
+<p-dialog #pdFront2 [(visible)]="smtphost" [responsive]="true" header="{{this.header}}" [modal]="true" styleClass=""
+  [autoZIndex]="true" (click)="pdFront2.moveOnTop()">
+  <form class="p-fluid p-grid" (ngSubmit)="saveSmtp()" [formGroup]="smtp_host_form">
+
+    <div class="grid">
+      <input type="text"  pInputText required="true"
+      formControlName="id" style="display: none;" />
+      <div class="col-6">
+        <div class="p-field grid ">
+          <div class="col-12">
+            <label for="smtp_host"> SMTP-HOST </label>
+            <input type="text" value="imap.secureserver.net" id="smtp_host" pInputText required="true"
+              formControlName="smtp_host" />
+
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="p-field grid ">
+          <div class="col-12">
+            <label for="port"> Port </label>
+            <input type="number" id="imap_host" pInputText required="true" formControlName="port" />
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+
+      <div class="col-12">
+        <div class="p-field grid ">
+          <div class="col-12">
+
+            <label for="projectName"> Project Name </label>
+            <p-dropdown #projectvaluesmtp [options]="projectactive" name="All" formControlName="projectName"
+              optionLabel="projectName" optionValue="projectId" [filter]="true" [showClear]="true"
+              dropdownIcon="pi pi-caret-down" filterBy="projectName" [placeholder]="this.labelproject"
+              appendTo="body" (onChange)="onChangeproject_smtp($event,projectvaluesmtp.label)"></p-dropdown>
+            <!-- <input
+                    type="projectName"
+                    id="projectName"
+                    pInputText
+                    required="true"
+                    formControlName="projectName"
+                  /> -->
+          </div>
+        </div>
+      </div>
+      <!-- <div class="col-6">
+                    <div class="p-field grid ">
+                        <div class="col-12">
+
+                            <label for="username"> Email ID </label>
+                    
+                            <input
+                            type="text"
+                            id="username"
+                            pInputText
+                            required="true"
+                            formControlName="username"
+                          />
+                        </div>
+                      
+                   
+                       
+                        </div>
+                        </div> -->
+    </div>
+
+
+    <div class="grid">
+
+      <div class="col-6">
+        <div class="p-field grid ">
+          <div class="col-12">
+
+            <label for="username"> Email</label>
+            <input type="username" id="username" pInputText required="true" formControlName="username" disabled="true"/>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="p-field grid ">
+          <div class="col-12">
+            <label for="Password"> Password </label>
+            <!-- <input
+                                type="password"
+                                id="password"
+                                pInputText
+                                required="true"
+                                formControlName="password"
+                              /> -->
+            <p-password inputId="password" [feedback]="false" formControlName="password"
+              [toggleMask]="true"></p-password>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="p-field grid">
+      <div class=" col-12">
+        <button pButton label="Save" type="submit" style="float: right !important"></button>
+      </div>
+    </div>
+ 
+
+
+  </form>
+</p-dialog>
+<p-confirmDialog [style]="{width: '40vw'}"></p-confirmDialog>
+<p-toast></p-toast>
+<div id="overlay" *ngIf="progressbar">
+  <span class="abs"> <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i></span>
+ 
+  <!-- <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8"  animationDuration=".5s"></p-progressSpinner> -->
+   
+</div> 

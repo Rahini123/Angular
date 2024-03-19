@@ -1,0 +1,25 @@
+<div *ngIf="showdivgeneral" class="div-tab">
+  <p-breadcrumb
+    [model]="breadcrumb"
+    [home]="breadcrumb"
+    class="pr-3"
+  ></p-breadcrumb>
+</div>
+
+<div *ngIf="showdivuser">
+  <p-breadcrumb
+    [model]="breadcrumb"
+    [home]="breadcrumb"
+    class="pr-3"
+  ></p-breadcrumb>
+</div>
+
+<p-tabView class="dark-panel" (onChange)="handleChange($event)">
+  <p-tabPanel header="Groups" leftIcon="pi pi-fw pi-users">
+    <app-groups></app-groups>
+  </p-tabPanel>
+  <p-tabPanel header="New Groups" leftIcon="pi pi-fw pi-users">
+    <app-new-groups></app-new-groups>
+  </p-tabPanel>
+
+</p-tabView>

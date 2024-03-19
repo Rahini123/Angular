@@ -1,0 +1,416 @@
+<form>
+  <p-table
+    #dt
+    [value]="requesters"
+    [loading]="isLoading"
+    [rows]="10"
+    [paginator]="true"
+    responsiveLayout="scroll"
+    [(selection)]="selectedRequesters"
+    [rowHover]="true"
+    dataKey="requesterId"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [showCurrentPageReport]="true"
+    [globalFilterFields]="['name', 'email', 'last_active']"
+  >
+  <ng-template pTemplate="caption">
+    <div class="card">
+      <div class="card-container purple-container overflow-hidden">
+          <div class="flex">
+              <div class="flex-1 flex align-items-center justify-content-start  font-bold text-white m-2 border-round">
+                <div  class="div-tab">
+                  <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+                </div>
+              </div>
+          
+              <div class="flex-1 flex align-items-center justify-content-end  font-bold text-white m-2  border-round">
+                <span class="p-input-icon-left">
+                  <i class="pi pi-search"></i>
+                  <input
+                    pInputText
+                    type="text"
+                    (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                    placeholder="Search..."
+                  />
+                </span>
+                <button
+                pButton
+                pRipple
+                label="Add"
+                icon="pi pi-plus-circle"
+                class="p-button-success mr-2"
+                (click)="showDialog()"
+               
+              ></button>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th pSortableColumn="firstName">
+          First Name <p-sortIcon field="firstName"></p-sortIcon>
+        </th>
+        <!-- <th pSortableColumn="lastName">
+          Last Name <p-sortIcon field="lastName"></p-sortIcon>
+        </th> -->
+        <th pSortableColumn="email">
+          Email <p-sortIcon field="email"></p-sortIcon>
+        </th>
+        <!-- <th pSortableColumn="title">
+          Title <p-sortIcon field="title"></p-sortIcon>
+        </th> -->
+        <!-- <th pSortableColumn="workPhoneNumber">
+          Phone Number <p-sortIcon field="workPhoneNumber"></p-sortIcon>
+        </th> -->
+        <th pSortableColumn="department">
+          Department <p-sortIcon field="department"></p-sortIcon>
+        </th>
+        <th pSortableColumn="manager">
+          Manager <p-sortIcon field="manager"></p-sortIcon>
+        </th>
+        <!-- <th pSortableColumn="location">
+          Location <p-sortIcon field="location"></p-sortIcon>
+        </th> -->
+        <!-- <th pSortableColumn="address">
+          Address<p-sortIcon field="address"></p-sortIcon>
+        </th> -->
+        <th pSortableColumn="language">
+          Language <p-sortIcon field="language"></p-sortIcon>
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-requester>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="requester"></p-tableCheckbox>
+        </td>
+        <td (click)="editRequesterDetail(requester)" style="cursor: pointer">
+          {{ requester.firstName }}
+        </td>
+        <!-- <td>{{ requester.lastName }}</td> -->
+        <td>{{ requester.email }}</td>
+        <!-- <td>{{ requester.title }}</td> -->
+        <!-- <td>{{ requester.workPhoneNumber }}</td> -->
+        <td>{{ requester.department }}</td>
+        <td>{{ requester.manager }}</td>
+        <!-- <td>{{ requester.location }}</td> -->
+        <td>{{ requester.language }}</td>
+        <!-- <td>{{ requester.address }}</td> -->
+        <td>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-pencil"
+            class="p-button-rounded p-button-success"
+            (click)="editRequestor(requester)"
+          ></button>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-trash"
+            class="p-button-rounded p-button-warning"
+            (click)="deleteRequester(requester)"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        In total there are {{ requesters ? requesters.length : 0 }} requesters.
+      </div>
+    </ng-template>
+  </p-table>
+</form>
+
+<p-dialog
+  #pdFront
+  [(visible)]="requestorDialog"
+  [responsive]="true"
+  header="Edit Requesters"
+  [modal]="true"
+  styleClass="p-fluid "
+  [autoZIndex]="true"
+  (click)="pdFront.moveOnTop()"
+>
+  <!-- <app-newrequester></app-newrequester> -->
+
+  <form
+    class="p-fluid p-grid"
+    (ngSubmit)="updateRequestor()"
+    [formGroup]="RequestersForm"
+  >
+<div class="grid">
+  <div class="col-6">
+    <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+      <label for="firstName">First Name</label>
+      <span class="p-float-label" styleClass="md-inputfield">
+        <input
+          type="text"
+          id="firstName"
+          pInputText
+          required="true"
+          formControlName="firstName"
+        />
+    
+      </span>
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+      <label for="id">Last Name</label>
+      <span class="p-float-label" styleClass="md-inputfield">
+        <input
+          type="text"
+          id="lastName"
+          pInputText
+          required="true"
+          formControlName="lastName"
+        />
+  
+      </span>
+    </div>
+  </div>
+</div>
+<div class="grid">
+  <div class="col-6">
+    <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+      <label for="id">Title</label>
+      <span class="p-float-label" styleClass="md-inputfield">
+        <input
+          type="number"
+          id="title"
+          pInputText
+          required="true"
+          formControlName="title"
+        />
+   
+      </span>
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+      <label for="department">Department</label>
+      <span class="p-float-label" styleClass="md-inputfield">
+        <input
+          type="text"
+          id="department"
+          pInputText
+          required="true"
+          formControlName="department"
+        />
+       
+      </span>
+    </div>
+  </div>
+</div>
+  
+<div class="grid">
+  <div class="col-6">    <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+    <label for="id">Phone Number</label>
+    <span class="p-float-label" styleClass="md-inputfield">
+      <input
+        type="text"
+        id="workPhoneNumber"
+        pInputText
+        required="true"
+        formControlName="workPhoneNumber"
+      />
+  
+    </span>
+  </div></div>
+  <div class="col-6">
+    <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+      <label for="id">Manager</label>
+      <span class="p-float-label" styleClass="md-inputfield">
+        <input
+          type="text"
+          id="manager"
+          pInputText
+          required="true"
+          formControlName="manager"
+        />
+      
+      </span>
+    </div>
+  </div>
+</div>
+<div class="grid">
+  <div class="col-12">
+    <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+      <span class="p-float-label" styleClass="md-inputfield">
+        <input
+          type="text"
+          id="email"
+          pInputText
+          required="true"
+          formControlName="email"
+        />
+        <label for="id">Email</label>
+      </span>
+    </div>
+  </div>
+</div>
+   
+ <div class="grid">
+  <div class="col-6">
+    <div class="p-field p-col-12 md:col-12 p-md-3 mt-5">
+      <span class="p-float-label" styleClass="md-inputfield">
+        <p-dropdown
+          id="timeZone"
+          [options]="timeZone"
+          optionLabel="Zone"
+          optionValue="Zone"
+          [showClear]="false"
+          [autoDisplayFirst]="true"
+          formControlName="timeZone"
+        ></p-dropdown>
+        <label for="timezone">Time Zone</label>
+        <div
+          *ngIf="
+            RequestersForm.controls['timeZone'].invalid &&
+            (RequestersForm.controls['timeZone'].dirty ||
+              RequestersForm.controls['timeZone'].touched)
+          "
+          class="alert"
+        >
+          <div *ngIf="RequestersForm.controls['timeZone'].errors?.['required']">
+            Please enter timeZone
+          </div>
+        </div>
+      </span>
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="p-field p-col-12 md:col-12 p-md-3 mt-5">
+      <span class="p-float-label" styleClass="md-inputfield">
+        <p-dropdown
+          [options]="timeFormat"
+          optionLabel="Format"
+          [showClear]="false"
+          [autoDisplayFirst]="true"
+        ></p-dropdown>
+        <label for="timeformat">Time Format</label>
+      </span>
+    </div>
+  </div>
+ </div>
+<div class="grid">
+  <div class="col-6"> 
+    <div class="p-field p-col-12 md:col-12 p-md-3 mt-3">
+      <label for="language">Language</label>
+      <span class="p-float-label" styleClass="md-inputfield">
+        <p-dropdown
+          [options]="language"
+          placeholder="Select"
+          optionLabel="language"
+          optionValue="language"
+          [showClear]="false"
+          [autoDisplayFirst]="true"
+          [formControlName]="'language'"
+        ></p-dropdown>
+     
+        <div
+          *ngIf="
+            RequestersForm.controls['language'].invalid &&
+            (RequestersForm.controls['language'].dirty ||
+              RequestersForm.controls['language'].touched)
+          "
+          class="alert"
+        >
+          <div *ngIf="RequestersForm.controls['language'].errors?.['required']">
+            Please enter language
+          </div>
+        </div>
+      </span>
+    </div></div>
+  <div class="col-6">
+    <div class="p-field p-col-12 md:col-12 p-md-3 mt-3">
+      <label for="location">Location</label>
+      <span class="p-float-label" styleClass="md-inputfield">
+        <input
+          type="text"
+          id="location"
+          pInputText
+          required="true"
+          formControlName="location"
+        />
+  
+      </span>
+    </div>
+
+  </div>
+</div>
+
+    <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+      <label for="id">Address</label>
+      <span class="p-float-label" styleClass="md-inputfield">
+        <input
+          type="text"
+          id="address"
+          pInputText
+          required="true"
+          formControlName="address"
+        />
+
+      </span>
+    </div>
+
+  
+
+    <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+      <label for="profileUrl">Profile URL</label>
+      <span class="p-float-label" styleClass="md-inputfield">
+        <input
+          type="text"
+          id="profileUrl"
+          pInputText
+          required="true"
+          formControlName="profileUrl"
+        />
+       
+      </span>
+    </div>
+
+      <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+      <label for="id">Background Information</label>
+      <span class="p-float-label" styleClass="md-inputfield">
+        <input
+          type="text"
+          id="backgroundInformation"
+          pInputText
+          required="true"
+          formControlName="backgroundInformation"
+        />
+       
+      </span>
+    </div>
+
+    <div class="p-field p-col-12 mb-2 ml-10">
+      <button
+        pButton
+        label="Save"
+        type="submit"
+        style="float: right !important"
+      ></button>
+    </div>
+  </form>
+</p-dialog>
+
+<p-dialog
+header="Title"
+[(visible)]="display"
+[responsive]="true"
+header="Add Requester "
+[modal]="true"
+styleClass="p-fluid close"
+[autoZIndex]="true"
+>
+ <app-newrequester></app-newrequester>
+</p-dialog>

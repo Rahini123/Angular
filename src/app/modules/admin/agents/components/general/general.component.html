@@ -1,0 +1,777 @@
+<p-table
+  #dt
+  [value]="agents"
+  [rowsPerPageOptions]="[5, 10, 25, 50, 100]"
+  [rows]="10"
+  [loading]="isLoading"
+  [paginator]="true"
+  responsiveLayout="scroll"
+  [(selection)]="selectedAgents"
+  [columns]="selectedColumns"
+  [rowHover]="true"
+  dataKey="agent_id"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  [showCurrentPageReport]="true"
+  [globalFilterFields]="['name', 'email']"
+>
+  <ng-template pTemplate="caption">
+    <div class="card">
+      <div class="card-container purple-container overflow-hidden">
+        <div class="flex">
+          <div
+            class="flex-1 flex align-items-center justify-content-start font-bold text-white m-2 border-round"
+          >
+            <div class="div-tab">
+              <p-breadcrumb [model]="items_menu" [home]="home"></p-breadcrumb>
+            </div>
+          </div>
+
+          <div
+            class="flex-1 flex align-items-center justify-content-end font-bold text-white m-2 border-round"
+          >
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                placeholder="Search..."
+              />
+            </span>
+            <button
+              pButton
+              pRipple
+              [disabled]="!canSubmit"
+              label="Delete"
+              icon="pi pi-trash"
+              class="p-button-danger mr-2"
+              (click)="deleteSelectedAgents()"
+            ></button>
+            <button
+              pButton
+              pRipple
+              label="Add"
+              icon="pi pi-plus-circle"
+              class="p-button-success mr-2"
+              (click)="showDialog()"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 3rem">
+        <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
+      </th>
+      <th pSortableColumn="firstName" pResizableColumn>
+        First Name <p-sortIcon field="name"></p-sortIcon>
+      </th>
+      <th pSortableColumn="lastName" pResizableColumn>
+        Last Name <p-sortIcon field="lastName"></p-sortIcon>
+      </th>
+      <th pSortableColumn="agentName" pResizableColumn>
+        Agent Name <p-sortIcon field="agentName"></p-sortIcon>
+      </th>
+      <th pSortableColumn="email" pResizableColumn>
+        Email <p-sortIcon field="email"></p-sortIcon>
+      </th>
+      <th pSortableColumn="title" pResizableColumn>
+        Title <p-sortIcon field="title"></p-sortIcon>
+      </th>
+      <th pSortableColumn="mobileNumber" pResizableColumn>
+        Mobile Number <p-sortIcon field="mobileNumber"></p-sortIcon>
+      </th>
+
+      <th>Action</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-agent>
+    <tr>
+      <td>
+        <!-- <p-tableCheckbox [value]="agent"></p-tableCheckbox> -->
+        <input
+          #inputCheck
+          type="checkbox"
+          (change)="getAgent($event, agent.agent_id)"
+          [value]="agent"
+        />
+      </td>
+      <td>{{ agent.firstName }}</td>
+      <td>{{ agent.lastName }}</td>
+      <td>{{ agent.agentName }}</td>
+      <td>{{ agent.email }}</td>
+      <td>{{ agent.title }}</td>
+      <td>{{ agent.mobileNumber }}</td>
+
+      <td>
+        <button
+          pButton
+          pRipple
+          icon="pi pi-pencil"
+          class="p-button-rounded p-button-success"
+          (click)="editAgent(agent)"
+        ></button>
+        <button
+          pButton
+          pRipple
+          icon="pi pi-trash"
+          class="p-button-rounded p-button-warning"
+          (click)="deleteAgentById(agent)"
+        ></button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="summary">
+    <div class="p-d-flex p-ai-center p-jc-between">
+      In total there are {{ agents ? agents.length : 0 }} Agents.
+    </div>
+  </ng-template>
+</p-table>
+
+<p-dialog
+  #pdFront
+  [(visible)]="agentDialog"
+  [responsive]="true"
+  header="Edit Agent Details"
+  [modal]="true"
+  styleClass=" "
+  [autoZIndex]="true"
+  (click)="pdFront.moveOnTop()"
+>
+  <form
+    class="p-fluid p-grid"
+    (ngSubmit)="updateAgents()"
+    [formGroup]="agentForm"
+  >
+    <div class="grid">
+      <div class="col-6" >
+        <div class="p-field grid">
+          <div class="col-12">
+            <span style="display: none;">
+              <label for="id">Agent Id</label>
+              <span class="p-float-label" styleClass="md-inputfield">
+                <input
+                  type="number"
+                  id="id"
+                  pInputText
+                  required="true"
+                  formControlName="agent_id"
+                  disabled="true"
+                />
+              </span> </span>     
+              <label for="firstName"
+              >First Name <span style="color: red">*</span>
+            </label>
+            <span class="p-float-label" styleClass="md-inputfield">
+              <input
+                type="text"
+                id="firstName"
+                pInputText
+                required="true"
+                formControlName="firstName"
+              />
+            </span>    
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="p-field grid">
+          <div class="col-12">
+            <label for="lastName"
+              >Last Name <span style="color: red">*</span></label
+            >
+            <span class="p-float-label" styleClass="md-inputfield">
+              <input
+                type="text"
+                id="lastName"
+                pInputText
+                required="true"
+                formControlName="lastName"
+              />
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="col-6">
+        <div class="p-field grid">
+          <div class="col-12">
+            <label for="title">Title <span style="color: red">*</span></label>
+            <span class="p-float-label" styleClass="md-inputfield">
+              <input
+                type="text"
+                id="title"
+                pInputText
+                required="true"
+                formControlName="title"
+              />
+
+              <div
+                *ngIf="
+                  agentForm.controls['title'].invalid &&
+                  (agentForm.controls['title'].dirty ||
+                    agentForm.controls['title'].touched)
+                "
+                class="alert"
+              >
+                <div *ngIf="agentForm.controls['title'].errors?.['required']">
+                  Please enter the title
+                </div>
+              </div>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="p-field grid">
+          <div class="col-12">
+            <label for="agentName"
+              >Agent Name <span style="color: red">*</span>
+            </label>
+            <span class="p-float-label" styleClass="md-inputfield">
+              <input
+                type="text"
+                id="agentName"
+                pInputText
+                required="false"
+                formControlName="agentName"
+              />
+
+              <div
+                *ngIf="
+                  agentForm.controls['agentName'].invalid &&
+                  (agentForm.controls['agentName'].dirty ||
+                    agentForm.controls['agentName'].touched)
+                "
+                class="alert"
+              >
+                <div
+                  *ngIf="agentForm.controls['agentName'].errors?.['required']"
+                >
+                  Please enter the Agent Name
+                </div>
+              </div>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="col-6">
+        <div class="p-field grid">
+          <div class="col-12">
+            <label for="mobileNumber">Mobile Number <span style="color: red">*</span></label>
+            <span class="p-float-label" styleClass="md-inputfield">
+              <input
+                type="number"
+                id="mobileNumber"
+                pInputText
+                required="true"
+                formControlName="mobileNumber"
+                (keypress)="keyPressAlphaNumericWithCharacters_contactnumber($event)"
+                onKeyDown="if(this.value.length==10 && event.keyCode!=8 ) return false;return event.keyCode !== 69" 
+              />
+
+              <div
+                *ngIf="
+                  agentForm.controls['mobileNumber'].invalid &&
+                  (agentForm.controls['mobileNumber'].dirty ||
+                    agentForm.controls['mobileNumber'].touched)
+                "
+                class="alert"
+              >
+                <div
+                  *ngIf="agentForm.controls['mobileNumber'].errors?.['required']"
+                >
+                  Please enter the Mobile Number
+                </div>
+              </div>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="p-field grid">
+          <div class="col-12">
+            <label for="email">Email ID <span style="color: red">*</span></label>
+            <span class="p-float-label" styleClass="md-inputfield">
+              <input
+                type="text"
+                id="email"
+                pInputText
+                required="true"
+                formControlName="email"
+
+              />
+              <div
+              *ngIf="
+                agentForm.controls['email'].invalid &&
+                (agentForm.controls['email'].dirty ||
+                  agentForm.controls['email'].touched)
+              "
+              class="alert"
+            >
+              <div
+                *ngIf="agentForm.controls['email'].errors?.['required']"
+              >
+                Please enter the Email ID
+              </div>
+              <div
+              *ngIf="agentForm.controls['email'].errors?.['email']"
+            >
+              Email ID Must be valid
+            </div>
+            </div>
+       
+             
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+   
+    <div class="p-field">
+      <div class="p-field grid">
+        <div class="col-12">
+          <button
+            pButton
+            label="Update"
+            type="submit"
+            style="float: right !important"
+          ></button>
+        </div>
+      </div>
+     
+    </div>
+  </form>
+</p-dialog>
+<p-dialog
+  header="Title"
+  [(visible)]="display"
+  [responsive]="true"
+  header="Add Agent Details"
+  [modal]="true"
+  styleClass=""
+  [autoZIndex]="true"
+>
+<form class="p-fluid p-grid" (ngSubmit)="saveAgents()" [formGroup]="agentForm">
+
+
+  <div class="grid">
+   
+    <div class="col-6">
+      <div class="p-field grid ">
+        <div class="col-12">
+          <label for="firstName"
+          >First Name <span style="color: red">*</span>
+        </label>
+        <span class="p-float-label" styleClass="md-inputfield">
+          <input
+            type="text"
+            id="firstName"
+            pInputText
+            required="true"
+            formControlName="firstName"
+          />
+        
+          <div
+            *ngIf="
+              agentForm.controls['firstName'].invalid &&
+              (agentForm.controls['firstName'].dirty ||
+                agentForm.controls['firstName'].touched)
+            "
+            class="alert"
+          >
+            <div *ngIf="agentForm.controls['firstName'].errors?.['required']">
+              Please enter the First Name
+            </div>
+          </div>
+        </span>
+          </div>
+          </div>
+      </div>
+      <div class="col-6">
+        <div class="p-field grid ">
+          <div class="col-12">
+            <label for="lastName"
+            >Last Name <span style="color: red">*</span></label
+          >
+            <span class="p-float-label" styleClass="md-inputfield">
+              <input
+                type="text"
+                id="lastName"
+                pInputText
+                required="true"
+                formControlName="lastName"
+              />
+             
+              <div
+                *ngIf="
+                  agentForm.controls['lastName'].invalid &&
+                  (agentForm.controls['lastName'].dirty ||
+                    agentForm.controls['lastName'].touched)
+                "
+                class="alert"
+              >
+                <div *ngIf="agentForm.controls['lastName'].errors?.['required']">
+                  Please enter the Last Name
+                </div>
+              </div>
+            </span>
+            </div>
+            </div>
+            </div>
+      </div>
+
+      <div class="grid">
+   
+        <div class="col-6">
+          <div class="p-field grid ">
+            <div class="col-12">
+              <label for="email">Email ID <span style="color: red">*</span></label>
+              <span class="p-float-label" styleClass="md-inputfield">
+                <input
+                  type="text"
+                  id="email"
+                  pInputText
+                  required="true"
+                  formControlName="email"
+                />
+              
+                <div
+                  *ngIf="
+                    agentForm.controls['email'].invalid &&
+                    (agentForm.controls['email'].dirty ||
+                      agentForm.controls['email'].touched)
+                  "
+                  class="alert"
+                >
+                  <div *ngIf="agentForm.controls['email'].errors?.['required']">
+                    Please enter Email ID
+                  </div>
+                  <div *ngIf="agentForm.controls['email'].errors?.['email']">
+                    Please enter valid Email ID
+                  </div>
+                </div>
+              </span>
+              </div>
+              </div>
+              </div>
+              <div class="col-6">
+                <div class="p-field grid ">
+                  <div class="col-12">
+                    <label for="title">Title <span style="color: red">*</span></label>
+                    <span class="p-float-label" styleClass="md-inputfield">
+                      <input
+                        type="text"
+                        id="title"
+                        pInputText
+                        required="true"
+                        formControlName="title"
+                      />
+              
+                      <div
+                        *ngIf="
+                          agentForm.controls['title'].invalid &&
+                          (agentForm.controls['title'].dirty ||
+                            agentForm.controls['title'].touched)
+                        "
+                        class="alert"
+                      >
+                        <div *ngIf="agentForm.controls['title'].errors?.['required']">
+                          Please enter the title
+                        </div>
+                      </div>
+                    </span>
+                    </div>
+                    </div>
+                    </div>
+              </div>
+
+
+              <div class="grid">
+   
+                <div class="col-6">
+                  <div class="p-field grid ">
+                    <div class="col-12">
+                      <label for="agentName" >Agent Name <span style="color: red">*</span>
+                      </label>
+                        <span class="p-float-label" styleClass="md-inputfield">
+                          <input
+                            type="text"
+                            id="agentName"
+                            pInputText
+                            required="false"
+                            formControlName="agentName"
+                          />
+                       
+                          <div
+                            *ngIf="
+                              agentForm.controls['agentName'].invalid &&
+                              (agentForm.controls['agentName'].dirty ||
+                                agentForm.controls['agentName'].touched)
+                            "
+                            class="alert"
+                          >
+                          <div *ngIf="agentForm.controls['agentName'].errors?.['required']">
+                              Please enter the Agent Name
+                            </div>
+                          </div>
+                        </span>
+                      </div>
+                      </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="p-field grid ">
+                          <div class="col-12">
+                            <label for="mobileNumber">Mobile Number<span style="color: red">*</span></label>
+      <span class="p-float-label" styleClass="md-inputfield">
+        <input
+          type="number"
+          id="mobileNumber"
+          pInputText
+          required="true"
+          formControlName="mobileNumber"
+          onKeyDown="if(this.value.length==10 && event.keyCode!=8 ) return false;return event.keyCode !== 69" 
+          (keypress)="keyPressAlphaNumericWithCharacters_contactnumber($event)"
+        />
+   
+        <div
+          *ngIf="
+            agentForm.controls['mobileNumber'].invalid &&
+            (agentForm.controls['mobileNumber'].dirty ||
+              agentForm.controls['mobileNumber'].touched)
+          "
+          class="alert"
+        >
+          <div
+            *ngIf="agentForm.controls['mobileNumber'].errors?.['required']"
+          >
+            Please enter the Mobile Number
+          </div>
+        </div>
+      </span>
+                            </div>
+                            </div>
+                            </div>
+                      </div>
+
+
+                      <div class="p-field p-col-12 ">
+                        <button
+                          pButton
+                          pRipple
+                          label="Save"
+                          type="submit"
+                          style="float: right !important"
+                        ></button>
+                        <!-- <p-toast></p-toast> -->
+                      </div>
+                    </form>
+
+<!-- <div class="grid">
+  <div class="col-6">
+    <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+      <label for="firstName"
+      >First Name <span style="color: red">*</span>
+    </label>
+      <span class="p-float-label" styleClass="md-inputfield">
+        <input
+          type="text"
+          id="firstName"
+          pInputText
+          required="true"
+          formControlName="firstName"
+        />
+      
+        <div
+          *ngIf="
+            agentForm.controls['firstName'].invalid &&
+            (agentForm.controls['firstName'].dirty ||
+              agentForm.controls['firstName'].touched)
+          "
+          class="alert"
+        >
+          <div *ngIf="agentForm.controls['firstName'].errors?.['required']">
+            Please enter the First Name
+          </div>
+        </div>
+      </span>
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+      <label for="lastName"
+      >Last Name <span style="color: red">*</span></label
+    >
+      <span class="p-float-label" styleClass="md-inputfield">
+        <input
+          type="text"
+          id="lastName"
+          pInputText
+          required="true"
+          formControlName="lastName"
+        />
+       
+        <div
+          *ngIf="
+            agentForm.controls['lastName'].invalid &&
+            (agentForm.controls['lastName'].dirty ||
+              agentForm.controls['lastName'].touched)
+          "
+          class="alert"
+        >
+          <div *ngIf="agentForm.controls['lastName'].errors?.['required']">
+            Please enter the Last Name
+          </div>
+        </div>
+      </span>
+    </div>
+  </div>
+</div>
+<div class="grid">
+  <div class="col-6">
+    <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+      <label for="email">Email </label>
+      <span class="p-float-label" styleClass="md-inputfield">
+        <input
+          type="text"
+          id="email"
+          pInputText
+          required="true"
+          formControlName="email"
+        />
+      
+        <div
+          *ngIf="
+            agentForm.controls['email'].invalid &&
+            (agentForm.controls['email'].dirty ||
+              agentForm.controls['email'].touched)
+          "
+          class="alert"
+        >
+          <div *ngIf="agentForm.controls['email'].errors?.['required']">
+            Please enter Email Id
+          </div>
+        </div>
+      </span>
+    </div>
+  </div>
+  <div class="col-6">
+  
+    <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+      <label for="title">Title</label>
+      <span class="p-float-label" styleClass="md-inputfield">
+        <input
+          type="text"
+          id="title"
+          pInputText
+          required="true"
+          formControlName="title"
+        />
+
+        <div
+          *ngIf="
+            agentForm.controls['title'].invalid &&
+            (agentForm.controls['title'].dirty ||
+              agentForm.controls['title'].touched)
+          "
+          class="alert"
+        >
+          <div *ngIf="agentForm.controls['title'].errors?.['required']">
+            Please enter the title
+          </div>
+        </div>
+      </span>
+    </div>
+  </div>
+</div>
+<div class="grid">
+  <div class="col-6">
+      <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+    <label for="agentName" >Agent Name <span style="color: red">*</span>
+  </label>
+    <span class="p-float-label" styleClass="md-inputfield">
+      <input
+        type="text"
+        id="agentName"
+        pInputText
+        required="false"
+        formControlName="agentName"
+      />
+   
+      <div
+        *ngIf="
+          agentForm.controls['agentName'].invalid &&
+          (agentForm.controls['agentName'].dirty ||
+            agentForm.controls['agentName'].touched)
+        "
+        class="alert"
+      >
+      <div *ngIf="agentForm.controls['agentName'].errors?.['required']">
+          Please enter the Agent Name
+        </div>
+      </div>
+    </span>
+  </div></div>
+  <div class="col-6">
+    <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+      <label for="mobileNumber">Mobile Number</label>
+      <span class="p-float-label" styleClass="md-inputfield">
+        <input
+          type="number"
+          id="mobileNumber"
+          pInputText
+          required="true"
+          formControlName="mobileNumber"
+        />
+   
+        <div
+          *ngIf="
+            agentForm.controls['mobileNumber'].invalid &&
+            (agentForm.controls['mobileNumber'].dirty ||
+              agentForm.controls['mobileNumber'].touched)
+          "
+          class="alert"
+        >
+          <div
+            *ngIf="agentForm.controls['mobileNumber'].errors?.['required']"
+          >
+            Please enter the Mobile Number
+          </div>
+        </div>
+      </span>
+    </div>
+  </div>
+</div>
+
+
+
+
+  <div class="p-field p-col-12 ">
+    <button
+      pButton
+      pRipple
+      label="Save"
+      type="submit"
+      style="float: right !important"
+    ></button>
+    <p-toast></p-toast>
+  </div> -->
+
+
+</p-dialog>
+<p-confirmDialog [style]="{width: '40vw'}"></p-confirmDialog>
+
+<p-toast></p-toast>
+<div id="overlay" *ngIf="progressbar">
+  <span class="abs"> <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i></span>
+ 
+  <!-- <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8"  animationDuration=".5s"></p-progressSpinner> -->
+   
+</div>

@@ -1,0 +1,382 @@
+
+.reply-form {
+  margin-top: 20px;
+}
+.height-pic {
+  max-height: 400px;
+  overflow: auto;
+}
+// img{
+//   width: 100%;
+// }
+.height-body img {
+  width: 100%;
+}
+span.Assigned
+{
+  background-color:#00acc1;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+
+}
+.slim-button.p-button:enabled:hover{
+  background: #f8f9fa;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+
+.cancelbtn button
+
+{
+
+  background-color: rgb(229, 37, 37);
+
+  border: 1px solid rgb(229, 37, 37) ;
+
+}
+
+.slim-button {
+  box-sizing: border-box;
+  height: 32px;
+  padding: 4px 12px;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 14px;
+  line-height: 22px;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  background: linear-gradient(180deg, #fff 0%, #f5f7f9 100%);
+  border: 1px solid #cfd7df;
+  border-radius: 4px;
+  color: #12344d !important;
+  font-weight: 600;
+  margin-right: 8px;
+  font-family: inherit;
+}
+// :host ::ng-deep.p-button:enabled:hover {
+//   background: #f8f9fa;
+//   color: #ffffff;
+//   border-color: #cfd7df;
+// }
+:host ::ng-deep.p-panel-header {
+  display: flex;
+  padding: 0px;
+  //justify-content: right;
+}
+p-panel.p-element.remove-padding .p-panel-header {
+  padding: 0px;
+}
+
+.itil-detail-note {
+  background: #e5f2fd;
+  border: 1px solid #bbdcfe;
+  // margin-left: 1rem;
+  // width: 55rem;
+  height: auto;
+  margin-bottom: 25px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+// :host ::ng-deep.p-panel {
+//  // margin-left: 1rem;
+// }
+
+.edit_sidebar_icon {
+  float: right;
+  background: #ffffff;
+  border-radius: 20px;
+  color: #12344d;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-right: 1rem;
+}
+.item_summary {
+  border-bottom: solid 1px #ebeff3;
+  padding: 20px;
+}
+.ticket-label {
+  font-weight: 600;
+  xmargin-right: 2rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.item-summery span {
+  display: inline-block;
+  margin: 6px 0 !important;
+  height: auto;
+  cursor: default;
+  word-break: break-word;
+}
+
+.due-by {
+  padding-left: 5px;
+}
+.due-label {
+  margin-left: 5rem !important;
+}
+.change-label {
+  color: #2c5cc5;
+  margin-left: 5rem !important;
+  font-size: 12px;
+  text-align: left;
+  font-weight: 600;
+  display: block;
+  cursor: pointer;
+}
+.label {
+  line-height: 20px;
+  font-size: 14px;
+  font-weight: normal;
+}
+.img {
+  width: 3rem;
+  border-radius: 24% !important;
+}
+.req-label {
+  color: #2c5cc5;
+  font-size: 12px;
+  text-align: left;
+  font-weight: 600;
+  display: block;
+  cursor: pointer;
+  margin-top: 8px;
+}
+.sub {
+  color: #12344d;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: verdana;
+  margin: 0 0 3px;
+  line-height: 1.2;
+  word-break: break-all;
+}
+.reply-form .p-inputtext:enabled:focus,.reply-form .p-inputtext
+{
+  box-shadow:none;
+  border: none;
+}
+.help-desk-reply-note {
+  border: 1px solid #bbdcfe;
+  background-color: #ffff;
+
+  // margin-bottom: 25px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.reply-div {
+  //float: right;
+
+  width: 100%;
+  margin-bottom: -10px;
+  background: #fcfcf9;
+  //padding: 5px 15px;
+  border: solid 1px #ccc;
+  border-radius: 5px;
+  color: #666;
+}
+.inline-field {
+  background: #fdfdfd;
+  border-bottom: solid 1px #f3f3f3;
+  margin-top: 12px;
+  margin-left: -8px;
+  width: 100%;
+  // padding-bottom: 10px;
+}
+.text-box {
+  border-color: #ebeff3;
+  margin-left: -2rem;
+}
+.inline-text {
+  background: #fdfdfd;
+  border-bottom: solid 1px #f3f3f3;
+  margin-left: -8px;
+
+  // padding-bottom: 10px;
+}
+textarea#mailBody {
+  border: 1px solid #ddd !important;
+}
+.reply-form .p-float-label label {
+  float: right;
+    position: relative;
+    width: 100%;
+}
+.inline-field-label {
+  background: #fdfdfd;
+  border-top: solid 1px #f3f3f3;
+  margin-top: 5rem;
+  margin-left: -8px;
+  width: 52.2rem;
+  // padding-bottom: 10px;
+}
+.inline-field-action {
+  background: #fdfdfd;
+  border-top: solid 1px #f3f3f3;
+
+  margin-left: -8px;
+
+  // padding-bottom: 10px;
+}
+.pseudo_reply {
+  height: 15px;
+  background: #ffffff;
+  font-size: 14px;
+  color: #e6e6e6;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  padding: 2rem;
+  border: solid 1px #f3f3f3;
+}
+.p-panel .p-panel-content{
+  padding: 60px;
+  padding-top: 0px;
+  padding-right: 0px;
+}
+.ticket p-breadcrumb.p-element.pr-3 {
+  float: none !important;
+  width: 100%;
+}
+.bg-border {
+  background-color: #fff;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+.col-2.txt-frd {
+  line-height: 31px;
+  text-align: right;
+  align-items: flex-start;
+}
+.col-12.help-desk-reply-note {
+  margin-top: 30px;
+}
+.col-12.height-body {
+  overflow-wrap: break-word;
+}
+.col-12.itil-detail-note.note-mrg {
+  font-size: 12px;
+  font-family: verdana;
+}
+label.item-color {
+  // background-color: #3d5cf0;
+  // border-radius: 3px;
+  padding: 3px;
+  color: rgb(3, 3, 3);
+}
+button.p-ripple.p-element.p-button-text.p-button-plain.reply.p-button.p-component {
+  background-color: #e52525;
+  color: #fff;
+  padding: 10px 15px;
+  font-size: 14px;
+}
+button.p-ripple.p-element.p-button-text.p-button-plain.forward.p-button.p-component {
+  background-color: #4f5251;
+  padding: 9px 10px;
+  color: #fff;
+  font-size: 14px;
+}
+.grid.m-0 {
+  padding: 2rem;
+}
+.col-10.txt-format {
+  margin-top: 5px;
+}
+span.Assigned
+{
+  background-color: #09B2C7;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+
+}
+span.UnAssigned
+{
+  background-color:#FFA726;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+
+}
+span.WIP
+{
+  background-color:#7D3C98;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+  
+}
+span.Onhold
+{
+  background-color: #FF33CC;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.MergeClosed
+{
+  background-color: #e40101;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.CustomerWorking
+{
+  background-color: #00FFCC;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.Closed
+{
+  background-color: #c93737;
+    color: rgb(255, 253, 253);
+    padding: 2px 3px;
+    border-radius: 4px;
+}
+span.Duplicate
+{
+  background-color: #676b6f;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.Resolved
+{
+  background-color: #85C1E9;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.Open
+{
+  background-color: #33691E;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+.col-20.height-body
+{
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: normal;
+  
+}
+span.note-bg {
+  background-color: #f6f6f6;
+  padding: 10px 10px;
+  margin-bottom: 10px;
+  display: flex;
+  border-radius: 3px;
+  font-size: 13px;
+  font-weight: bold;
+}
+button.p-element.p-ripple.p-button-text.p-button-plain.shownote.p-button.p-component {
+  padding: 9px 5px;
+  background-color: #3f51b5;
+  color: #fff;
+}

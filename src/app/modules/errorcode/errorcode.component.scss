@@ -1,0 +1,25 @@
+:host ::ng-deep.p-datatable {
+    position: relative;
+    xwidth: 80rem;
+  }
+  
+  .slim-button {
+    box-sizing: border-box;
+    height: 32px;
+    padding: 4px 12px;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 14px;
+    line-height: 22px;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    background: linear-gradient(180deg, #fff 0%, #f5f7f9 100%);
+    border: 1px solid #cfd7df;
+    border-radius: 4px;
+    color: #12344d !important;
+    font-weight: 600;
+    margin-right: 8px;
+    font-family: inherit;
+  }
+  

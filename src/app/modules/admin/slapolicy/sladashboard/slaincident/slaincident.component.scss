@@ -1,0 +1,148 @@
+
+
+.d-flex {
+    display: flex !important;
+    padding: 35px 40px;
+    background-color: #fff;
+    border: 1px solid #dddd;
+}
+.Slapolicy
+{
+  float:left;
+  width:100%;
+}
+.status
+{
+  background-color: #dddd;
+  padding: 10px;
+}
+.pos-ab
+{
+  position: absolute;
+  right: 0;
+}
+.search-icon .fa-search{
+  position: relative;
+  float: right;
+  width: 75px !important;
+  top: -39px;
+  right: -38px;
+  font-size: 30px;
+}
+.bg-color {
+
+ 
+  background: linear-gradient(180deg, #f5f5f5 0%, #fdfdfd 100%);
+  text-align: left;
+  color: #1d1d1d;
+}
+.bg-color span {
+  display: block;
+}
+.pos-rel {
+  position: relative;
+}
+.card-icon {
+
+  text-align: center;
+  color: #fff;
+
+  width: auto;
+  width: 76px;
+  height: 66px;
+  border-radius: 3px;
+  line-height: 80px;
+  align-content: center;
+  margin-top: 0px;
+  display: block;
+  position: absolute;
+  top: -47px;
+  border: 1px solid #ddd;
+  left: -10px;
+  right: 0;
+}
+.bg1 .card-icon
+{
+  background: linear-gradient(60deg,#ef5350,#ef5350);
+  box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(255 152 0 / 40%);
+  background-color: #fff;
+}
+.bg2 .card-icon
+{
+  background: linear-gradient(60deg,#66bb6a,#43a047);
+  box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(76 175 80 / 40%);
+  background-color: #fff;
+}
+.bg3 .card-icon
+{
+  background: linear-gradient(60deg,#ffa726,#ffa726);
+  box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(244 67 54 / 40%);
+  background-color: #fff;
+}
+.bg4 .card-icon
+{
+  background: linear-gradient(60deg,#26c6da,#00acc1);
+  box-shadow:0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(0 188 212 / 40%);
+  background-color: #fff;
+}
+span.txt-color {
+  color: #000;
+  font-size: 17px;
+}
+.bg-color-sec
+{
+  border:1px solid #ddd;
+  padding: 10px;
+  margin: 10px;
+}
+.Chart-title {
+  background-color: #f0f0f085;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+input.urgent.ng-untouched.ng-pristine.ng-valid {
+  background-color: #fe1d1daa;
+}
+input.high.ng-untouched.ng-pristine.ng-valid
+{
+  background-color: #e64949aa;
+}
+input.medium.ng-untouched.ng-pristine.ng-valid
+{
+  background-color: #f4b630bb;
+}
+input.low.ng-untouched.ng-pristine.ng-valid
+{
+  background-color: #0ef88b90;
+}
+span.abs {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: 0;
+  bottom: 0px;
+}
+
+p-progressspinner{
+  position: absolute;
+  top: 50%;
+  bottom: 0px;
+  left: 50%;
+  right: 0;
+}
+.p-2.flex-fill.bg-color.bg2.margin-allign {
+  line-height: 38px;
+}
+#overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: block; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgb(0 0 0 / 9%); /* Black background with opacity */
+  z-index: 999999; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}

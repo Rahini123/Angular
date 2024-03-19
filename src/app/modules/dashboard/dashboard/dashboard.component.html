@@ -1,0 +1,210 @@
+
+<div class="p-datatable-header">
+  <div class="card ">
+    <div class="card-container purple-container overflow-hidden">
+      <div class="flex">
+        <div class="flex-1 flex align-items-center justify-content-start  font-bold text-white m-2 border-round">
+          <div class="div-tab">
+            <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-12">
+  <div class="grid dropdown" *ngIf="displaydropdown">
+
+    <div class="col-3">
+
+      <p-dropdown [options]="emailTickets" 
+        name="All"  #projectname
+        optionLabel="projectName" optionValue="projectId" [filter]="true"
+        [showClear]="true" dropdownIcon="pi pi-caret-down" filterBy="projectName"
+        [placeholder]="emailPlaceholderText" (onChange)="onChange($event,projectname.label)"></p-dropdown>
+
+
+    </div>
+    <div class="col-3" *ngIf="showgroupsec">
+
+      <p-dropdown #groupAgent [options]="groupbased" optionLabel="groupAgentName" optionValue="groupAgentName"
+        dropdownIcon="pi pi-caret-down" [filter]="true" [showClear]="true" [placeholder]="groupPlaceholderText"
+        (onChange)="onChange1($event)"></p-dropdown>
+
+    </div>
+  
+  </div>
+</div>
+
+
+
+
+<div class="d-flex pb-4 mb-2">
+
+  <div class="p-4 flex-fill bg-color bg2">
+    <div class="pos-rel">
+      <div _ngcontent-php-c5="" class="card-icon">
+        <mat-icon> import_contacts</mat-icon> <mat-icon>redo</mat-icon>
+      </div>
+    </div>
+ 
+    <span class="txt-color" *ngIf="proproject"> {{ this.openticketsct}} </span>
+    <span class="txt-color" *ngIf="progroup"> {{this.groupwiseprojectcount}} </span>
+    <span class="txt-color"  > {{ this.openticketsbyrolespro}} </span>
+    <span class="txt-color"   > {{ this.openticketsbyrolesprogroup}} </span>
+    <!-- <span class="txt-color" *ngIf="proproject"> {{this.openTicketscount}} </span>
+    <span class="txt-color" *ngIf="progroup"> {{this.tkcountopenno}} </span> -->
+    <span style="font-weight: bold; color: black">
+      <span style="font-weight: bold; color: black"> Open Tickets</span>
+     
+      <p-button label="View Table List" class="label-txt closed" (onClick)="openticket()" 
+      *ngIf="displaygroup"></p-button>
+      <p-button label="View Table List " class="label-txt closed" (onClick)="openticketproj()"
+        *ngIf="displayproject"></p-button>
+        
+    </span>
+  </div>
+  <div class="p-4 flex-fill bg-color bg1">
+    <div class="pos-rel">
+      <div _ngcontent-php-c5="" class="card-icon">
+
+        <mat-icon> import_contacts</mat-icon> <mat-icon>clear</mat-icon>
+      </div>
+    </div>
+    <span class="txt-color" *ngIf="proproject">{{this.closeTicketscount}}</span>
+    <span class="txt-color" *ngIf="progroup">
+      {{this.tkcountcloseno}}
+    </span>
+    <span style="font-weight: bold; color: black"> Closed Tickets</span>
+    <p-button label="View Table List" class="label-txt " (onClick)="closedticket()"
+      *ngIf="displaygroup"></p-button>
+    <p-button label="View Table List" class="label-txt " (onClick)="closedticketproj()"
+     *ngIf="displayproject"></p-button>
+  </div>
+  <div class="p-4 flex-fill bg-color bg3">
+    <div class="pos-rel">
+      <div _ngcontent-php-c5="" class="card-icon">
+        <mat-icon>person_delete</mat-icon><mat-icon>error</mat-icon>
+      </div>
+    </div>
+    <span class="txt-color" *ngIf="proproject">
+      {{this.unassignedTicketscount}}
+    </span>
+    <span class="txt-color" *ngIf="progroup">
+      {{this.tkcountunassignno}}
+    </span>
+    <span style="font-weight: bold; color: black">Unassigned Tickets</span>
+    <p-button label="View Table List" class="label-txt unassign" (onClick)="unassignedticket()"
+      *ngIf="displaygroup"></p-button>
+    <p-button label="View Table List" class="label-txt unassign" (onClick)="unassignedticketproj()"
+      *ngIf="displayproject"></p-button>
+  </div>
+  <div class="p-4 flex-fill bg-color bg4">
+    <div class="pos-rel">
+      <div _ngcontent-php-c5="" class="card-icon">
+        <mat-icon> import_contacts</mat-icon> <mat-icon>how_to_reg</mat-icon>
+      </div>
+    </div>
+    <span class="txt-color" *ngIf="proproject">{{this.assignedTicketscount}}</span>
+    <span class="txt-color" *ngIf="progroup">{{this.tkcountassignno}}</span>
+    <span style="font-weight: bold; color: rgb(17, 17, 17)"> Assigned Tickets</span>
+
+    <p-button label="View Table List" class="label-txt assign" (onClick)="assignedticket()"
+      *ngIf="displaygroup"></p-button>
+    <p-button label="View Table List" class="label-txt assign" (onClick)="assignedticketproj()"
+      *ngIf="displayproject"></p-button>
+  </div>
+  <div class="p-4 flex-fill bg-color bg5">
+    <div class="pos-rel">
+      <div _ngcontent-php-c5="" class="card-icon">
+        <mat-icon>chrome_reader_mode</mat-icon><mat-icon>check_circle_outline</mat-icon>
+      </div>
+    </div>
+    <span class="txt-color" *ngIf="proproject">{{this.approvallength}}</span>
+ 
+    <span class="txt-color" *ngIf="progroup">{{this.approvallength_group}}</span>
+    <span style="font-weight: bold; color: rgb(17, 17, 17)">Waiting for Approval</span>
+
+    <p-button label="View Table List " class="label-txt approvalwaiting " 
+    *ngIf="displayproject" (onClick)="approvalproccess();approvalredirect()"
+  ></p-button>
+  
+  <p-button label="View Table List " class="label-txt approvalwaiting" 
+  *ngIf="displaygroup" (onClick)="approvalproccess_group();approvalredirect_group()"
+></p-button>
+
+  </div>
+</div>
+<div class="" *ngIf="displaychart">
+ 
+
+  <div class="d-flex pt-0 pb-0">
+
+    <div class="p-2 flex-fill bg-color-sec">
+      <div class="Chart-title"> <i class="pi pi-chart-pie"
+          style="font-size: 1rem;margin-right: 5px; color: rgb(181, 174, 174);"></i>Chart</div>
+          <div class="col-12">
+            <div class="grid">
+              <div class="col-9"> <p-chart type="doughnut" [data]="data" [options]="chartOption" width="250" height="250" class="chart-pic">
+
+              </p-chart></div>
+              <div class="col-3">
+               
+                <div class="legends" *ngIf="legendlabels">
+                  <div class="Chart-title"> <i class="pi pi-chart-pie"
+                    style="font-size: 1rem;margin-right: 5px; color: rgb(181, 174, 174);"></i>Legends</div>
+                  <div class="legends-pos">
+                 <div><i class="pi pi-stop-circle" style="color:#33691E;font-size: 12px;margin-right: 10px;"></i>Open Tickets : {{this.openTicketscount}}</div> 
+                 <div><i class="pi pi-stop-circle" style="color:#85C1E9;font-size: 12px;margin-right: 10px;"></i>Resolved Tickets :{{this.resolvedcount}}</div>
+                <div><i class="pi pi-stop-circle" style="color:#FFA726;font-size: 12px;margin-right: 10px;"></i>UnAssigned Tickets : {{this.unassignedTicketscount}}</div>
+                <div><i class="pi pi-stop-circle" style="color:#09B2C7;font-size: 12px;margin-right: 10px;"></i>Assigned Tickets : {{this.assignedTicketscount}}</div>
+                <div><i class="pi pi-stop-circle" style="color:#7D3C98;font-size: 12px;margin-right: 10px;"></i>Wip Tickets : {{this.wipTicketscount}}</div>
+                <div><i class="pi pi-stop-circle" style="color:#FF33CC;font-size: 12px;margin-right: 10px;"></i>OnHold Tickets : {{this.onholdTicketscount}}</div>
+                <div><i class="pi pi-stop-circle" style="color:#00FFCC;font-size: 12px;margin-right: 10px;"></i>Customer Working Tickets :  {{this.customerTicketscount}}</div>
+                </div>
+                </div>
+                <div class="legends" *ngIf="legendlabelsgroupwise">
+                  <div class="Chart-title"> <i class="pi pi-chart-pie"
+                    style="font-size: 1rem;margin-right: 5px; color: rgb(181, 174, 174);"></i>Legends</div>
+                  <div class="legends-pos">
+                 <div><i class="pi pi-stop-circle" style="color:#33691E;font-size: 12px;margin-right: 10px;"></i>Open Tickets : {{this.tkcountopen.length}}</div> 
+                 <div><i class="pi pi-stop-circle" style="color:#85C1E9;font-size: 12px;margin-right: 10px;"></i>Resolved Tickets :{{this.tkresolved.length}}</div>
+                <div><i class="pi pi-stop-circle" style="color:#FFA726;font-size: 12px;margin-right: 10px;"></i>UnAssigned Tickets : {{this.tkcountunassign.length}}</div>
+                <div><i class="pi pi-stop-circle" style="color:#09B2C7;font-size: 12px;margin-right: 10px;"></i>Assigned Tickets : {{this.tkcountassign.length}}</div>
+                <div><i class="pi pi-stop-circle" style="color:#7D3C98;font-size: 12px;margin-right: 10px;"></i>Wip Tickets : {{this.tkwip.length}}</div>
+                <div><i class="pi pi-stop-circle" style="color:#FF33CC;font-size: 12px;margin-right: 10px;"></i>OnHold Tickets : {{this.tkonhold.length}}</div>
+                <div><i class="pi pi-stop-circle" style="color:#00FFCC;font-size: 12px;margin-right: 10px;"></i>Customer Working Tickets :  {{this.tkcustomer.length}}</div>
+                </div>
+                </div>
+                <div class="legends" *ngIf="legendlabelsgroupwise_role">
+                  <div class="Chart-title"> <i class="pi pi-chart-pie"
+                    style="font-size: 1rem;margin-right: 5px; color: rgb(181, 174, 174);"></i>Legends</div>
+                  <div class="legends-pos">
+                 <div><i class="pi pi-stop-circle" style="color:#33691E;font-size: 12px;margin-right: 10px;"></i>Open Tickets : {{this.tkcountopen.length}}</div> 
+                 <div><i class="pi pi-stop-circle" style="color:#85C1E9;font-size: 12px;margin-right: 10px;"></i>Resolved Tickets :{{this.tkcustomerresolved.length}}</div>
+                <div><i class="pi pi-stop-circle" style="color:#FFA726;font-size: 12px;margin-right: 10px;"></i>UnAssigned Tickets : {{this.tkcountunassign.length}}</div>
+                <div><i class="pi pi-stop-circle" style="color:#09B2C7;font-size: 12px;margin-right: 10px;"></i>Assigned Tickets : {{this.tkcountassign.length}}</div>
+                <div><i class="pi pi-stop-circle" style="color:#7D3C98;font-size: 12px;margin-right: 10px;"></i>Wip Tickets : {{this.tkcountwip}}</div>
+                <div><i class="pi pi-stop-circle" style="color:#FF33CC;font-size: 12px;margin-right: 10px;"></i>OnHold Tickets : {{this.tkCountonhold}}</div>
+                <div><i class="pi pi-stop-circle" style="color:#00FFCC;font-size: 12px;margin-right: 10px;"></i>Customer Working Tickets :  {{this.tkcustomer.length}}</div>
+                </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+     
+    </div>
+  </div>
+
+</div>
+
+<p-toast></p-toast>
+<div id="overlay" *ngIf="progressbar">
+  <span class="abs"> <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i></span>
+ 
+  <!-- <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8"  animationDuration=".5s"></p-progressSpinner> -->
+   
+</div>

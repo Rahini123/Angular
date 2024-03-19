@@ -1,0 +1,31 @@
+{
+  "agent": [
+    {
+      "user_id": 18009402583,
+      "first_name": "PP",
+      "last_name": "Support",
+      "job_title": "",
+      "mobile": "",
+      "phone": "",
+      "time_zone": "Kuala Lumpur",
+      "language": "en",
+      "isDeactivateUser": false,
+      "all_agents": "",
+      "is_active": "",
+      "occasional": "",
+      "address": "",
+      "reporting_manager": "",
+      "department_head": "",
+      "department_name": "",
+      "location_name": "",
+      "roles_scope": "",
+      "time_format": "",
+      "member_of": "",
+      "description": "",
+      "vip_user": "",
+      "groups": "",
+      "agent_level": "",
+      "last_ative": ""
+    }
+  ]
+}

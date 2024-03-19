@@ -1,0 +1,125 @@
+<!-- <p-sidebar 
+    styleClass="custom-sidebar"
+    [(visible)]="opened"
+    position="left"
+    [showCloseIcon]="true">
+
+    <p-panelMenu
+        [transitionOptions]=" '0ms'"
+        [model]="items"
+        styleClass="dark-panel custom-panel"></p-panelMenu>
+</p-sidebar>
+
+<p-sidebar
+    #sidebar
+    styleClass="custom-class"
+    ng-if="togglrPanel == true"
+    [modal]="false"
+    [(visible)]="display"
+    position="left"
+    [showCloseIcon]="false"
+    [baseZIndex]="10000">
+
+    <img src="HE-HLPortal/assets/images/cholahandlogo.png" alt="Image" width="40" />
+
+    <div class="p-sidebar p-sidebar-header">
+        <button
+            pButton pRipple type="button" icon="pi pi-angle-right"
+                class="p-button-rounded"
+                (click)="panelClick()"></button>
+    </div>
+
+    <p-panelMenu styleClass="dark-panel custom-panel" [model]="iconItems"></p-panelMenu>
+
+</p-sidebar> -->
+
+<div class="example-container">
+  <div class="card">
+    <div class="">
+      <div class="flex">
+        <div class="flex-auto flex align-items-center justify-content-start">
+          <!-- <app-ng-dynamic-breadcrumb
+                  [bgColor]="'none'"
+                  [symbol]="'>'"
+                  
+                ></app-ng-dynamic-breadcrumb> -->
+          <div class="Header" style="text-align: center; margin-right: 10px">
+            <p-image
+              src="{{ projectNames }}/assets/FocurR_arrow.png"
+              alt="Image"
+              height="40"
+            ></p-image>
+          </div>
+          <mat-toolbar color="primary" class="example-toolbar">
+            <button mat-icon-button (click)="sidenav.toggle()">
+              <mat-icon>menu</mat-icon>
+            </button>
+          </mat-toolbar>
+          <span class="txt-tilte"> TechZard </span>
+        </div>
+
+        <div class="flex-auto flex align-items-center justify-content-end mr-3">
+          <div class="flex align-items-center justify-content-end w-20rem">
+            <p-splitButton
+              label="{{ userDisplayName }}"
+              icon="pi pi-user"
+              [model]="changepassword"
+              styleClass="p-button-outlined mr-2 "
+            ></p-splitButton>
+
+            <!-- <p-menubar>
+                  <p-button
+                    label="LogOut"
+                    icon="pi pi-sign-out"
+                    (onClick)="logOutr()"
+                  ></p-button>
+                </p-menubar> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <mat-sidenav-container (backdropClick)="clickBack()">
+    <mat-sidenav
+      class="side-container"
+      mode="push"
+      [fixedInViewport]="true"
+      [opened]="false"
+      #sidenav
+    >
+      <mat-list>
+        <mat-list-item [matMenuTriggerFor]="" #menuTrigger="matMenuTrigger">
+          <!-- <span (mouseenter)="openSubMenu(menuTrigger)"> -->
+          <span>
+            <p-panelMenu
+              styleClass="dark-panel custom-panel"
+              [model]="iconItems"
+            ></p-panelMenu>
+          </span>
+        </mat-list-item>
+        <!-- <mat-menu #menus="matMenu" [overlapTrigger]="true" [hasBackdrop]="false" class="top-sub-menu">
+                <div>aaa</div>
+                <div>aaa</div>
+                <div>aaa</div>
+            </mat-menu> -->
+      </mat-list>
+
+      <!-- <mat-list>
+            <mat-list-item [matMenuTriggerFor]="menus2" #menuTrigger2="matMenuTrigger">
+                <span (mouseenter)="openSubMenu(menuTrigger2)">Benjamine</span>
+            </mat-list-item>
+            <mat-menu #menus2="matMenu" [overlapTrigger]="true" [hasBackdrop]="false" class="top-sub-menu">
+                <div>bbb</div>
+                <div>bbb</div>
+                <div>bbb</div>
+            </mat-menu>
+        </mat-list> -->
+    </mat-sidenav>
+    <mat-sidenav-content class="main-contents">
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
+
+<p-confirmDialog [style]="{width: '40vw'}"></p-confirmDialog>

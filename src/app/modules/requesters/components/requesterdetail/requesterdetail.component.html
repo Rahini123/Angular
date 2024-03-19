@@ -1,0 +1,102 @@
+<form>
+  <p-panel>
+    <ng-template pTemplate="header">
+      <span>
+        <label style="color: #2c5cc5; margin-right: 50rem">FreshService</label>
+      </span>
+      <buttoN
+        pButton
+        type="button"
+        label="More"
+        icon="pi pi-angle-down"
+        class="slim-button"
+        iconPos="right"
+        (click)="menuMore.toggle($event)"
+      ></buttoN>
+      <p-menu
+        #menuMore
+        [popup]="true"
+        [model]="moreitems"
+        appendTo="body"
+      ></p-menu>
+      <button
+        pButton
+        type="button"
+        label="Assume Identity"
+        class="slim-button"
+      ></button>
+
+      <button
+        pButton
+        type="button"
+        label="Convert to an Agent"
+        class="slim-button"
+      ></button>
+    </ng-template>
+    <div class="suface-card grid">
+      <div class="col-3">
+        <div class="grid">
+          <div class="col-12">
+            <span class="p-float-label">
+              <img src="assets/A.svg" alt="Image" class="img" />
+            </span>
+            <span style="font-size: 14px; font-weight: 600; color: #12344d">
+              Kalyan from FreshService</span
+            >
+          </div>
+          <div class="col-12">
+            <span class="p-float-label">
+              <span style="font-size: 14px; font-weight: 600"> Email</span>
+            </span>
+            <span style="font-size: 14px"> sales@freshservice.com</span>
+          </div>
+          <div class="col-12">
+            <span class="p-float-label">
+              <span style="font-size: 14px; font-weight: 600"> Time Zone</span>
+            </span>
+            <span style="font-size: 14px">Eastern Time(US & Canada)</span>
+          </div>
+          <div class="col-12">
+            <span class="p-float-label">
+              <span style="font-size: 14px; font-weight: 600"> Language</span>
+            </span>
+            <span style="font-size: 14px">English</span>
+          </div>
+        </div>
+      </div>
+      <p-divider layout="vertical"></p-divider>
+      <div class="col-8">
+        <div class="grid">
+          <div class="col-12 info">
+            Email has not been verified for this requester!<span
+              style="color: #2c5cc5; cursor: pointer"
+              >Verify Email</span
+            >
+          </div>
+          <div class="col-8 mt-2" *ngIf="addTagdiv">
+            <button
+              pButton
+              type="button"
+              label="Add Tags"
+              class="slim-button"
+              (click)="addTags()"
+            ></button>
+          </div>
+          <div class="p-fluid col-8 mt-2" *ngIf="addTagEntrydiv">
+            <span class="p-float-label">
+              <input id="float-input" type="text" pInputText />
+              <label for="float-input">Enter Tags</label>
+            </span>
+          </div>
+          <div class="col-offset-6 col-4" *ngIf="addTagEntrydiv">
+            <p-button label="Cancel" (click)="cancelAddTag()"></p-button>
+
+            <span style="margin-left: 10px">
+              <p-button label="Save"></p-button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-panel>
+</form>

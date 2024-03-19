@@ -1,0 +1,14 @@
+.box.flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+.box
+  {
+    float: left;
+    width: 100%;
+    text-align: center;
+    padding: 40px;
+    border:1px solid #dddd;
+    margin-top: 40px;
+  }

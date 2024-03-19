@@ -1,0 +1,89 @@
+.grid {
+    padding: 10px;
+    box-sizing: border-box;
+}
+.grid.grid-sec .col-12 {
+    text-align: center;
+}
+.flex-1.text-center.p-4.border-round {
+  
+    border: 1px solid #dddd;
+    background-color:rgb(221 221 221 / 12%);
+    margin-right: 15px;
+    
+}
+.txt-align {
+    display: none;
+}
+a {
+    color: #605e64;
+}
+.flex.card-container.indigo-container {
+    padding: 10px;
+}
+.icon-sec i
+{
+    color:#fff;
+    background: linear-gradient(180deg, #6d6b6b 0%, #000000 100%);
+    border: 1px solid #fff;
+    padding: 10px;
+    
+    border-radius: 3px;
+    margin-left: 5px;
+    margin-bottom: 12px;
+}
+i.pi:hover {
+    // background-color: #d20505;
+    // border: 1px solid #fff;
+    background: linear-gradient(180deg, #ae1818 0%, #e85346 100%);
+    border: 1px solid #fff;
+}
+.txt-title {
+    font-size: 12px;
+    font-weight: bold;
+  
+    color: #151414;
+    border-radius: 3px;
+   
+}
+.p-dropdown-filter {
+    width: 100%;
+    padding: 2px
+
+}
+//button-5
+///////////////////////////
+
+// Size can also be negative; see how it's smaller than the element
+.raise:hover,
+.raise:focus {
+  box-shadow: 0 0.5em 0.5em -0.4em var(--hover);
+  transform: translateY(-0.25em);
+}
+$colors: (
+  
+  raise: #ffa260,
+
+);
+@each $button, $color in $colors {
+    .#{$button} {
+      --color: #{$color};
+      --hover: #{adjust-hue($color, 45deg)};
+    }
+  }
+  button {
+    background: none;
+    border: 2px solid;
+    font: inherit;
+    line-height: 1;
+    margin: 0.5em;
+    padding: 1em 2em;
+  }
+  code {
+    color: #e4cb58;
+    font: inherit;
+  }
+  .card
+  {
+    margin-bottom: 5px;
+  }

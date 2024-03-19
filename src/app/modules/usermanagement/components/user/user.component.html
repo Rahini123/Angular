@@ -1,0 +1,698 @@
+<div class="user-table">
+  <p-table
+    #dt
+    [value]="users"
+    [rowsPerPageOptions]="[5, 10, 25, 50, 100]"
+    [rows]="5"
+    [resizableColumns]="true"
+    [loading]="isLoading"
+    [paginator]="true"
+    responsiveLayout="scroll"
+    [(selection)]="selectedUsers"
+    [rowHover]="true"
+    dataKey="id"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [showCurrentPageReport]="true"
+    [globalFilterFields]="['name', 'email', 'role']"
+  >
+    <ng-template pTemplate="caption">
+      <div class="card">
+        <div class="card-container purple-container overflow-hidden">
+          <div class="flex">
+            <div
+              class="flex-1 flex align-items-center justify-content-start font-bold text-white m-2 border-round"
+            >
+              <div class="div-tab">
+                <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+              </div>
+            </div>
+
+            <div
+              class="flex-1 flex align-items-center justify-content-end font-bold text-white m-2 border-round"
+            >
+              <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    dt.filterGlobal($any($event.target).value, 'contains')
+                  "
+                  placeholder="Search..."
+                  (keydown.enter)="search($event.target.value)"
+                />
+              </span>
+              <button
+                pButton
+                pRipple
+                label="Add"
+                icon="pi pi-plus-circle"
+                class="p-button-success mr-2"
+                (click)="showDialog()"
+              ></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 5%">
+          <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
+        </th>
+        <th style="width: 10%" >
+          Name 
+        </th>
+        <th style="width: 10%" >
+          Email 
+        </th>
+
+        <th style="width: 10%" >
+          Role 
+        <th
+          style="width: 10%; text-align: center"
+         
+          
+        >
+          Project 
+        </th>
+        <th style="width: 10%" >
+          Group
+        </th>
+        <th style="width: 10%" >
+          Status
+        </th>
+        <!-- <th pSortableColumn="full_name">
+        Full Name <p-sortIcon field="full_name "></p-sortIcon>
+      </th> -->
+        <!--<th pSortableColumn="is_active">
+              is_active <p-sortIcon field="is_active "></p-sortIcon>
+            </th> -->
+        <th style="width: 15%; text-align: left">Action</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-user>
+      <tr>
+        <td>
+          <!-- <p-tableRadioButton [value]="user"></p-tableRadioButton> -->
+        </td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+        <td *ngFor="let temp of user.roles">{{ temp.name }}</td>
+        <td style="text-align: center">{{ user.projectName }}</td>
+        <td style="text-align: center">{{ user.groupName }}</td>
+
+        <td>
+          <span
+            [ngClass]="{
+              'active ': user.is_Active == 'Y',
+              'inactive ': user.is_Active == 'N'
+            }"
+          >
+            {{ user.is_Active === "Y" ? "Active " : "Inactive" }}
+          </span>
+        </td>
+
+        <td>
+          <p-inputSwitch
+            trueValue="Y"
+            falseValue="N"
+            [(ngModel)]="user.is_Active"
+            (onChange)="activeUser(user, $event)"
+          >
+          </p-inputSwitch>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-pencil"
+            style="margin-right: 3px"
+            class="p-button-rounded p-button-success"
+            (click)="editUser(user)"
+          ></button>
+          <!-- <p-inputSwitch
+  
+         trueValue="Y"
+        falseValue="N"    
+         (onChange)="handleChange($event)"
+         
+         ></p-inputSwitch> -->
+
+          <!-- <button
+          pButton
+          pRipple
+          icon="pi pi-trash"
+          class="p-button-rounded p-button-warning"
+          (click)="deleteUser(user)"
+        ></button>
+      </td>
+      <td>
+         <mat-slide-toggle
+     
+        (change)="onChange($event)"
+        >
+      </mat-slide-toggle> -->
+          <!-- <p-toggleButton onLabel="Y" offLabel="N"
+        trueValue="Y"
+
+        falseValue="N"
+        (onChange)="handleChange($event)
+        
+        " ></p-toggleButton> -->
+          <!-- <p-inputSwitch
+  
+         trueValue="Y"
+        falseValue="N"     (onChange)="handleChange($event)"></p-inputSwitch> -->
+        </td>
+        <!-- <td></td> -->
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        In total there are {{ users ? users.length : 0 }} Users.
+      </div>
+    </ng-template>
+  </p-table>
+</div>
+
+<div>
+  <p-dialog
+    #pdFront
+    [(visible)]="userDialog"
+    [responsive]="true"
+    header="Edit User Details"
+    [modal]="true"
+    styleClass=""
+    [autoZIndex]="true"
+    (click)="pdFront.moveOnTop()"
+  >
+    <form
+      (ngSubmit)="UpdateUser()"
+      [formGroup]="userForm"
+      class="p-fluid p-grid"
+    >
+      <span style="display: none">
+        <label for="id">UserId</label>
+        <span class="p-float-label">
+          <input
+            type="number"
+            id="id"
+            pInputText
+            formControlName="id"
+            disabled="true"
+          />
+        </span>
+      </span>
+      <div class="grid">
+        <div class="col-6">
+          <div class="p-field grid">
+            <div class="col-12">
+              <label for="username">Username</label>
+              <span class="p-float-label">
+                <input
+                  type="text"
+                  id="username"
+                  pInputText
+                  formControlName="username"
+                />
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="p-field grid">
+            <div class="col-12">
+              <label for="name">Name</label>
+              <span class="p-float-label">
+                <input
+                  type="text"
+                  id="name"
+                  pInputText
+                  formControlName="name"
+                />
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="col-6">
+          <div class="p-field grid">
+            <div class="col-12">
+              <label for="password">Password</label>
+              <span class="p-float-label">
+                <p-password
+                  type="password"
+                  id="password"
+                  [toggleMask]="true"
+                  pInputText
+                  formControlName="password"
+                >
+                </p-password>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="p-field grid">
+            <div class="col-12">
+              <label for="userRoles"
+
+                >Roles<span style="color: red">*</span></label
+              >
+              <p-dropdown
+              #rolesNo
+                [options]="roles"
+                name="All"
+                appendTo="body"
+                optionLabel="name"
+                optionValue="name"
+                [showClear]="true"
+                [filter]="true"
+                maxSelectedLabels="1"
+                filterBy="name"
+                filterMatchMode="startsWith" 
+               
+                 [autoDisplayFirst]="false"
+                formControlName="userRoles"
+              [placeholder]="this.uservalue"
+                filterMatchMode="startsWith"
+                (onChange)="onAccountSelect_client(rolesNo.value); onAccountSelect_projectname(rolesNo.value); onAccountSelect_projectname1(rolesNo.value); onAccountSelect_projectname2(rolesNo.value)"
+              ></p-dropdown>
+       
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="col-6" *ngIf="showagentlist">
+          <div class="p-field grid">
+            <div class="col-12">
+              <label for="email"
+                >Agent Name<span style="color: red">*</span></label
+              >
+              <p-dropdown
+                #grouplist
+                [options]="agents"
+                name="All"
+                appendTo="body"
+                optionLabel="agentName"
+                optionValue="agentName"
+                [showClear]="true"
+                [filter]="true"
+                maxSelectedLabels="1"
+                filterBy="agentName"
+                [placeholder]="'Agent Name'"
+                [autoDisplayFirst]="true"
+                filterBy="agentName"
+                filterMatchMode="startsWith"
+                (onChange)="onChangelist(grouplist.value, $event)"
+              ></p-dropdown>
+            </div>
+          </div>
+        </div>
+        <div class="col-6" *ngIf="showprojectlist">
+          <div class="p-field grid">
+            <div class="col-12">
+              <label for="email"
+                >Project Name<span style="color: red">*</span></label
+              >
+              <p-dropdown
+                #projectlist
+                [options]="emailTickets"
+                name="All"
+                appendTo="body"
+                optionLabel="projectName"
+                optionValue="projectName"
+                [showClear]="true"
+                [filter]="true"
+                filterBy="projectName"
+                filterMatchMode="startsWith"
+                maxSelectedLabels="1"
+                filterBy="projectName"
+                [placeholder]="this.UserprojectName"
+                [autoDisplayFirst]="true"
+                formControlName="projectName"
+                (onChange)="onChangelist(projectlist.value, $event)"
+              ></p-dropdown>
+            </div>
+          </div>
+        </div>
+        <div class="col-6" *ngIf="showprojectlist1">
+          <div class="p-field grid">
+            <div class="col-12">
+              <label for="email"
+                >Project Name<span style="color: red">*</span></label
+              >
+              <p-dropdown
+                #projectlist
+                [options]="emailTickets"
+                name="All"
+                appendTo="body"
+                optionLabel="projectName"
+                optionValue="projectName"
+                [showClear]="true"
+                [filter]="true"
+                maxSelectedLabels="1"
+                filterBy="projectName"
+                [placeholder]="this.UserprojectName"
+                [autoDisplayFirst]="true"
+                filterMatchMode="startsWith"
+                formControlName="projectName"
+                (onChange)="onChangelist(projectlist.value, $event)"
+              ></p-dropdown>
+            </div>
+          </div>
+        </div>
+
+        <!-- <div class="col-6" *ngIf="showprojectlist2">
+          <div class="p-field grid">
+            <div class="col-12">
+              <label for="email"
+                >Project Name<span style="color: red">*</span></label
+              >
+              <p-dropdown
+                #projectlist
+                [options]="emailTickets"
+                name="All"
+                appendTo="body"
+                optionLabel="projectName"
+                optionValue="projectName"
+                [showClear]="true"
+                [filter]="true"
+                maxSelectedLabels="1"
+                filterBy="projectName"
+                [placeholder]="'Project Name'"
+                [autoDisplayFirst]="true"
+                formControlName="projectName"
+                filterMatchMode="startsWith"
+                (onChange)="onChangelist(projectlist.value, $event)"
+              ></p-dropdown>
+            </div>
+          </div>
+        </div> -->
+        <div class="col-6" *ngIf="showprojectlist2">
+          <div class="p-field grid">
+            <div class="col-12">
+              <label for="email"
+                >Group Name<span style="color: red">*</span></label
+              >
+              <p-dropdown
+                #projectlist
+                [options]="groupTickets"
+                name="All"
+                appendTo="body"
+                optionLabel="groupAgentName"
+                optionValue="groupAgentName"
+                [showClear]="true"
+                [filter]="true"
+                maxSelectedLabels="1"
+                filterBy="groupAgentName"
+                filterMatchMode="startsWith"
+                [placeholder]="this.UserGroupName"
+                [autoDisplayFirst]="true"
+                formControlName="groupName"
+                (onChange)="onChangelist(projectlist.value, $event)"
+              ></p-dropdown>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="p-field grid">
+            <div class="col-12">
+              <label for="email">Email</label>
+              <span class="p-float-label">
+                <input
+                  type="text"
+                  id="email"
+                  pInputText
+                  formControlName="email"
+                />
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-field grid">
+        <div class="col-12">
+          <button
+            pButton
+            label="Update"
+            type="submit"
+            style="float: right !important"
+          ></button>
+        </div>
+      </div>
+    </form>
+  </p-dialog>
+  <p-dialog
+    header="Title"
+    [(visible)]="display"
+    [responsive]="true"
+    header="Add User Details"
+    [modal]="true"
+    styleClass=""
+    [autoZIndex]="true"
+  >
+  <form (ngSubmit)="createUser()" [formGroup]="userForm" class="p-fluid p-grid">
+    <div class="grid">
+      <div class="col-6">
+        <div class="p-field grid">
+          <div class="col-12">
+            <label for="username">Username</label>
+            <span class="p-float-label">
+              <input
+                type="text"
+                id="username"
+                pInputText
+                formControlName="username"
+              />
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="p-field grid">
+          <div class="col-12">
+            <label for="name">Name</label>
+            <span class="p-float-label">
+              <input type="text" id="name" pInputText formControlName="name" />
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="grid">
+      <div class="col-6">
+        <div class="p-field grid">
+          <div class="col-12">
+            <label for="password">Password</label>
+            <span class="p-float-label">
+              <p-password
+                [toggleMask]="true"
+                type="password"
+                id="password"
+                pInputText
+                formControlName="password"
+              ></p-password>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="p-field grid">
+          <div class="col-12">
+            <label for="dropdown">Role</label>
+            <span class="p-float-label">
+              <p-dropdown
+                appendTo="body"
+                [options]="roles"
+                optionLabel="name"
+                optionValue="name"
+                [filter]="true" 
+                filterBy="name"
+                filterMatchMode="startsWith" 
+                placeholder=" Roles"
+                [showClear]="false"
+                [autoDisplayFirst]="true"
+                formControlName="userRoles"
+                (onChange)="onAccountSelect_client($event.value); onAccountSelect_projectname($event.value);onAccountSelect_projectname1($event.value); onAccountSelect_projectname2($event.value)"
+          
+              ></p-dropdown>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="grid">
+      <div class="col-6" *ngIf="showagentlist">
+        <div class="p-field grid">
+          <div class="col-12">
+            <label for="email">Agent Name<span style="color: red">*</span></label>
+            <p-dropdown
+              #grouplist
+              [options]="agents"
+              name="All"
+              appendTo="body"
+              optionLabel="agentName"
+              optionValue="agentName"
+              [showClear]="true"
+              [filter]="true"
+              filterMatchMode="startsWith" 
+              maxSelectedLabels="1"
+              filterBy="agentName"
+              [placeholder]="'Agent Name'"
+              [autoDisplayFirst]="true"
+              (onChange)="onChangelist(grouplist.value, $event)"
+            ></p-dropdown>
+          </div>
+        </div>
+      </div>
+      <div class="col-6" *ngIf="showprojectlist">
+        <div class="p-field grid">
+          <div class="col-12">
+            <label for="projectName"
+              >Project Name<span style="color: red">*</span></label
+            >
+            <p-dropdown
+              #projectlist
+              [options]="emailTickets"
+              name="All"
+              appendTo="body"
+              optionLabel="projectName"
+              optionValue="projectName"
+              [showClear]="true"
+              [filter]="true"
+              maxSelectedLabels="1"
+              filterBy="projectName"
+              filterMatchMode="startsWith" 
+              [placeholder]="'Project Name'"
+              [autoDisplayFirst]="true"
+              formControlName="projectName"
+              (onChange)="onChangelist(projectlist.value, $event)"
+            ></p-dropdown>
+          </div>
+        </div>
+      </div>
+      <div class="col-6" *ngIf="showprojectlist1">
+        <div class="p-field grid">
+          <div class="col-12">
+            <label for="projectName"
+              >Project Name<span style="color: red">*</span></label
+            >
+            <p-dropdown
+              #projectlist
+              [options]="emailTickets"
+              name="All"
+              appendTo="body"
+              optionLabel="projectName"
+              optionValue="projectName"
+              [showClear]="true"
+              [filter]="true"
+              maxSelectedLabels="1"
+              filterMatchMode="startsWith" 
+              filterBy="projectName"
+              [placeholder]="'Project Name'"
+              [autoDisplayFirst]="true"
+              formControlName="projectName"
+              (onChange)="onChangelist(projectlist.value, $event)"
+            ></p-dropdown>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-6" *ngIf="showprojectlist2">
+        <div class="p-field grid">
+          <div class="col-12">
+            <label for="projectName"
+              >Project Name<span style="color: red">*</span></label
+            >
+            <p-dropdown
+              #projectlist
+              [options]="emailTickets"
+              name="All"
+              appendTo="body"
+              optionLabel="projectName"
+              optionValue="projectId"
+              [showClear]="true"
+              [filter]="true"
+              filterMatchMode="startsWith" 
+              maxSelectedLabels="1"
+              filterBy="projectName"
+              [placeholder]="'Project Name'"
+              [autoDisplayFirst]="true"
+              formControlName="projectName"
+              (onChange)="onChangelist(projectlist.label, $event)"
+            ></p-dropdown>
+          </div>
+        </div>
+      </div>
+      <div class="col-6" *ngIf="showprojectlist2">
+        <div class="p-field grid">
+          <div class="col-12">
+            <label for="groupName"
+              >Group Name<span style="color: red">*</span></label
+            >
+            <p-dropdown
+              #projectlist
+              [options]="groupbased"
+              name="All"
+              appendTo="body"
+              optionLabel="groupAgentName"
+              optionValue="groupAgentName"
+              [showClear]="true"
+              [filter]="true"
+              maxSelectedLabels="1"
+              filterBy="groupAgentName"
+              [placeholder]="'Group Name'"
+              [autoDisplayFirst]="true"
+              formControlName="groupName"
+              filterMatchMode="startsWith" 
+             
+            ></p-dropdown>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="p-field grid">
+          <div class="col-12">
+            <label for="email">Email</label>
+            <span class="p-float-label">
+              <input type="text" id="email" pInputText formControlName="email" />
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="p-field grid">
+      <div class="col-12">
+        <button
+          pButton
+          label="Create User"
+          type="submit"
+          style="float: right !important"
+        ></button>
+       
+      </div>
+    </div>
+  
+  </form>
+  
+  </p-dialog>
+</div>
+<p-toast></p-toast>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+
+<div id="overlay" *ngIf="progressbar">
+  <span class="abs"> <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i></span>
+ 
+  <!-- <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8"  animationDuration=".5s"></p-progressSpinner> -->
+   
+</div>

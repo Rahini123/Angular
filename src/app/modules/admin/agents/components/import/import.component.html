@@ -1,0 +1,38 @@
+<!-- <h3>Import Agents</h3>
+<p>
+  <span><b>Step 1 out of 2:</b> </span>
+  Select a CSV file to upload. Please ensure that your CSV file is in UTF-8
+  format, and that the first row contains field names (such as First Name and
+  Email). For more information,
+  <a
+    href="https://support.freshservice.com/support/solutions/articles/232445-importing-agent-information"
+    >click here</a
+  >
+</p>
+<p>
+  <i
+    class="pi pi-exclamation-circle"
+    style="color: #de4747; margin-right: 5px"
+  ></i
+  >If an existing agent's email is found in the CSV file, the information in the
+  file will be updated onto their profile.
+</p>
+<div class="mt-5">
+  <p-toast></p-toast>
+  <p-fileUpload
+    name="myfile[]"
+    accept="csv/*"
+    [customUpload]="true"
+    (uploadHandler)="onUpload($event)"
+  >
+    <ng-template pTemplate="toolbar"> </ng-template>
+    <ng-template pTemplate="content" let-files>
+      <ul *ngIf="uploadedFiles.length">
+        <li *ngFor="let file of uploadedFiles">
+          {{ file.name }} - {{ file.size }} bytes
+        </li>
+      </ul>
+    </ng-template>
+  </p-fileUpload>
+</div> -->
+<!-- <ckeditor [editor]="editor" (ready)="onReady($event)"></ckeditor> -->

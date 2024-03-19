@@ -1,0 +1,485 @@
+<!-- <div >
+  <p-table [value]="openticketlist" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Quantity</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product>
+        <tr>
+            <td>{{ product.projectName }}</td>
+            <td>{{ product.ticketStatus }}</td>
+            <td>{{ product.mailBody }}</td>
+            <td>{{ product.priorityStatus }}</td>
+        </tr>
+    </ng-template>
+</p-table>
+</div> -->
+
+<div class="p-fluid col-12" style="padding: 0px">
+  <p-table
+    #dt
+    editMode="row"
+    [value]="openticketlist"
+    [reorderableColumns]="true"
+    [rowsPerPageOptions]="[5, 10, 25, 50, 100]"
+    paginatorDropdownAppendTo="body"
+    [resizableColumns]="true"
+    [rows]="10"
+    [loading]="isLoading"
+    [paginator]="true"
+    responsiveLayout="scroll"
+    [columns]="selectedColumns"
+    [(selection)]="selectedTickets"
+    [rowHover]="true"
+    dataKey="id"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [showCurrentPageReport]="true"
+    [globalFilterFields]="['ticketNo','groupName']"
+  >
+    <ng-template pTemplate="caption">
+      <div class="col-12 m-0 p-0">
+        <div class="grid" >
+          <div class="col-2 m-0 breadcrumb-sec">
+            <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+          </div>
+          <div class="col-3 mr-2 pb-0" style="display: none">
+            <div *ngIf="showMsg">
+              <p-dropdown
+                [options]="emailTickets"
+                name="All"
+                optionLabel="projectName"
+                optionValue="projectId"
+          
+                [filter]="true"
+                filterBy="projectName"
+                [placeholder]="emailPlaceholderText"
+               
+                (onChange)="onChange($event)"
+              ></p-dropdown>
+   
+            </div>
+          </div>
+          <div class="col-3 mr-2 pb-0" style="display: none">
+            <div *ngIf="showMsg">
+              <p-dropdown
+                #groupAgent
+                [options]="groupTickets"
+                optionLabel="groupAgentName"
+                optionValue="groupAgentName"
+                [filter]="true"
+                [showClear]="true"
+                [placeholder]="groupPlaceholderText"
+                (onChange)="onChange1($event)"
+              ></p-dropdown>
+            </div>
+          </div>
+          <div class="col-3 m-0 pb-0">
+            <div class="showassign" >
+              <span *ngIf="showassignbtn">    <button
+                pButton
+                type="button"
+                label="Assign To"
+                style="width: 7rem; margin-left: -1rem"
+                class="slim-button"
+                [disabled]="!selectTicketNo || !selectTicketNo.length"
+                (click)="op.toggle($event);onclickassign();"
+              ></button> </span>
+              <span>{{this.projectname}}</span>
+          <span > Status:</span> 
+              <span class="link-sec dashboard" [ngClass]="{
+                'Onhold ':this.status_txt == 'On Hold',
+                'WIP ': this.status_txt == 'WIP',
+                'CustomerWorking ': this.status_txt == 'Customer Working',
+                'Closed ': this.status_txt == 'Closed',
+                'Duplicate ': this.status_txt == 'Duplicate',
+                'Resolved ': this.status_txt == 'Resolved',
+                'Open ': this.status_txt=='Open',
+                'MergeClosed':this.status_txt == 'MergedClosed',
+                'UnAssigned':this.status_txt == 'UnAssigned',
+                'Assigned': this.status_txt== 'Assigned',
+                'TechincalWorking':this.status_txt == 'Techincal Working',
+                'ToBeMoveToPROD': this.status_txt == 'ToBeMoveToPROD',
+                'FinalConfirmation': this.status_txt == 'Final Confirmation',
+                'InputRequired': this.status_txt == 'Input Required',
+                'WaitingforApproval': this.status_txt == 'Waiting for Approval'
+              }">
+            {{this.status_txt}}</span>
+           
+            </div>
+            
+          </div>
+          
+
+        </div>
+      </div>
+
+      <div class="p-field grid mt-2">
+       
+      
+        <div class="card p-2">
+          <div class="flex flex-row-reverse flex-wrap">
+       
+            <div class="flex align-items-center justify-content-center w-15rem">
+              <div class="col-12" style="padding: 0px; padding-right: 10px">
+                <p-multiSelect
+                  [options]="cols"
+                  [(ngModel)]="selectedColumns"
+                  optionLabel="header"
+                  selectedItemsLabel="{0} columns selected"
+                  [style]="{ minWidth: '20px' }"
+                  placeholder="Choose Columns"
+                ></p-multiSelect>
+              </div>
+            </div>
+    
+            <div class="flex align-items-center justify-content-center w-15rem">
+              <div class="p-d-flex p-ai-end p-jc-end">
+                <span class="p-input-icon-left">
+                  <i class="pi pi-search"></i>
+                  <input
+                    pInputText
+                    type="text"
+                    (input)="
+                      dt.filterGlobal($any($event.target).value, 'contains')
+                    "
+                    placeholder="Search..."
+                  />
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="header"  let-ticket  let-columns >
+
+
+      <tr>
+        <th style="width: 3rem">
+ 
+        </th>
+
+
+        <th
+          *ngFor="let col of columns"
+          pResizableColumn
+          pReorderableColumn          
+          pSortableColumn="{{ col.header }}"
+        >
+          {{ col.header }} 
+          <p-sortIcon field="{{ col.header }}"></p-sortIcon>
+        </th>
+
+        <th style="text-align: center">Status</th> 
+   
+        <th style="text-align: center"  [ngClass]="ticket.ticketStatus=='Waiting For Approval'?'displaytk':'notdisplaytk'">Ticket Status</th>
+        
+      </tr>
+    </ng-template>
+
+    <ng-template
+      pTemplate="body"
+      [pEditableRow]="ticket"
+      let-ri="rowIndex"
+      let-ticket
+      let-columns="columns"
+      let-rowData
+      let-index="rowIndex"
+    >
+    
+      <tr [pReorderableRow]="index">
+        <td>
+          <span *ngIf="tableselectedcol">
+          <p-radioButton [value]="ticket" [(ngModel)]="selectedValue" (click)="editTickets(ticket)">
+          </p-radioButton></span>
+        </td>
+       
+
+        <td *ngFor="let col of columns" (click)="editTicket(ticket)" style="cursor: pointer" 
+        pTooltip="{{ ticket[col.field] }}" [tooltipOptions]="tooltipOptions" tooltipPosition="top" placeholder="Top" >
+          <span id="class" class="tick-width"
+          [ngClass]="{
+            'Medium ': ticket.priority == 'Medium' && col.field==='priority',
+            'Low ': ticket.priority == 'Low' && col.field==='priority',
+            'Urgent ': ticket.priority == 'Urgent' && col.field==='priority',
+            'High ': ticket.priority == 'High' && col.field==='priority' ,
+            'Medium_WFP': ticket.priorityStatus == 'Medium' && col.field==='priorityStatus',
+            'Low_WFP ': ticket.priorityStatus == 'Low' && col.field==='priorityStatus',
+            'Urgent_WFP ': ticket.priorityStatus == 'Urgent' && col.field==='priorityStatus',
+            'High_WFP': ticket.priorityStatus == 'High' && col.field==='priorityStatus' 
+
+     
+             }"
+       > {{ ticket[col.field] }}</span>
+        
+        </td>
+        <!-- <td>
+        <p-overlayPanel #op>
+          <ng-template pTemplate>
+            <p-dropdown appendTo="body"
+              #groupliststatus
+              [options]="statusitems"
+             
+             
+              [metaKeySelection]="false"
+              [checkbox]="false"
+              [filter]="true"
+              [multiple]="false"
+              optionLabel="statusitems"
+              [listStyle]="{ 'max-height': '250px' }"
+              [style]="{ width: '15rem' }"
+              (onChange)="onChangeliststatus(ticket,groupliststatus.value);"
+              
+              ></p-dropdown>
+          </ng-template>
+      </p-overlayPanel>
+      
+      <button type="text" pButton label="Basic" (click)="op.toggle($event)"></button>
+      </td> -->
+        <td pEditableColumn  *ngIf="tableselectedcol" [ngClass]="{ 'Closedtd': ticket.status== 'Closed'}">
+          <!-- <p-overlayPanel #op>
+          
+          <ng-template pTemplate="input">
+            <p-dropdown appendTo="body"
+            #groupliststatus
+            [options]="statusitems"
+           
+           
+            [metaKeySelection]="false"
+            [checkbox]="false"
+            [filter]="true"
+            [multiple]="false"
+            optionLabel="statusitems"
+            [listStyle]="{ 'max-height': '250px' }"
+            [style]="{ width: '2rem' }"
+            (onChange)="onChangeliststatus(ticket,groupliststatus.value);"
+            
+            ></p-dropdown>
+            <ng-template pTemplate="output">
+              {{ticket.status}}
+          </ng-template>
+          </ng-template>
+      </p-overlayPanel> -->
+
+          <!-- <button type="text" pButton label="Basic" (click)="op.toggle($event)"></button> -->
+          <p-cellEditor>
+            <ng-template pTemplate="input" class="ticketdropdown">
+              <p-dropdown appendTo="body" #groupliststatus [options]="statusvalue" [metaKeySelection]="false"
+                [checkbox]="false" [filter]="true" panelStyleClass="dropdowndisable" [multiple]="false"
+                optionLabel="status" [listStyle]="{ 'max-height': '10px' }" [style]="{ width: '6rem', padding: '0px' }"
+                [autoDisplayFirst]="false" (onChange)="onChangeliststatus(ticket, groupliststatus.value);"></p-dropdown>
+            </ng-template>
+            <ng-template pTemplate="output">
+              <span class="link-sec" [ngClass]="{
+                'Onhold ': ticket.status == 'On Hold',
+                'WIP ': ticket.status == 'WIP',
+                'CustomerWorking ': ticket.status == 'Customer Working',
+                'Closed ': ticket.status == 'Closed',
+                'Duplicate ': ticket.status == 'Duplicate',
+                'Resolved ': ticket.status == 'Resolved',
+                'Open ': ticket.status == 'Open',
+                'MergeClosed': ticket.status == 'MergedClosed',
+                'UnAssigned': ticket.status == 'UnAssigned',
+                'Assigned': ticket.status == 'Assigned',
+                'TechincalWorking': ticket.status == 'Techincal Working',
+                'ToBeMoveToPROD': ticket.status == 'ToBeMoveToPROD',
+                'FinalConfirmation': ticket.status == 'Final Confirmation',
+                'InputRequired': ticket.status == 'Input Required',
+                'WaitingforApproval': ticket.status == 'Waiting for Approval'
+                }">
+                {{ ticket.status }}
+              </span>
+            </ng-template>
+          </p-cellEditor>
+          <span class="link-sec" [ngClass]="{
+            'Onholdsec': ticket.status == 'On Hold',
+            'WIPsec ': ticket.status == 'WIP',
+            'CustomerWorkingsec': ticket.status == 'Customer Working',
+            'Closedsec': ticket.status == 'Closed',
+            'Duplicatesec': ticket.status == 'Duplicate',
+            'Resolvedsec': ticket.status == 'Resolved',
+            'Opensec': ticket.status == 'Open',
+            'MergeClosedsec': ticket.status == 'MergedClosed',
+            'UnAssignedsec': ticket.status == 'UnAssigned',
+            'Closed sec': ticket.status == 'Closed',
+            'Assignedsec': ticket.status == 'Assigned',
+            'TechincalWorkingsec': ticket.status == 'Techincal Working',
+            'ToBeMoveToPRODsec': ticket.status == 'ToBeMoveToPROD',
+            'FinalConfirmationsec': ticket.status == 'Final Confirmation',
+            'InputRequiredsec': ticket.status == 'Input Required',
+            'WaitingforApprovalsec': ticket.status == 'Waiting for Approval'
+          }">
+          {{ ticket.status }}</span>
+
+      
+        </td>
+      
+        <td [ngClass]="ticket.ticketStatus == 'Waiting For Approval'?'displaytk':'notdisplaytk'">{{ticket.ticketStatus}}</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        In total there are {{ openticketlist ? openticketlist.length : 0 }} Tickets.
+      </div>
+    </ng-template>
+  </p-table>
+</div>
+<p-overlayPanel #op [showCloseIcon]="false">
+  <p-listbox
+    #grouplist
+    [options]="groupbased"
+    [(ngModel)]="selectedvalue"
+    optionLabel="groupAgentName"
+    [metaKeySelection]="false"
+    [checkbox]="false"
+    [filter]="true"
+    [multiple]="false"
+    optionLabel="groupAgentName"
+    [listStyle]="{ 'max-height': '250px' }"
+    [style]="{ width: '15rem' }"
+    (onChange)="onChangelist(grouplist.value)"
+  >
+  </p-listbox>
+  <p>
+    Selected Group:
+    {{ selectedvalue ? selectedvalue.groupAgentName : "none" }}
+  </p>
+
+  <div class="p-field grid">
+    <div class="col-offset-10 col-2">
+      <button
+        pButton
+        label="Assign"
+        (click)="assignTickets()"
+        type="submit"
+        style="float: right !important"
+      ></button>
+    </div>
+  </div>
+</p-overlayPanel>
+
+<p-toast></p-toast>
+
+<p-dialog
+  #pdFront
+  [(visible)]="TicketDialog"
+  [responsive]="true"
+  header="Error Code"
+  [modal]="true"
+  styleClass="p-fluid close"
+  [autoZIndex]="true"
+  (click)="pdFront.moveOnTop()"
+>
+<form 
+    class="p-fluid p-grid"
+    (ngSubmit)="saveErrors()"
+    [formGroup]="errorForm">
+  
+
+    <div class="grid">
+   
+      <div class="col-6">
+        <div class="p-field grid ">
+          <div class="col-12">
+            <label for="error_code"
+            >Error Code<span style="color: red">*</span></label >
+            <span class="p-float-label" styleClass="md-inputfield">
+              <input
+                type="text"
+                id="error_code"
+                pInputText
+                required="true"
+                formControlName="error_code"
+                disabled="true"
+              />
+             
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="p-field grid ">
+          <div class="col-12">
+            <label for="error_name"
+            > Problem Summary <span style="color: red">*</span></label
+          >
+            <span class="p-float-label" styleClass="md-inputfield">
+              <input
+                type="text"
+                id="error_name"
+                pInputText
+                required="true"
+                formControlName="error_name"
+                disabled="true"
+              />
+            
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-12 p-0">
+
+      <div class="p-field grid ">
+        <div class="col-12">
+          <label for="error_description"> Problem Description</label>
+          <span class="p-float-label" styleClass="md-inputfield">
+          
+            <textarea
+              inputId="textarea"
+              rows="3"
+              style="resize: none"
+              cols="30"
+              pInputTextarea
+              id="error_description"
+              formControlName="error_description"
+              ngModel
+            ></textarea>
+          
+          </span>
+        </div>
+      </div>
+  
+    </div>
+    
+   
+  
+    
+
+    <div class="p-field grid">
+
+      <div class=" col-12">
+
+        <button
+
+          pButton
+
+          label="Save"
+
+          type="submit"
+
+          style="float: right !important"
+
+        ></button>
+
+      </div>
+
+    </div>
+
+
+
+</form>
+</p-dialog>
+<div id="overlay" *ngIf="progressbar">
+  <span class="abs"> <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i></span>
+ 
+  <!-- <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8"  animationDuration=".5s"></p-progressSpinner> -->
+   
+</div>

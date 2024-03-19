@@ -1,0 +1,156 @@
+<div class="client-table">
+    <p-table #dt [value]="workflow" tableStyleClass="table" [loading]="isLoading"
+      [rowsPerPageOptions]="[5, 10, 25, 50, 100]" [rows]="5" [paginator]="true" responsiveLayout="scroll"
+     [rowHover]="true" dataKey="workflowId"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true"
+      [globalFilterFields]="['workflowId']">
+      <ng-template pTemplate="caption">
+        <div class="card">
+          <div class="card-container purple-container overflow-hidden">
+            <div class="flex">
+              <div class="flex-1 flex align-items-center justify-content-start  font-bold text-white m-2 border-round">
+                <div class="div-tab">
+                  <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+                </div>
+              </div>
+  
+              <div class="flex-1 flex align-items-center justify-content-end  font-bold text-white m-2  border-round">
+                <span class="p-input-icon-left">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                    placeholder="Search..." (keydown.enter)="search($event.target.value)" />
+                </span>
+                <button pButton pRipple label="Add" icon="pi pi-plus-circle" class="p-button-success mr-2"
+                  (click)="showDialog()"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th rowspan="2">
+            <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
+          </th>
+          <!-- <th pSortableColumn="clientId" rowspan="2">
+            Client Id <p-sortIcon field="clientId"></p-sortIcon>
+          </th> -->
+          <!-- <th pSortableColumn="clientName" rowspan="2" pResizableColumn>
+            Workflow ID <p-sortIcon field="clientName"></p-sortIcon>
+          </th> -->
+          <th pSortableColumn="clientName" rowspan="2" pResizableColumn>
+            Project Names<p-sortIcon field="clientName"></p-sortIcon>
+          </th>
+          <th pSortableColumn="clientDescription" rowspan="2" pResizableColumn>
+            Ticket Priority <p-sortIcon field="clientName"></p-sortIcon>
+          </th>
+         
+          <th style="text-align: center;">Action</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-workflow>
+        <tr>
+          <td>
+            <!-- <p-tableCheckbox [value]="client"></p-tableCheckbox> -->
+          </td>
+          <!-- <td>{{ client.clientId }}</td> -->
+          <!-- <td>{{ workflow.workflowId }}</td> -->
+          <td>{{ workflow.projectName }}</td>
+          <td>{{ workflow.ticketPriority }}</td>
+         
+          <td>
+  
+  
+            <button pButton pRipple [style]="{ float: 'right' }" icon="pi pi-pencil"
+              class="p-button-rounded p-button-success" (click)="editworkflow(workflow)"></button>
+           
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          In total there are {{ workflow ? workflow.length : 0 }} workflows.
+        </div>
+      </ng-template>
+    </p-table>
+    <p-dialog #pdFront [(visible)]="WorkflowDialogAdd" [responsive]="true" header="Add Workflow Details" [modal]="true"
+    styleClass=" " [autoZIndex]="true" styleClass="addslapolicy"
+    (onHide)="cancel()">
+    <div class="col-12">
+        <div class="grid">
+                        
+                <div class="col-2" style="line-height: 50px;text-align: right;">Project Names :</div>
+                <div class="col-3">
+                    <p-dropdown #projectlabel [options]="projectactive" name="All" optionLabel="projectName"
+                    optionValue="projectId" [filter]="true" [showClear]="true" filterBy="projectDescription"
+                    appendTo="body"
+                    placeholder="Select Project Name" (onChange)="onChange($event,projectlabel.label)">
+                </p-dropdown>
+                </div>
+                <div class="col-2" style="line-height: 50px;text-align: right">
+                    Ticket Priority
+               </div>
+               <div class="col-3">
+                <p-dropdown #projectlabel2 [options]="ticketpriority" name="All" optionLabel="label"
+                optionValue="label" [filter]="true" [showClear]="true" filterBy="projectDescription"
+                appendTo="body"
+                placeholder="Select Ticket Priority" (onChange)="onChangeticket($event,projectlabel2.label)">
+            </p-dropdown>
+               </div>                                                                                                                                 
+            <div class="col-2 ">
+                <button pButton pRipple type="submit" label="Save" icon="pi pi-file-o"
+                class="p-element p-button p-component" (click)="saveclick()" style="float: right;"></button> 
+            </div>
+           
+           <!-- <div>{{this.projectlable}}</div>
+       <div>{{this.ticketprioritylabel}}</div> -->
+        </div>
+    </div>
+  
+    </p-dialog>
+    <p-dialog #pdFront [(visible)]="WorkflowDialog" [responsive]="true" header="Edit Workflow Details" [modal]="true"
+  styleClass=" " [autoZIndex]="true"  styleClass="addslapolicy"
+  (onHide)="cancel()">
+  <form class="p-fluid p-grid"  [formGroup]="slapolicyservice">
+  <div class="col-12">
+    <div class="grid">
+     
+            <input type="text" formControlName="workflowId"  style="display: none;">
+            <div class="col-2" style="line-height: 50px;text-align: right;">Project Name :</div>
+            <div class="col-3">
+                <p-dropdown #project [options]="projectactive" name="All" optionLabel="projectName"
+                optionValue="projectId" [filter]="true" [showClear]="true" filterBy="projectDescription"
+                appendTo="body" formControlName="projectName"
+                [placeholder]="this.projectname"  [disabled]="true" [(ngModel)]="projectname" (onChange)="onChange($event,project.label)">
+            </p-dropdown>
+            </div>
+            <div class="col-2" style="line-height: 50px;text-align: right">
+                Ticket Priority
+           </div>
+           <div class="col-3">
+            <p-dropdown #ticket [options]="ticketpriority" name="All" optionLabel="label"
+            optionValue="label" [filter]="true" [showClear]="true" filterBy="projectDescription"
+            appendTo="body" formControlName="ticketPriority"  [(ngModel)]="ticketPriority" 
+            [placeholder]="this.ticketPriority" (onChange)="onChangeticket($event,ticket.label)">
+        </p-dropdown>
+           </div>                                                                                                                                 
+        <div class="col-2 ">
+            <button pButton pRipple type="submit" label="Save" icon="pi pi-file-o"
+            class="p-element p-button p-component" (click)="editclick()" style="float: right;"></button> 
+        </div>
+       
+    </div>
+</div>
+</form>
+  </p-dialog>
+  
+  </div>
+  <p-toast></p-toast>
+      
+<div id="overlay" *ngIf="progressbar">
+  <span class="abs"> <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i></span>
+ 
+  <!-- <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8"  animationDuration=".5s"></p-progressSpinner> -->
+   
+</div>  

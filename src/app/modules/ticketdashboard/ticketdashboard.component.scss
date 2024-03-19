@@ -1,0 +1,512 @@
+
+
+.border-manual
+{
+  padding: 10px;
+  border: 1px solid #767676;
+  margin-left: 8px;
+  border-radius: 3px;
+  display: flex;
+}
+
+.displaytk
+{
+//display: block;
+}
+.notdisplaytk
+{
+  display: none;
+  line-height: 25px;
+}
+
+span.Assigned
+{
+  background-color:#8e1938;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+
+}
+
+.div-tab
+{
+  margin-top: 30px;
+}
+
+label {
+  padding-bottom: 10px;
+}
+.card
+{
+  width: 100%;
+  border: none;
+  background-color: none;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-top:0px;
+  padding-bottom: 0px;
+  padding-top: 0px;
+}
+
+.slim-button {
+  box-sizing: border-box;
+  height: 37px;
+  padding: 4px 12px;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 14px;
+  line-height: 22px;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  background: linear-gradient(171deg, #3b82f6 0%, #105dda 100%);
+  border: 1px solid #678dcd;
+  border-radius: 4px;
+  color: #ffffff !important;
+  font-weight: 600;
+  margin-right: 8px;
+  font-family: inherit;
+}
+.slim-button.merge {
+  background: linear-gradient(171deg, #da2626eb 0%, #ee1457 100%);
+  border: 1px solid #e62448;
+  font-family: verdana;
+}
+.slim-button.manualadd {
+  font-weight: normal;
+  background: linear-gradient(171deg, rgb(0 0 0 / 92%) 0%, #333832 100%);
+  border: 1px solid #070707;
+  font-family: verdana;
+}
+.p-toast-top-right {
+  top: 70px;
+ 
+}
+
+.height
+{
+  display: flex;
+  height: 37px;
+  justify-content: center;
+  align-items: center;
+  color:#ffff;
+  font-size: 14px;
+  margin-top: 1px;
+}
+.col-2.height.bg-white-500 {
+  color: #000;
+  border: 1px solid rgb(206 212 218);
+  border-radius: 0px 0px 3px 3px ;
+}
+.col-10.height.bg-green-500
+{
+  background: linear-gradient(180deg, #d51b1b 0%, #7a0e0e 100%);
+  border: 1px solid #b5b6b7;
+  border-radius: 13px 0px -1px 13px;
+  color: #ffffff 
+}
+.grid.margin-rm {
+  margin: 0px;
+}
+
+thead.p-datatable-thead {
+  border-top: 1px solid #dddd;
+}
+span.pos-relative {
+  position: relative;
+}span.pos-absolute {
+  position: absolute;
+}
+span.link-sec {
+  color: #222222;
+  cursor: pointer;
+
+}
+span.Assigned
+{
+  background-color: #09B2C7;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+
+}
+span.UnAssigned
+{
+  background-color:#FFA726;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+
+}
+span.WIP
+{
+  background-color:#7D3C98;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+  
+}
+span.Onhold
+{
+  background-color: #FF33CC;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.MergeClosed
+{
+  background-color: #e40101;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.CustomerWorking
+{
+  background-color: #00FFCC;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.TechincalWorking
+{
+  background-color: #0f7d67;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.ToBeMoveToPROD
+{
+  background-color: #7d0f3d;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.InputRequired
+{
+  background-color: #210f7d;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.WaitingforApproval
+{
+  background-color: #e09a30;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.FinalConfirmation
+{
+  background-color: #2eab0c;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.Closed
+{
+  background-color: #c93737;
+    color: rgb(255, 253, 253);
+    padding: 2px 3px;
+    border-radius: 4px;
+}
+span.Duplicate
+{
+  background-color: #676b6f;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.Resolved
+{
+  background-color: #85C1E9;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.Open
+{
+  background-color: #33691E;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+.tick-width {
+  // max-width: 210px;
+  // overflow: hidden;
+  // white-space: nowrap;
+  // text-overflow: ellipsis;
+  // word-break: break-word;
+  // display: inline-block;
+}
+
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
+  display: none;
+}
+h3.merge-title {
+  color: #121213;
+  font-weight: bold;
+  background-color: #80808012;
+  padding: 10px;
+  border: 1px solid #dddd;
+}
+.merge .p-sidebar .p-sidebar-content
+{
+  padding: 0px;
+}
+.p-sidewidth {
+  max-width: 45%;
+  width: 100%;
+}
+.merge-sec-div {
+  border: 1px solid #cccc;
+  margin-bottom: 10px;
+  background-color: #d1d1d10f;
+}
+.p-sidebar .p-sidebar-header .p-sidebar-close
+{
+  color: #ffffff;
+ 
+  background: #242020 !important;
+}
+.p-sidebar .p-sidebar-header .p-sidebar-close, .p-sidebar .p-sidebar-header .p-sidebar-icon
+{
+  background-color: #000 !important;
+}
+span.alert.pos {
+  position: relative;
+}
+.style-class
+{
+  border: 1px solid #ddd;
+  background-color: #ffffff;
+  padding: 0px;
+  margin-top: 0px;
+}
+span.abs {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: 0;
+  bottom: 0px;
+}
+
+p-progressspinner{
+  position: absolute;
+  top: 50%;
+  bottom: 0px;
+  left: 50%;
+  right: 0;
+}
+#overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: block; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgb(0 0 0 / 9%); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}
+.Closedtd p-dropdown.p-element.p-inputwrapper {
+  display: none;
+}
+.WIPsec,.Onholdsec,.CustomerWorkingsec,.Duplicatesec,.Resolvedsec,.Opensec,.MergeClosedsec,
+.UnAssignedsec,.Assignedsec,.TechincalWorkingsec,.ToBeMoveToPRODsec,.FinalConfirmationsec,.InputRequiredsec,
+.WaitingforApprovalsec{
+  display: none;
+}
+.Closedtd p-celleditor.p-element {
+  display: none;
+}
+span.link-sec {
+  color: #222222;
+  cursor: pointer;
+ // 
+
+}
+span.link-sec.dashboard
+{
+  font-size: 14px;
+  padding: 4px 5px;
+  margin-left: 10px;
+}
+span.Assigned
+{
+  background-color: #09B2C7;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+
+}
+span.UnAssigned
+{
+  background-color:#FFA726;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+
+}
+span.Assigned
+{
+  background-color:#00acc1;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+
+}
+span.WIP
+{
+  background-color:#7D3C98;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+  
+}
+span.Onhold
+{
+  background-color: #FF33CC;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.MergeClosed
+{
+  background-color: #e40101;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.CustomerWorking
+{
+  background-color: #00FFCC;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.TechincalWorking
+{
+  background-color: #0f7d67;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.ToBeMoveToPROD
+{
+  background-color: #7d0f3d;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.InputRequired
+{
+  background-color: #210f7d;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.WaitingforApproval
+{
+  background-color: #e09a30;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.FinalConfirmation
+{
+  background-color: #2eab0c;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.Closed
+{
+  background-color: #c93737;
+    color: rgb(255, 253, 253);
+    padding: 2px 3px;
+    border-radius: 4px;
+}
+span.Duplicate
+{
+  background-color: #676b6f;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.Resolved
+{
+  background-color: #85C1E9;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.Open
+{
+  background-color: #33691E;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+.showassign {
+  margin-top: 4px;
+}
+.Medium
+{
+  background-color: rgb(244 182 48 / 17%);
+  padding:2px 23px;
+  border-radius:3px;
+  border:1px solid #ddd;
+}
+.Low
+{
+  background-color: rgb(14 248 139 / 16%);
+  padding:2px 36px;
+  border-radius:3px;
+  border:1px solid #ddd;
+}
+.High
+{
+  background-color: rgb(254 29 29 / 9%);
+  padding:2px 33px;
+  border-radius:3px;
+  border:1px solid #ddd;
+}
+.Urgent
+{
+  background-color: rgb(254 29 29 / 16%);
+  padding:2px 25px;
+  border-radius:3px;
+  border:1px solid #ddd;
+}
+
+.Medium_WFP
+{
+  background-color: rgb(244 182 48 / 17%);
+  padding:2px 23px;
+  border-radius:3px;
+  border:1px solid #ddd;
+}
+.Low_WFP
+{
+  background-color: rgb(14 248 139 / 16%);
+  padding:2px 36px;
+  border-radius:3px;
+  border:1px solid #ddd;
+}
+.High_WFP
+{
+  background-color: rgb(254 29 29 / 9%);
+  padding:2px 33px;
+  border-radius:3px;
+  border:1px solid #ddd;
+}
+.Urgent_WFP
+{
+  background-color: rgb(254 29 29 / 16%);
+  padding:2px 25px;
+  border-radius:3px;
+  border:1px solid #ddd;
+}

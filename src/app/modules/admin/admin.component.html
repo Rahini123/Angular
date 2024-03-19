@@ -1,0 +1,148 @@
+<div class="p-datatable-header">
+  <div class="card">
+    <div class="card-container purple-container overflow-hidden">
+      <div class="flex">
+        <div class="flex-1 flex align-items-center justify-content-start font-bold text-white m-2 border-round">
+          <div class="div-tab">
+            <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="flex">
+  <div class="bg-width grid p-4">
+    <div
+      class="grid flex-1 flex align-items-center justify-content-center font-bold m-1 px-0 py-0 border-round bg-shadow bg-groups"
+      pRipple (mouseover)="over()" (mouseout)="out()" (click)="clickgrouplink()">
+      <div class="col-12 p-0">
+        <div class="grid">
+          <div class="col-6 text-align" style="text-align: center;">
+            <!-- <i class="pi pi-users" style="margin-right: 2px"></i> -->
+            <img src="{{ projectNames }}/assets/dash10.png" alt="Image" width="60" height="60" class="img" />
+          </div>
+          <div class="col-6 text-align" style="line-height: 60px;">Groups</div>
+        </div>
+
+      </div>
+
+
+
+    </div>
+    <div
+      class="grid flex-1 flex align-items-center justify-content-center font-bold m-1 px-0 py-0  border-round bg-shadow bg-agents"
+      pRipple (click)="clickagentlink()">
+      <div class="col-12">
+        <div class="grid">
+          <div class="col-6 text-align" style="text-align: center;">
+            <img src="{{ projectNames }}/assets/dash9.png" alt="Image" width="60" height="60" class="img" />
+            <!-- <i class="pi pi-user" style="margin-right: 2px"></i>
+          <i class="pi pi-envelope"></i> -->
+          </div>
+          <div class="col-6 text-align" style="line-height: 60px;">Agents</div>
+        </div>
+      </div>
+
+      <!-- <div class="col-12 txt-align-center">
+        The Agent role is for everyone who works with tickets in Ticketing System but doesn’t need to make changes to global settings.
+        </div> -->
+    </div>
+    <div
+      class="grid flex-1 flex align-items-center justify-content-center font-bold m-1 px-0 py-0 border-round bg-shadow bg-roles"
+      pRipple (click)="clickScheduleslink()">
+
+      <div class="col-12">
+        <div class="grid">
+          <div class="col-6 text-align" style="text-align: center;">
+            <img src="{{ projectNames }}/assets/dash13.png" alt="Image" width="60" height="60" class="img" />
+    
+          </div>
+          <div class="col-6 text-align" style="line-height: 60px;">Scheduler</div>
+        </div>
+      </div>
+    </div> 
+    <div
+      class="grid flex-1 flex align-items-center justify-content-center font-bold m-1 px-0 py-0 border-round bg-shadow bg-email"
+      pRipple (click)="clickEmaillink()">
+      <div class="col-12">
+        <div class="grid">
+          <div class="col-6 text-align" style="text-align: center;">
+
+            <img src="{{ projectNames }}/assets/dash5.png" alt="Image" width="60" height="60" class="img" />
+          </div>
+          <div class="col-6 text-align" style="line-height: 60px;">Email Settings</div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="flex">
+  <div class="bg-width grid p-4">
+    <div
+      class="grid flex-1 flex align-items-center justify-content-center font-bold m-1 px-0 py-0 border-round bg-shadow bg-sla"
+      pRipple (click)="clickslalink()">
+      <div class="col-12">
+        <div class="grid">
+          <div class="col-6 text-align" style="text-align: center;">
+            <img src="{{ projectNames }}/assets/dash14.png" alt="Image" width="60" height="60" class="img" />
+            <!-- <i class="pi pi-user" style="margin-right: 2px"></i>
+        <i class="pi pi-clock"></i> -->
+          </div>
+          <div class="col-6 text-align" style="line-height: 60px;">SLA Policy</div>
+        </div>
+      </div>
+
+
+    </div>
+    <div
+      class="grid flex-1 flex align-items-center justify-content-center font-bold m-1 px-0 py-0 border-round bg-shadow bg-advisory"
+      pRipple (click)="clickAdvisory()">
+      <div class="col-12">
+        <div class="grid">
+          <div class="col-6 text-align" style="text-align: center;">
+            <img src="{{ projectNames }}/assets/dash15.png" alt="Image" width="60" height="60" class="img" />
+            <!-- <i class="pi pi-comments" style="margin-right: 2px"></i>
+        <i class="pi pi-user-edit"></i> -->
+          </div>
+          <div class="col-6 text-align" style="line-height: 60px;">Advisory</div>
+
+        </div>
+      </div>
+
+    </div>
+    <div
+      class="grid flex-1 flex align-items-center justify-content-center font-bold m-1 px-0 py-0 border-round bg-shadow bg-fieldmanager"
+      pRipple (click)="clickformbuilder()">
+      <div class="col-12">
+        <div class="grid">
+          <div class="col-6 text-align" style="text-align: center;">
+            <img src="{{ projectNames }}/assets/dash16.png" alt="Image" width="60" height="60" class="img" />
+            <!-- <i class="pi pi-file-o" style="margin-right: 2px"></i>
+      <i class="pi pi-user-edit"></i> -->
+          </div>
+          <div class="col-6 text-align" style="line-height: 60px;">Field Manager</div>
+        </div>
+      </div>
+
+
+    </div>
+    <div
+    class="grid flex-1 flex align-items-center justify-content-center font-bold m-1 px-0 py-0 border-round bg-shadow bg-fieldmanager"
+    pRipple (click)="clickworkflow()">
+    <div class="col-12">
+      <div class="grid">
+        <div class="col-6 text-align" style="text-align: center;">
+          <img src="{{ projectNames }}/assets/dash17.png" alt="Image" width="60" height="60" class="img" />
+          <!-- <i class="pi pi-file-o" style="margin-right: 2px"></i>
+    <i class="pi pi-user-edit"></i> -->
+        </div>
+        <div class="col-6 text-align" style="line-height: 60px;">Workflow</div>
+      </div>
+    </div>
+
+
+  </div>
+  </div>
+</div>

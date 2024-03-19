@@ -1,0 +1,45 @@
+<p-card>
+    <ng-template pTemplate="body">
+      <form class="p-fluid p-grid" (ngSubmit)="updateRoles()" [formGroup]="roleForm">
+
+        <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+          <span class="p-float-label" styleClass="md-inputfield">
+            <input type="text" id="id" pInputText required="true" formControlName="id" disabled [disabled]="false" />
+            <label for="id">Id<span style="color: red">*</span></label>
+          </span>
+        </div>
+
+        <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+          <span class="p-float-label" styleClass="md-inputfield">
+            <input type="text" id="name" pInputText required="true" formControlName="name" />
+            <label for="name">Name <span style="color: red">*</span></label>
+          </span>
+        </div>
+        <div class="p-field p-col-12 md:col-12 p-md-3 mt-3">
+          <label for="description" class="p-float-label">Description</label>
+          <span class="p-float-label" styleClass="md-inputfield">
+            <textarea
+              inputId="textarea"
+              rows="3"
+              style="resize: none"
+              cols="30"
+              pInputTextarea
+              formControlName="description"
+            ></textarea>
+            
+          </span>
+          
+        </div>
+        <div class="p-field p-col-12 col-offset-11 md:col-1 p-md-4 mb-2 ml-10">
+          <button
+            pButton pRipple
+            label="update"
+            type="submit"
+            style="float: right !important"
+          ></button>
+        </div>
+        <p-toast></p-toast>   
+      </form>
+      
+    </ng-template>
+  </p-card>

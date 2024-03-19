@@ -1,0 +1,27 @@
+<div *ngIf="showdivgeneral" class="div-tab">
+  <p-breadcrumb
+    [model]="breadcrumb"
+    [home]="breadcrumb"
+    class="pr-3"
+  ></p-breadcrumb>
+</div>
+
+<div *ngIf="showdivuser">
+  <p-breadcrumb
+    [model]="breadcrumb"
+    [home]="breadcrumb"
+    class="pr-3"
+  ></p-breadcrumb>
+</div>
+
+<p-tabView class="dark-panel" (onChange)="handleChange($event)">
+  <p-tabPanel header="Requesters" leftIcon="pi pi-fw pi-user">
+    <app-requestergeneral></app-requestergeneral>
+  </p-tabPanel>
+  <p-tabPanel header="New Requesters" leftIcon="pi pi-fw pi-user">
+    <app-newrequester></app-newrequester>
+  </p-tabPanel>
+  <!-- <p-tabPanel header="Import" leftIcon="pi pi-fw pi-angle-double-down">
+    <app-import></app-import>
+  </p-tabPanel> -->
+</p-tabView>

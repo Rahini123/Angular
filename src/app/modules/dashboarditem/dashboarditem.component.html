@@ -1,0 +1,192 @@
+<div class="p-fluid col-12">
+    <div class="card">
+        <div class="flex card-container indigo-container">
+            <div class="flex-1  text-center p-4 border-round" *ngIf="dashboard">
+              <div class="icon-sec">
+                <a routerLink="/dashboard/dashboard" routerLinkActive="active">
+                    <!-- <i class="pi  pi-th-large" style="font-size: 2rem"></i> -->
+                    <img
+                    src="{{ projectNames }}/assets/dash1.png"
+                    alt="Image"
+                    width="150"
+                    class="img"
+                  />
+                </a>
+             
+            </div> 
+               <div class="txt-title">
+              <!-- <a routerLink="" routerLinkActive="active"> -->
+                    Dashboard
+                <!-- </a> -->
+            </div>
+         
+               <div class="txt-align"> Its records all the relevant information on an issue</div>
+            </div>
+           
+            <div class="flex-1  text-center p-4 border-round " *ngIf="Tickets">
+                <div class="icon-sec"><a routerLink="/dashboard/tickets" routerLinkActive="active">
+                    <!-- <i class="pi  pi-ticket" style="font-size: 2rem"></i> -->
+                    <img
+                    src="{{ projectNames }}/assets/dash2.png"
+                    alt="Image"
+                    width="150"
+                    class="img"
+                  />
+                </a></div> 
+                <div  class="txt-title"> Tickets</div>
+            
+                <div class="txt-align"> Tickets, also known as cases or issues  along with  user information</div>
+
+            </div>
+            <!-- <div class="flex-1  text-center p-4 border-round" *ngIf="Profile">
+                <div class="icon-sec"><a routerLink="/dashboard/changepassword" routerLinkActive="active"><i class="pi  pi-user" style="font-size: 2rem"></i></a></div> 
+                <div  class="txt-title"> Profile </div>
+                <div class="txt-align"> Hereby they can Update the  Personal Information</div>
+            </div> -->
+            <!-- <div class="flex-1  text-center p-4 border-round" *ngIf="Errorcode">
+                <div class="icon-sec"><a routerLink="/dashboard/errorcode" routerLinkActive="active"><i class="pi  pi pi-envelope" style="font-size: 2rem"></i></a></div> 
+                <div  class="txt-title"> Error code</div>
+            
+   
+                 <div class="txt-align"> They can track through this applicaton</div>
+              </div> -->
+                      
+            <div class="flex-1  text-center p-4 border-round " *ngIf="Projects">
+                <div class="icon-sec"><a routerLink="/dashboard/projects" routerLinkActive="active">
+                    <img
+                    src="{{ projectNames }}/assets/dash3.png"
+                    alt="Image"
+                    width="150"
+                    class="img"
+                  />
+                </a>
+                </div> 
+                <div  class="txt-title"> Projects</div>
+
+                <div class="txt-align">We can set  schedule for the project .</div>
+
+            </div>
+            <div class="flex-1  text-center p-4 border-round" *ngIf="ClientDetails">
+                <div class="icon-sec"> <a routerLink="/dashboard/clients" routerLinkActive="active">
+                    <!-- <i class="pi  pi-users" style="font-size: 2rem"></i> -->
+                    <img
+                    src="{{ projectNames }}/assets/dash4.png"
+                    alt="Image"
+                    width="150"
+                    class="img"
+                  />
+                </a>
+                </div> 
+                <div  class="txt-title">Clients </div>
+                <!-- <div> Client details</div> -->
+                <div class="txt-align">Client details with Description are listed </div>
+            </div>
+        </div>
+    </div>
+    <div class="card" *ngIf="cardsec">
+        <div class="flex card-container indigo-container">
+
+
+            <div class="flex-1  text-center p-4 border-round" *ngIf="EmailSettings">
+                <div class="icon-sec">
+                    <a routerLink="/dashboard/emailsetting" routerLinkActive="active">     
+                        <img
+                        src="{{ projectNames }}/assets/dash5.png"
+                        alt="Image"
+                        width="150"
+                        class="img"
+                      />
+                        <!-- <i class="pi  pi pi-envelope" style="font-size: 2rem"></i> -->
+                    </a> 
+                  <!-- <i class="pi  pi pi-sliders-v" style="font-size: 2rem"></i>
+               -->
+              </div> 
+              <div> 
+                <!-- <a routerLink="/dashboard/emailsettings" routerLinkActive="active">Email Setting</a> -->
+            </div>
+                 <div  class="txt-title">Email Settings</div>
+                 <div class="txt-align"> Email  Settings its turns each email received into a “ticket” 
+                 </div>
+              </div>
+
+
+              <div class="flex-1  text-center p-4 border-round" *ngIf="Roles">
+                <div class="icon-sec">
+                    <a routerLink="/admin/roles" routerLinkActive="active">  
+                        <img
+                        src="{{ projectNames }}/assets/dash6.png"
+                        alt="Image"
+                        width="150"
+                        class="img"
+                      />  
+                          <!-- <i class="pi pi-id-card" style="font-size: 2rem"></i> -->
+                        </a>
+                    <!-- <i class="pi pi-sliders-h" style="font-size: 2rem"></i> -->
+                 
+                </div> 
+                <div  class="txt-title"> Roles</div>
+                <!-- <div> Roles</div> -->
+                <div class="txt-align"> The Roles List View page displays the list of default roles  </div>
+            </div>
+            <div class="flex-1  text-center p-4 border-round "  *ngIf="User">
+                <div class="icon-sec">
+                    <a routerLink="/dashboard/usermanagement" routerLinkActive="active">    
+                          <!-- <i class="pi  pi pi-user" style="font-size: 2rem"></i> -->
+                          <img
+                          src="{{ projectNames }}/assets/dash6.png"
+                          alt="Image"
+                          width="150"
+                          class="img"
+                        />  
+                        </a>
+                    <!-- <i class="pi  pi pi-sliders-v" style="font-size: 2rem"></i> -->
+                </div> 
+                <div  class="txt-title"> User Management</div>
+                <!-- <div> User Management</div> -->
+                <div class="txt-align"> User management describes the ability for administrators to manage roles and permissions </div>
+
+            </div>
+            <div class="flex-1  text-center p-4 border-round " *ngIf="Agent">
+                <div class="icon-sec">
+                    <a routerLink="/dashboard/admin/agents" routerLinkActive="active">   
+                        <img
+                        src="{{ projectNames }}/assets/dash9.png"
+                        alt="Image"
+                        width="150"
+                        class="img"
+                      />      
+                            <!-- <i class="pi  pi pi-user-plus" style="font-size: 2rem"></i> -->
+                        </a>
+                    <!-- <i class="pi  pi pi-sliders-v" style="font-size: 2rem"></i> -->
+                </div> 
+                <div  class="txt-title"> Agents</div>
+                <!-- <div> Agent</div> -->
+                <div class="txt-align">  The Agent role is for everyone who works with tickets in Ticketing System  </div>
+
+            </div>
+                                             
+    
+                       
+            <div class="flex-1  text-center p-4 border-round " *ngIf="Groups">
+                <div class="icon-sec">
+                    <a routerLink="/dashboard/admin/groups" routerLinkActive="active"> 
+                        <img
+                        src="{{ projectNames }}/assets/dash10.png"
+                        alt="Image"
+                        width="150"
+                        class="img"
+                      />       
+                          <!-- <i class="pi  pi pi-users" style="font-size: 2rem"></i> -->
+                        </a>
+                    <!-- <i class="pi  pi pi-sliders-v" style="font-size: 2rem"></i> -->
+                </div> 
+                <div  class="txt-title"> Groups</div>
+                <!-- <div> Groups</div> -->
+                <div class="txt-align"> User can create a Ticket Group so that specific users are tagged into the group all at once</div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+

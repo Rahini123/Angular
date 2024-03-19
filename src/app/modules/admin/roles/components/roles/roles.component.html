@@ -1,0 +1,201 @@
+<div class="containersec">
+  <p-table
+    #dt
+    [value]="data"
+    [rowsPerPageOptions]="[5, 10, 25, 50, 100]"
+    [rows]="10"
+    [loading]="isLoading"
+    [reorderableColumns]="true"
+    responsiveLayout="scroll"
+    [columns]="selectedColumns"
+    [(selection)]="selectedRoles"
+    [rowHover]="true"
+    dataKey="id"
+    [showCurrentPageReport]="true"
+    [globalFilterFields]="['id', 'role', 'description']"
+  >
+    <ng-template pTemplate="caption">
+      <div class="card">
+        <div class="card-container purple-container overflow-hidden">
+          <div class="flex">
+            <div
+              class="flex-1 flex align-items-center justify-content-start font-bold text-white m-2 border-round"
+            >
+              <div class="div-tab">
+                <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+              </div>
+            </div>
+
+            <div
+              class="flex-1 flex align-items-center justify-content-end font-bold text-white m-2 border-round"
+            >
+              <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    dt.filterGlobal($any($event.target).value, 'contains')
+                  "
+                  placeholder="Search..."
+                />
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header" class="table-container">
+      <tr>
+        <th>
+          <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
+        </th>
+        <!-- <th pSortableColumn="name">ID <p-sortIcon field="id"></p-sortIcon></th> -->
+        <th pSortableColumn="name" pResizableColumn>
+          Name <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="description" pResizableColumn>
+          Description <p-sortIcon field="description"></p-sortIcon>
+        </th>
+        <!-- <th pSortableColumn="agent">
+          Agent <p-sortIcon field="agent"></p-sortIcon>
+        </th> -->
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-role>
+      <tr>
+        <td>
+          <!-- <p-tableCheckbox [value]="role"></p-tableCheckbox> -->
+        </td>
+        <!-- <td>{{ role.id }}</td> -->
+        <td>{{ role.name }}</td>
+        <td>{{ role.description }}</td>
+
+        <!-- <td>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-pencil"
+            style="margin-right: 3px"
+            class="p-button-rounded p-button-success"
+            (click)="editRole(role)"
+            
+          ></button>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-trash"
+            class="p-button-rounded p-button-warning"
+            (click)="deleteRole(role)"
+          ></button>
+        </td> -->
+      </tr>
+    </ng-template>
+    <!-- <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        In total there are {{ roles ? roles.length : 0 }} roles.
+      </div>
+    </ng-template> -->
+  </p-table>
+</div>
+<div>
+  <p-dialog
+    #pdFront
+    [(visible)]="roleDialog"
+    [responsive]="true"
+    header="Edit Role"
+    [modal]="true"
+    styleClass="p-fluid close"
+    [autoZIndex]="true"
+    (click)="pdFront.moveOnTop()"
+  >
+    <form class="p-fluid p-grid" (ngSubmit)="saveRole()" [formGroup]="roleform">
+      <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+        <span class="p-float-label" styleClass="md-inputfield">
+          <input
+            type="text"
+            id="id"
+            pInputText
+            required="true"
+            formControlName="id"
+            ngModel
+            disabled="false"
+          />
+          <label for="id">id <span style="color: red">*</span></label>
+          <div
+            *ngIf="
+              roleform.controls['id'].invalid &&
+              (roleform.controls['id'].dirty ||
+                roleform.controls['name'].touched)
+            "
+            class="alert"
+          >
+            <div *ngIf="roleform.controls['id'].errors?.['required']">
+              Please enter id
+            </div>
+          </div>
+        </span>
+      </div>
+      <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+        <span class="p-float-label" styleClass="md-inputfield">
+          <input
+            type="text"
+            id="name"
+            pInputText
+            required="true"
+            formControlName="name"
+            ngModel
+          />
+          <label for="name">Name <span style="color: red">*</span></label>
+          <div
+            *ngIf="
+              roleform.controls['name'].invalid &&
+              (roleform.controls['name'].dirty ||
+                roleform.controls['name'].touched)
+            "
+            class="alert"
+          >
+            <div *ngIf="roleform.controls['name'].errors?.['required']">
+              Please enter name
+            </div>
+          </div>
+        </span>
+      </div>
+      <div class="p-field p-col-12 md:col-12 p-md-3 mt-3">
+        <span class="p-float-label">
+          <textarea
+            inputId="textarea"
+            rows="3"
+            style="resize: none"
+            cols="30"
+            pInputTextarea
+            id="description"
+            formControlName="description"
+            ngModel
+          ></textarea>
+          <label for="description">Description</label>
+          <div
+            *ngIf="
+              roleform.controls['description'].invalid &&
+              (roleform.controls['description'].dirty ||
+                roleform.controls['description'].touched)
+            "
+            class="alert"
+          >
+            <div *ngIf="roleform.controls['description'].errors?.['required']">
+              Please enter name
+            </div>
+          </div>
+        </span>
+      </div>
+      <div class="p-field p-col-12 col-offset-11 md:col-1 p-md-4 mb-2 ml-10">
+        <button
+          pButton
+          label="Update"
+          type="submit"
+          style="float: right !important"
+        ></button>
+      </div>
+    </form>
+  </p-dialog>
+</div>

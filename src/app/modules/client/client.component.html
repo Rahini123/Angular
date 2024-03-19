@@ -1,0 +1,605 @@
+<div class="client-table">
+  <p-table #dt [value]="clients" tableStyleClass="table" [loading]="isLoading"
+    [rowsPerPageOptions]="[5, 10, 25, 50, 100]" [rows]="5" [paginator]="true" responsiveLayout="scroll"
+    [(selection)]="selectedClient" [rowHover]="true" dataKey="clientId"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true"
+    [globalFilterFields]="['clientName']">
+    <ng-template pTemplate="caption">
+      <div class="card">
+        <div class="card-container purple-container overflow-hidden">
+          <div class="flex">
+            <div class="flex-1 flex align-items-center justify-content-start  font-bold text-white m-2 border-round">
+              <div class="div-tab">
+                <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+              </div>
+            </div>
+
+            <div class="flex-1 flex align-items-center justify-content-end  font-bold text-white m-2  border-round">
+              <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                  placeholder="Search..." (keydown.enter)="search($event.target.value)" />
+              </span>
+              <button pButton pRipple label="Add" icon="pi pi-plus-circle" class="p-button-success mr-2"
+                (click)="showDialog()"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th rowspan="2">
+          <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
+        </th>
+        <!-- <th pSortableColumn="clientId" rowspan="2">
+          Client Id <p-sortIcon field="clientId"></p-sortIcon>
+        </th> -->
+        <th pSortableColumn="clientName" rowspan="2" pResizableColumn>
+          Client Name <p-sortIcon field="clientName"></p-sortIcon>
+        </th>
+        <th pSortableColumn="clientDescription" rowspan="2" pResizableColumn>
+          Client Description <p-sortIcon field="clientName"></p-sortIcon>
+        </th>
+        <th>Status</th>
+        <th style="text-align: center;">Action</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-client>
+      <tr>
+        <td>
+          <!-- <p-tableCheckbox [value]="client"></p-tableCheckbox> -->
+        </td>
+        <!-- <td>{{ client.clientId }}</td> -->
+        <td>{{ client.clientName }}</td>
+        <td>{{ client.clientDescription }}</td>
+        <td>
+
+          <span [ngClass]="{
+  
+              'active ': client.clientActivity == 'Y',
+  
+              'inactive ': client.clientActivity == 'N'
+  
+            }">
+
+            {{ client.clientActivity === "Y" ? "Active " : "Inactive" }}</span>
+
+        </td>
+        <td>
+
+
+          <button pButton pRipple [style]="{ float: 'right' }" icon="pi pi-pencil"
+            class="p-button-rounded p-button-success" (click)="editClient(client)"></button>
+          <p-inputSwitch [style]="{ float: 'right' }" trueValue="Y" falseValue="N" [(ngModel)]="client.clientActivity"
+            (onChange)="activeClient(client, $event)">
+
+          </p-inputSwitch>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        In total there are {{ clients ? clients.length : 0 }} Clients.
+      </div>
+    </ng-template>
+  </p-table>
+
+</div>
+<p-dialog #pdFront [(visible)]="clientDialog" [responsive]="true" header="Edit Client-Details" [modal]="true"
+  styleClass=" " [autoZIndex]="true" (click)="pdFront.moveOnTop()" styleClass="addslapolicy"
+  (onHide)="cancel()">
+  <div class="grid">
+    <div class="col-7">
+      <form class="p-fluid p-grid" (ngSubmit)="updateClient()" [formGroup]="clientForm">
+        <div class="grid">
+
+          <div class="col-6">
+            <div class="p-field grid " style="display:none">
+              <div class="col-12">
+                <label for="clientId">Client Id</label>
+                <span class="p-float-label" styleClass="md-inputfield">
+                  <input type="number" id="clientId" pInputText required="true" formControlName="clientId"
+                    disabled="true" />
+
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="p-field grid ">
+              <div class="col-12">
+                <label for="clientName">Client Name <span style="color: red;">*</span></label>
+                <span class="p-float-label" styleClass="md-inputfield">
+                  <input type="text" id="clientName" pInputText required="true" formControlName="clientName" />
+
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="grid">
+
+          <div class="col-12">
+            <div class="p-field grid ">
+              <div class="col-12">
+                <label for="clientDescription">Client Description <span style="color: red;">*</span></label>
+                <span class="p-float-label" styleClass="md-inputfield">
+
+                  <textarea inputId="textarea" rows="3" style="resize: none" cols="30" pInputTextarea
+                    id="clientDescription" formControlName="clientDescription"></textarea>
+                </span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="grid">
+
+          <div class="col-12">
+            <div class="p-field grid ">
+              <div class="col-12">
+
+                <label for="clientDescription">TimeZone :{{this.timezonestrings}}<span style="color: red;">*</span></label>
+                <span>
+                  <p-dropdown #timezones [options]="timezone" name="All" optionLabel="value" optionValue="value"
+                    [filter]="true" [showClear]="true" filterBy="value" [autoDisplayFirst]="false"
+                    (onChange)="onChange($event,timezones.value)" formControlName="timezone"
+                    [ngModel]="this.timezonestrings" (ngModelChange)="this.timezonestrings=$event"
+                    filterMatchMode="startsWith" ></p-dropdown>
+                </span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
+
+
+        <div class="clientdata">Client WorkHours Details</div>
+
+
+        <div class="weekformat">
+          <!-- <div>Client Working Hours</div> -->
+          <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+            <div formArrayName="clientWorkingHours">
+            
+              <ng-container *ngFor="let row of f?.['clientWorkingHours']['controls']; let i = index">
+                <div [formGroupName]="i" style="margin-bottom: 10px;" class="col-12">
+                  <input type="text" name="name" formControlName="workingId" style="display: none;" placeholder="workhoursid"/>
+                  <div class="grid">
+                    <div class="col-4">
+                      <input type="text" name="name" formControlName="day" disabled="true" />
+                    </div>
+                    <div class="col-4">
+                      <input type="time" name="todate" formControlName="startHours"  />
+                    </div>
+                    <div class="col-4">
+                      <input type="time" name="fromdate" formControlName="endHours" />
+                    </div>
+
+
+
+
+                  </div>
+
+                </div>
+              </ng-container>
+            </div>
+            <br />
+            <!-- <button type="button" (click)="addItem()">Add</button> -->
+            <!-- <button type="submit">Submit</button> -->
+            <!-- <pre>    {{ this.arr.value | json }}</pre> -->
+          </form>
+
+        </div>
+
+
+        <div class="row">
+
+          <div class=" col-12">
+
+            <button pButton label="Update" type="submit" style="float: right !important"></button>
+
+          </div>
+
+        </div>
+
+      </form>
+      <!-- {{clientForm?.value|json}} -->
+    </div>
+    <div class="col-5">
+      <span class="client-details">Client Leave Days</span>
+      <form [formGroup]="formGroup_leave_days" (ngSubmit)="onSubmit_leavedays()">
+        <div formArrayName="arr_days">
+          <!-- {{ this.weekdays.length }} -->
+          <ng-container *ngFor="let row of leave_days?.['arr_days']['controls']; let i = index">
+            <div [formGroupName]="i" style="margin-bottom: 0px;">
+              <!-- {{ i }} -->
+              <!-- <label for="name">Name:</label> -->
+              <div class="col-12">
+                <div class="grid">
+                  <input type="text" name="name" formControlName="leaveId" style="display: none;" placeholder="leaveid"/>
+                  <div class="col-5"> Leave Name :<input type="text" name="name" formControlName="leaveName" /></div>
+                  <div class="col-5"> Date : <input type="date" name="todate" formControlName="date" /></div>
+                  <div class="col-2"> <a type="button" (click)="removeItem_leavedays(i)" style="line-height: 70px;color:red;">
+                     <i class="pi pi-times-circle"></i></a></div>
+                </div>
+              </div>
+             
+          
+              <!-- <input type="datetime" name="fromdate" formControlName="endHours" /> -->
+      
+             
+              <!-- <p
+                *ngIf="
+                  row?.controls?.leaveName?.touched && row?.controls?.leaveName?.errors?.required
+                "
+                style="color: red"
+              >
+                Name field is required
+              </p> -->
+            </div>
+          </ng-container>
+        </div>
+        
+        <p-button type="button" (click)="addItem_leavedays()"  style="margin-left: 10px;">Add</p-button>
+        <!-- <button type="submit">Submit</button> -->
+        <!-- <pre>    {{ this.formGroup_leave_days.value | json }}</pre> -->
+      </form>
+      
+     </div>
+    <!-- <div class="col-5">
+      <button (click)="onEditCloseItems()" class="btn btn-secondary btn-lg1" pButton style="margin-bottom: 10px;">
+        Client Leave Days
+        <i class="pi {{ isEditItems ? 'pi-times' : 'pi-user-edit' }} " style="margin-left:10px;font-size: 1rem"></i>
+
+      </button>
+      <div *ngIf="!isEditItems">
+        <table style="margin-bottom: 0px;border:1px solid #ddd;background-color: #ddd;">
+          <thead>
+            <tr>
+
+              <th scope="col" style="width:200px">LeaveName</th>
+              <th scope="col" style="width:200px">Date</th>
+              <th scope="col" style="width:200px">Action</th>
+            </tr>
+          </thead>
+        </table>
+        <div *ngFor="let field of clienthoursarray; let i = index">
+          <table class="table">
+
+            <tbody>
+              <tr>
+
+                <td style="width:200px;padding:5px"> {{ field.leaveName }}</td>
+                <td style="width:200px;padding:5px"> {{ field.date }}</td>
+                <td style="width:200px;padding:5px"> <i (click)="deleteFieldValueedit(i)" class="pi pi-trash"
+                    style="color:red;cursor: pointer;"></i></td>
+              </tr>
+
+
+            </tbody>
+          </table>
+
+
+        </div>
+      </div>
+      <div *ngIf="isEditItems">
+        <div *ngFor="let field of clienthoursarray; let i = index">
+
+          <div class="input-group" style="margin-bottom: 10px;">
+            <div class="input-group-prepend">
+              <div (click)="deleteFieldValueedit(i)" class="input-group-text">
+                <i class="pi pi-trash"></i>
+              </div>
+            </div>
+            <input [(ngModel)]="field.leaveName" class="form-control" type="text" name="{{ field.leaveName }}"
+              placeholder="LeaveName..." />
+         
+            <input [ngModel]="field.date | date:'yyyy-MM-dd'" class="form-control" type="date"
+              name="{{ field.date |date:'yyyy-mm-dd'}}" placeholder="Date..." (ngModelChange)="field.date=$event" />
+          
+          </div>
+
+        </div>
+
+        <div class="bottom-days">
+          <button class="btn btn-secondary btn-lg1" type="button" (click)="addFieldValueedit()"
+            style="margin-right:10px">
+            Add Leave Days
+          </button>
+          <button (click)="onEditCloseItems()" class="btn btn-primary btn-lg1" type="button">
+            Save Leave Days
+          </button>
+        </div>
+      </div>
+
+
+    </div> -->
+  </div>
+</p-dialog>
+<p-dialog header="Title" [(visible)]="display" [responsive]="true" header="Add Client-Details" [modal]="true"
+  styleClass="" [autoZIndex]="true" styleClass="addslapolicy">
+  <div class="grid">
+    <div class="col-7">
+
+      <form class="p-fluid p-grid" (ngSubmit)="saveClient()" [formGroup]="clientForm">
+
+        <div class="grid">
+
+          <div class="col-12">
+            <div class="p-field grid ">
+              <div class="col-12">
+                <label for="clientName">Client Name <span style="color: red;">*</span></label>
+                <span class="p-float-label" styleClass="md-inputfield">
+                  <input type="text" id="clientName" pInputText required="true" formControlName="clientName" />
+
+                </span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="grid">
+
+          <div class="col-12">
+            <div class="p-field grid ">
+              <div class="col-12">
+                <label for="clientDescription">Client Description <span style="color: red;">*</span></label>
+                <span class="p-float-label" styleClass="md-inputfield">
+
+                  <textarea inputId="textarea" rows="3" style="resize: none" cols="30" pInputTextarea
+                    id="clientDescription" formControlName="clientDescription" ngModel></textarea></span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="grid">
+
+          <div class="col-12">
+            <div class="p-field grid ">
+              <div class="col-12">
+                <label for="clientDescription">TimeZone <span style="color: red;">*</span></label>
+                <span>
+                  <p-dropdown #timezones [options]="timezone" name="All" optionLabel="value" optionValue="value"
+                    [filter]="true" [showClear]="true" filterBy="value" [autoDisplayFirst]="false"
+                    (onChange)="onChange($event,timezones.value)" formControlName="timezone"
+                   filterMatchMode="startsWith"  ></p-dropdown>
+                </span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div>
+          <table class="table" *ngIf="tablespace">
+            <thead>
+              <th>Weekdays</th>
+              <th>Start Hours</th>
+              <th>End Hours</th>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of weekdayslist ">
+                <td>{{item.day}}</td>
+                <td>{{item.startHours}}</td>
+                <td>{{item.endHours}}</td>
+              </tr>
+            </tbody>
+          </table>
+        
+        </div>
+        <div class="weekformat">
+          <div>Client Working Hours</div>
+          <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+            <div formArrayName="clientWorkingHours">
+            
+              <ng-container *ngFor="let row of f?.['clientWorkingHours']['controls']; let i = index">
+                <div [formGroupName]="i" style="margin-bottom: 10px;" class="col-12">
+                 
+                  <div class="grid">
+                 
+                    <div class="col-4">
+                      <input type="text" name="name" formControlName="day" disabled="true" />
+                    </div>
+                    <div class="col-4">
+                      <input type="time" name="todate" formControlName="startHours"   />
+                    </div>
+                    <div class="col-4">
+                      <input type="time" name="fromdate" formControlName="endHours" />
+                    </div>
+                  </div>
+
+                </div>
+              </ng-container>
+            </div>
+            <!-- <br /> -->
+            <!-- <button type="button" (click)="addItem()">Add</button> -->
+            <!-- <button type="submit">Submit</button> -->
+            <!-- <pre>    {{ this.arr.value | json }}</pre> -->
+          </form>
+
+        </div>
+
+    
+        <!-- <p-table #myTab [value]="clientweekends" let i=index>
+          <ng-template pTemplate="header">
+            <tr>
+              <th></th>
+              <th>Week Days</th>
+              <th>Start Hours</th>
+              <th>End Hours</th>
+
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-weekdays>
+            <tr>
+              <td>
+
+                <input type="checkbox" name={{weekdays.day}} id={{weekdays.id}}
+                  (click)="getClientCalender($event.target.checked,weekdays,$event.target.value)" [value]="weekdays.id"
+                  [checked]="checkbox.checked" />
+
+              </td>
+
+              <td>
+                <label>{{ weekdays.day }}</label>
+              </td>
+              <td>
+
+                <p-calendar [(ngModel)]="weekdays.startHours" appendTo="body" showTime="true" [timeOnly]="true"
+                  inputId="timeonly" [hourFormat]="24" formControlName="startHours" [showIcon]="true"
+                  [icon]="'pi pi-clock'" (onSelect)="onfocus(weekdays)"> </p-calendar>
+
+              </td>
+              <td>
+                <p-calendar appendTo="body" [(ngModel)]="weekdays.endHours" showTime="true" [timeOnly]="true"
+                  inputId="timeonly" [hourFormat]="24" formControlName="endHours" (onSelect)="onfocus(weekdays)"
+                  [showIcon]="true" [icon]="'pi pi-clock'"> </p-calendar>
+
+              </td>
+            </tr>
+          </ng-template>
+        </p-table> -->
+
+
+
+
+        <div class="row">
+
+          <div class=" col-12">
+
+            <button pButton label="Save" type="submit" style="float: right !important"></button>
+
+          </div>
+
+        </div>
+
+
+
+      </form>
+    </div>
+    <div class="col-5">
+      <div style="margin-bottom: 10px;"> Leave Details </div>
+      <form [formGroup]="formGroup_leave_days" (ngSubmit)="onSubmit_leavedays()">
+        <div formArrayName="arr_days">
+          <!-- {{ this.weekdays.length }} -->
+          <ng-container *ngFor="let row of leave_days?.['arr_days']['controls']; let i = index">
+            <div [formGroupName]="i" style="margin-bottom: 0px;">
+              <!-- {{ i }} -->
+              <!-- <label for="name">Name:</label> -->
+              <div class="col-12">
+                <div class="grid">
+                  <div class="col-5"> Leave Name :<input type="text" name="name" formControlName="leaveName" /></div>
+                  <div class="col-5"> Date : <input type="date" name="todate" formControlName="date" /></div>
+                  <div class="col-2"> <a type="button" (click)="removeItem_leavedays(i)" style="line-height: 70px;color:red;">
+                     <i class="pi pi-times-circle"></i></a></div>
+                </div>
+              </div>
+             
+          
+              <!-- <input type="datetime" name="fromdate" formControlName="endHours" /> -->
+      
+             
+              <!-- <p
+                *ngIf="
+                  row?.controls?.leaveName?.touched && row?.controls?.leaveName?.errors?.required
+                "
+                style="color: red"
+              >
+                Name field is required
+              </p> -->
+            </div>
+          </ng-container>
+        </div>
+       
+        <p-button type="button" (click)="addItem_leavedays()"  style="margin-left: 10px;">Add</p-button>
+        <!-- <button type="submit">Submit</button>-->
+        <!-- <pre>    {{ this.formGroup_leave_days.value | json }}</pre>  -->
+      </form>
+      
+     </div>
+    <!-- <div class="col-5">
+      <button (click)="onEditCloseItems()" class="btn btn-secondary btn-lg1" pButton style="margin-bottom: 10px;">
+        Client Leave Days
+        <i class="pi {{ isEditItems ? 'pi-times' : 'pi-user-edit' }} " style="margin-left:10px;font-size: 1rem"></i>
+
+      </button>
+      <div *ngIf="!isEditItems">
+        <table style="margin-bottom: 0px;border:1px solid #ddd;background-color: #ddd;">
+          <thead>
+            <tr>
+
+              <th scope="col" style="width:200px;padding:5px">LeaveName</th>
+              <th scope="col" style="width:200px;padding:5px">Date</th>
+              <th scope="col" style="width:200px;padding:5px">Action</th>
+            </tr>
+          </thead>
+        </table>
+        <div *ngFor="let field of fieldArray; let i = index">
+          <table class="table">
+
+            <tbody>
+              <tr>
+
+                <td style="width:200px"> {{ field.leaveName }}</td>
+                <td style="width:200px"> {{ field.date }}</td>
+                <td style="width:200px"> <i (click)="deleteFieldValue(i)" class="pi pi-trash" style="color:red"></i>
+                </td>
+              </tr>
+
+
+            </tbody>
+          </table>
+
+
+        </div>
+      </div>
+      <div *ngIf="isEditItems">
+        <div *ngFor="let field of fieldArray; let i = index">
+
+          <div class="input-group" style="margin-bottom: 10px;">
+            <div class="input-group-prepend">
+              <div (click)="deleteFieldValue(i)" class="input-group-text">
+                <i class="pi pi-trash"></i>
+              </div>
+            </div>
+            <input [(ngModel)]="field.leaveName" class="form-control" type="text" name="{{ field.leaveName }}"
+              placeholder="LeaveName..." />
+            <input [(ngModel)]="field.date" class="form-control" type="date" name="{{ field.date }}"
+              placeholder="Date..." />
+          </div>
+
+        </div>
+
+        <div class="bottom-days">
+          <button class="btn btn-secondary btn-lg1" type="button" (click)="addFieldValue()" style="margin-right:10px">
+            Add Leave Days
+          </button>
+          <button (click)="onEditCloseItems()" class="btn btn-primary btn-lg1" type="button">
+            Save Leave Days
+          </button>
+        </div>
+      </div>
+    </div> -->
+  </div>
+</p-dialog>
+
+
+<p-toast></p-toast>
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+<div id="overlay" *ngIf="progressbar">
+  <span class="abs"> <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i></span>
+ 
+  <!-- <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8"  animationDuration=".5s"></p-progressSpinner> -->
+   
+</div>

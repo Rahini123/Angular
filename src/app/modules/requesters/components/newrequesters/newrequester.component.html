@@ -1,0 +1,249 @@
+<form class="p-fluid p-grid" 
+(ngSubmit)="saverequesters()"
+[formGroup]="RequestersForm" 
+>
+<div class="grid">
+  <div class="col-6">
+    <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+      <label for="firstName">First Name <span style="color: red">*</span></label >
+      <span class="p-float-label" styleClass="md-inputfield">
+        <input type="text" id="firstName" pInputText required="true" formControlName="firstName" />
+     
+          <div *ngIf="RequestersForm.controls['firstName'].invalid && (RequestersForm.controls['firstName'].dirty || RequestersForm.controls['firstName'].touched)" class="alert">
+            <div *ngIf="RequestersForm.controls['firstName'].errors?.['required']">
+            Please enter firstName
+          </div>
+          </div>
+      </span>
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+      <label for="lastName">LastName <span style="color: red">*</span></label>
+      <span class="p-float-label" styleClass="md-inputfield">
+        <input type="text" id="lastName" pInputText required="true" formControlName="lastName"/>
+      
+        <div *ngIf="RequestersForm.controls['lastName'].invalid && (RequestersForm.controls['lastName'].dirty || RequestersForm.controls['lastName'].touched)" class="alert">
+          <div *ngIf="RequestersForm.controls['lastName'].errors?.['required']">
+          Please enter lastName
+        </div>
+        </div>
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="col-6">
+    <div class="p-field p-col-12 md:col-12 p-md-3 ">
+      <label for="title">Department</label>
+      <span class="p-float-label" styleClass="md-inputfield">
+        <input type="text" id="department" pInputText required="true" formControlName="department" />
+ 
+        <div *ngIf="RequestersForm.controls['department'].invalid && (RequestersForm.controls['department'].dirty || RequestersForm.controls['department'].touched)" class="alert">
+          <div *ngIf="RequestersForm.controls['department'].errors?.['required']">
+          Please enter department
+        </div>
+        </div>
+      </span>
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="p-field p-col-12 md:col-12 p-md-3 ">
+      <label for="title">Language</label>
+  
+      <span class="p-float-label" styleClass="md-inputfield">
+        <p-dropdown
+          [options]="language"
+          placeholder="Language "
+          optionLabel="language"
+          optionValue="language"
+          [showClear]="false"
+          [autoDisplayFirst]="true"
+          [formControlName]="'language'"
+          
+        ></p-dropdown>
+        <!-- <label for="language">Language</label> -->
+        <div *ngIf="RequestersForm.controls['language'].invalid && (RequestersForm.controls['language'].dirty || RequestersForm.controls['language'].touched)" class="alert">
+          <div *ngIf="RequestersForm.controls['language'].errors?.['required']">
+          Please enter language
+        </div>
+        </div>
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="col-6">
+    <div class="p-field p-col-12 md:col-12 p-md-3 ">
+      <label for="timezone">Time Zone</label>
+      <span class="p-float-label" styleClass="md-inputfield">
+        <p-dropdown
+        id="timeZone"
+          [options]="timeZone"
+          optionLabel="Zone"
+          optionValue="Zone"
+          [showClear]="false"
+          [autoDisplayFirst]="true"
+          formControlName="timeZone"
+        ></p-dropdown>
+    
+        <div *ngIf="RequestersForm.controls['timeZone'].invalid && (RequestersForm.controls['timeZone'].dirty || RequestersForm.controls['timeZone'].touched)" class="alert">
+          <div *ngIf="RequestersForm.controls['timeZone'].errors?.['required']">
+          Please enter timeZone
+        </div>
+        </div>
+      </span>
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="p-field p-col-12 md:col-12 p-md-3 ">
+      <label for="timeformat">Time Format</label>
+      <span class="p-float-label" styleClass="md-inputfield">
+        <p-dropdown
+          [options]="timeFormat"
+          optionLabel="Format"
+          [showClear]="false"
+          [autoDisplayFirst]="true"
+          
+        ></p-dropdown>
+  
+      </span>
+    </div>
+  </div>
+</div>
+<div class="grid">
+  <div class="col-6">
+    <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+      <label for="email">Email <span style="color: red">*</span></label>
+      <span class="p-float-label" styleClass="md-inputfield">
+        <input type="text" id="Email" pInputText required="true" formControlName="email"/>
+      
+        <div *ngIf="RequestersForm.controls['email'].invalid && (RequestersForm.controls['email'].dirty || RequestersForm.controls['email'].touched)" class="alert">
+          <div *ngIf="RequestersForm.controls['email'].errors?.['required']">
+          Please enter Email Id
+        </div>
+        </div>
+      </span>
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+      <label for="title">Title</label>
+      <span class="p-float-label" styleClass="md-inputfield">
+        <input type="text" id="title" pInputText required="true" formControlName="title" />
+       
+        <div *ngIf="RequestersForm.controls['title'].invalid && (RequestersForm.controls['title'].dirty || RequestersForm.controls['title'].touched)" class="alert">
+          <div *ngIf="RequestersForm.controls['title'].errors?.['required']">
+          Please enter title
+        </div>
+        </div>
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="col-6">
+    <div class="p-field p-col-12 md:col-12 p-md-3 ">
+      <label for="workPhoneNumber">Work Phone </label>
+      <span class="p-float-label" styleClass="md-inputfield">
+        <p-inputNumber inputId="integeronly" id="workPhoneNumber" formControlName="workPhoneNumber"> </p-inputNumber>
+       
+        <div *ngIf="RequestersForm.controls['workPhoneNumber'].invalid && (RequestersForm.controls['workPhoneNumber'].dirty || RequestersForm.controls['workPhoneNumber'].touched)" class="alert">
+          <div *ngIf="RequestersForm.controls['workPhoneNumber'].errors?.['required']">
+          Please enter workPhoneNumber
+        </div>
+        </div>
+      </span>
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="p-field p-col-12 md:col-12 p-md-3 ">
+      <label for="manager">Manager</label>
+      <span class="p-float-label" styleClass="md-inputfield">
+        <input type="text" id="manager" pInputText required="true" formControlName="manager" />
+     
+        <div *ngIf="RequestersForm.controls['manager'].invalid && (RequestersForm.controls['manager'].dirty || RequestersForm.controls['manager'].touched)" class="alert">
+          <div *ng  If="RequestersForm.controls['manager'].errors?.['required']">
+          Please enter manager
+        </div>
+        </div>
+      </span>
+    </div>
+  </div>
+</div>
+<div class="grid">
+  <div class="col-6">
+    <div class="p-field p-col-12 md:col-12 p-md-3 ">
+      <label for="address">Location</label>
+      <span class="p-float-label" styleClass="md-inputfield">
+        <textarea pInputTextarea  id="location" formControlName="location"></textarea>
+  
+   
+        <div *ngIf="RequestersForm.controls['location'].invalid && (RequestersForm.controls['location'].dirty || RequestersForm.controls['location'].touched)" class="alert">
+          <div *ngIf="RequestersForm.controls['location'].errors?.['required']">
+          Please enter Location
+        </div>
+        </div>
+      </span>
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="p-field p-col-12 md:col-12 p-md-3 ">
+      <label for="address">Address</label>
+      <span class="p-float-label" styleClass="md-inputfield">
+        <textarea pInputTextarea  id="address" formControlName="address"></textarea>
+  
+
+        <div *ngIf="RequestersForm.controls['address'].invalid && (RequestersForm.controls['address'].dirty || RequestersForm.controls['address'].touched)" class="alert">
+          <div *ngIf="RequestersForm.controls['address'].errors?.['required']">
+          Please enter department
+        </div>
+        </div>
+      </span>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+
+
+  <div class="col-sm">
+    <div class="p-field p-col-12 md:col-12 p-md-3 ">
+      <label for="backgroundInformation">Background Information</label>
+      <span class="p-float-label">
+        <textarea
+          inputId="textarea"
+      
+          style="resize: none"
+    
+          pInputTextarea
+          [formControlName]="'backgroundInformation'"
+        ></textarea>
+        
+      </span>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+    <div class="p-field col-12">
+      <button
+        pButton
+        label="Save"
+        type="submit"
+        style="float: right !important"
+      ></button>
+    </div>
+</form>

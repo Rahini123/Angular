@@ -1,0 +1,222 @@
+<body>
+  <div>
+     <div class="wave"></div>
+     <div class="wave"></div>
+     <div class="wave"></div>
+  </div>
+  <div class="background-img password">
+
+    <div class="layer2">
+      <div class="container-sec layer-bg">
+        <div class="col-12">
+          <div class="grid">
+          <div class="col-7 height height-bg" >
+            <div class="layer">
+              <div class="col-12 p-3">
+                <div class="grid">
+                  <div class="conatiner txt-section">
+                    TechZard
+                  </div>
+                  <div class="col-4 image-sec">
+                    <p-image
+                    src="{{ projectNames }}/assets/tk.png"
+                    alt="Image" 
+                    width="100%"
+                  ></p-image>
+                  </div>
+                  <div class="txt-sections col-8">
+                    <!-- <span>TechZard</span> -->
+                    Techzard help administrators manage assets, incidents, problems, change and releases. 
+                    TechZard is to streamline the support process, improve agent productivity, 
+                    and enhance the overall customer or employee experience by ensuring issues are addressed efficiently and promptly..
+                  </div>
+                </div>
+             
+             
+             
+              </div>
+              
+            
+            </div>
+           
+          </div>
+          <div class="col-5 height height-white" >
+            <div class="text-center mt-2 image-logo">
+              <p-image
+                src="{{ projectNames }}/assets/FocusR_1000px.png"
+                alt="Image"
+              ></p-image>
+      <span class="techzard">TechZard </span>
+      <span class="techzard-login mt-5">User Login</span>
+              <div>
+          </div>
+        </div>
+        <div class="login">
+          <form
+          style="margin-top: 2rem"
+          [formGroup]="loginFormGroup"
+          (ngSubmit)="login($event)"
+        >
+         
+      
+          <div class="p-fluid p-grid">
+            <div class="p-field  col-12">
+              <label>UserName : </label>
+              <span class="p-input-icon-left">
+                <i class="pi pi-user"></i>
+                <input
+                id="float-input"
+                type="text"
+                pInputText
+                [(ngModel)]="loginData.usernameOrEmail"
+                placeholder="Enter Username"
+                formControlName="username"
+              />
+              </span>
+            
+            </div>
+      
+            <div class="p-field  col-12">
+              <label>Password :</label>
+      
+              <span class="p-float-label p-input-icon-left">
+                <i class="pi pi-lock"></i>
+                <p-password
+                  [toggleMask]="true"
+                  [feedback]="false"
+                  [(ngModel)]="loginData.password"
+                  placeholder="Enter password"
+                  formControlName="password"
+                  inputId="password"
+                ></p-password>
+              </span>
+            </div>
+      
+            <div class="p-field  col-12">
+              <div class="grid m-0 p-0">
+                <div class="col-12 m-0 p-0">
+                  
+                </div>
+      
+                <div class="col-12 p-0" style="text-align: right">
+                  <a
+                    class="font-medium no-underline text-blue-500 text-right cursor-pointer"
+                    routerLink="/ForgotPassword"
+                    >Forgot password?</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+      
+          <div class="p-field  col-12">
+            <button
+              pButton
+              pRipple
+              label="Login"
+              type="submit"
+              class="w-full p-button-raised p-button-danger"
+            ></button>
+          </div>
+        </form>
+      
+        <p-toast></p-toast>
+      
+        </div>
+      </div>
+      </div>
+      </div>
+      </div>
+    </div>
+       
+    </div>
+</body>
+ 
+<!-- <div class="flex">
+  <div class="col-4 pt-12 image">
+    <p-image
+      src="{{ projectNames }}/assets/img-login.png"
+      alt="Image"
+      height="45"
+    ></p-image>
+  </div>
+
+  <div class="col-8 image">
+    <form [formGroup]="loginFormGroup" novalidate (ngSubmit)="login($event)">
+      <form
+        style="margin-top: 5rem"
+        [formGroup]="loginFormGroup"
+        (ngSubmit)="login($event)"
+      >
+        <div class="text-center mb-2 image-logo">
+          <p-image
+            src="{{ projectNames }}/assets/FocusR_1000px.png"
+            alt="Image"
+          ></p-image>
+
+          <div>
+            <Span class="tk-title">TechZard </Span>
+          </div>
+        </div>
+
+        <div class="p-fluid p-grid">
+          <div class="p-field col-offset-3 col-6">
+            <label>UserName : </label>
+
+            <input
+              id="float-input"
+              type="text"
+              pInputText
+              [(ngModel)]="loginData.usernameOrEmail"
+              placeholder="Enter Username"
+              formControlName="username"
+            />
+          </div>
+
+          <div class="p-field col-offset-3 col-6">
+            <label>Password :</label>
+
+            <span class="p-float-label">
+              <p-password
+                [toggleMask]="true"
+                [feedback]="false"
+                [(ngModel)]="loginData.password"
+                placeholder="Enter password"
+                formControlName="password"
+                inputId="password"
+              ></p-password>
+            </span>
+          </div>
+
+          <div class="p-field col-offset-3 col-6">
+            <div class="grid m-0 p-0">
+              <div class="col-6 m-0 p-0">
+                
+              </div>
+
+              <div class="col-6 p-0" style="text-align: right">
+                <a
+                  class="font-medium no-underline text-blue-500 text-right cursor-pointer"
+                  routerLink="/ForgotPassword"
+                  >Forgot password?</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-field col-offset-3 col-6">
+          <button
+            pButton
+            pRipple
+            label="Login"
+            type="submit"
+            class="w-full p-button-raised p-button-danger"
+          ></button>
+        </div>
+      </form>
+
+      <p-toast></p-toast>
+    </form>
+  </div>
+</div> -->

@@ -1,0 +1,23 @@
+<div *ngIf="showdivgeneral" class="div-tab">
+  <p-breadcrumb
+    [model]="breadcrumb"
+    [home]="breadcrumb"
+    class="pr-3"
+  ></p-breadcrumb>
+</div>
+
+<div *ngIf="showdivuser">
+  <p-breadcrumb
+    [model]="breadcrumb"
+    [home]="breadcrumb"
+    class="pr-3"
+  ></p-breadcrumb>
+</div>
+
+<p-tabView class="dark-panel" (onChange)="handleChange($event)">
+  <p-tabPanel header="Roles" leftIcon="pi pi-fw pi-id-card">
+    <app-roles></app-roles>
+  </p-tabPanel>
+  <!-- <p-tabPanel header="New Roles"> <app-newrole></app-newrole> </p-tabPanel>
+</p-tabView> -->
+</p-tabView>

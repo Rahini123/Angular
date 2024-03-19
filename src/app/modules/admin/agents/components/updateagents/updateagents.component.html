@@ -1,0 +1,371 @@
+<p-card>
+  <ng-template pTemplate="header">
+    <a
+      pButton
+      pRipple
+      label="AgentList"
+      icon="pi pi-list"
+      routerLink="/dashboard/admin/agents"
+      style="text-decoration: none; margin-left: 10px; margin-top: 30px"
+    ></a>
+  </ng-template>
+  <ng-template pTemplate="body">
+    <form
+      class="p-fluid p-grid"
+      (ngSubmit)="updateAgents()"
+      [formGroup]="agentForm"
+    >
+      <!-- <label><b>Agent Type</b></label>
+        <div class="p-field p-col-12 md:col-12 p-md-3 mb-2 z-0">
+          <div class="formgroup-inline">
+           <div class="field-radiobutton">
+              <p-radioButton
+                name="agentFull"
+                value="Full-Time"
+                [(ngModel)]="selectedAgent"
+                inputId="agentFull"
+              ></p-radioButton>
+              <label for="agentFull">Full-Time</label>
+              <small>(Consumes an agent license.)</small>
+            </div>
+            <div class="field-radiobutton">
+              <p-radioButton
+                name="Ocassional"
+                value="Ocassional"
+                [(ngModel)]="selectedAgent"
+                inputId="Ocassional"
+              ></p-radioButton>
+              <label for="Ocassional">Ocassional</label>
+              <small>(Consumes a day pass for each day that they login.)</small>
+            </div>
+          </div>
+        </div> -->
+
+      <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+        <span class="p-float-label" styleClass="md-inputfield">
+          <input
+            type="number"
+            id="id"
+            pInputText
+            required="true"
+            formControlName="agent_id"
+            [disabled]="false"
+            [ngModel]="disable"
+            disabled
+          />
+          <label for="id">Agent Id<span style="color: red">*</span></label>
+        </span>
+      </div>
+      <p-divider></p-divider>
+      <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+        <span class="p-float-label" styleClass="md-inputfield">
+          <input
+            type="text"
+            id="Email"
+            pInputText
+            required="true"
+            formControlName="email"
+          />
+          <label for="email">Email <span style="color: red">*</span></label>
+        </span>
+      </div>
+      <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+        <span class="p-float-label" styleClass="md-inputfield">
+          <input
+            type="text"
+            id="First Name"
+            pInputText
+            required="true"
+            formControlName="firstName"
+          />
+          <label for="firstname"
+            >First Name <span style="color: red">*</span></label
+          >
+        </span>
+      </div>
+      <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+        <span class="p-float-label" styleClass="md-inputfield">
+          <input
+            type="text"
+            id="Last Name"
+            pInputText
+            required="true"
+            formControlName="lastName"
+          />
+          <label for="lastname"
+            >Last Name <span style="color: red">*</span></label
+          >
+        </span>
+      </div>
+      <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+        <span class="p-float-label" styleClass="md-inputfield">
+          <input
+            type="text"
+            id="Title"
+            pInputText
+            required="true"
+            formControlName="title"
+          />
+          <label for="title">Title</label>
+        </span>
+      </div>
+      <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+        <span class="p-float-label" styleClass="md-inputfield">
+          <p-inputNumber inputId="integeronly" formControlName="phoneNumber">
+          </p-inputNumber>
+          <label for="workphone">Work Phone </label>
+        </span>
+      </div>
+      <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+        <span class="p-float-label" styleClass="md-inputfield">
+          <p-inputNumber inputId="integeronly" formControlName="mobileNumber">
+          </p-inputNumber>
+          <label for="mobilephone">Mobile Phone</label>
+        </span>
+      </div>
+      <div class="p-field p-col-12 md:col-12 p-md-3 mt-2">
+        <!-- <img src="assets/profile_blank_medium.gif" alt="Image" class="img" /> -->
+        <!-- <div>
+            <b>Profile Picture</b>
+          </div> -->
+
+        <!-- <div>
+            <p-toast></p-toast>
+            <p-fileUpload
+              name="myfile[]"
+              accept="image/*"
+              [customUpload]="true"
+              (uploadHandler)="onUpload($event)"
+            >
+              <ng-template pTemplate="toolbar">
+                <div>
+                  Recommended dimension 200w x 200h and less than 5MB in jpg or
+                  jpeg or png format.
+                </div>
+              </ng-template>
+              <ng-template pTemplate="content" let-files>
+                <ul *ngIf="uploadedFiles.length">
+                  <li *ngFor="let file of uploadedFiles">
+                    {{ file.name }} - {{ file.size }} bytes
+                  </li>
+                </ul>
+              </ng-template>
+            </p-fileUpload>
+          </div> -->
+        <div class="p-field p-col-12 md:col-12 p-md-3 mt-5">
+          <span class="p-float-label" styleClass="md-inputfield">
+            <p-dropdown
+              [options]="timeZone"
+              optionLabel="Zone"
+              [showClear]="false"
+              [autoDisplayFirst]="true"
+            ></p-dropdown>
+            <label for="timezone">Time Zone</label>
+          </span>
+        </div>
+        <div class="p-field p-col-12 md:col-12 p-md-3 mt-3">
+          <span class="p-float-label" styleClass="md-inputfield">
+            <p-dropdown
+              [options]="language"
+              optionLabel="language"
+              optionValue="language"
+              [showClear]="false"
+              [autoDisplayFirst]="true"
+              formControlName="language"
+            ></p-dropdown>
+            <label for="language">Language</label>
+          </span>
+        </div>
+        <div class="p-field p-col-12 md:col-12 p-md-3 mt-3">
+          <span class="p-float-label" styleClass="md-inputfield">
+            <p-dropdown
+              [options]="level"
+              optionLabel="level"
+              optionValue="level"
+              [showClear]="false"
+              [autoDisplayFirst]="true"
+              formControlName="level"
+            ></p-dropdown>
+            <label for="level">Level</label>
+          </span>
+        </div>
+        <div class="p-field p-col-12 md:col-12 p-md-3 mt-3">
+          <span class="p-float-label" styleClass="md-inputfield">
+            <p-dropdown
+              [options]="timeFormat"
+              optionLabel="Format"
+              optionValue="time"
+              [showClear]="false"
+              [autoDisplayFirst]="true"
+              formControlName="timeformat"
+            ></p-dropdown>
+            <label for="timeformat">Time Format</label>
+          </span>
+        </div>
+        <!-- <div class="p-field p-col-12 md:col-12 p-md-3 mt-1">
+            <div class="p-field-checkbox">
+              <p-checkbox [binary]="true" inputId="binary"></p-checkbox>
+              <label for="binary"> Mark as VIP</label>
+            </div>
+          </div> -->
+        <div class="p-field p-col-12 md:col-4 p-md-3 mt-1">
+          <span class="p-float-label">
+            <p-cascadeSelect
+              inputId="cascadeSelect"
+              [options]="cascadeSelectCountries"
+              optionLabel="cname"
+              optionGroupLabel="name"
+              [optionGroupChildren]="['states', 'cities']"
+              formControlName="location"
+            ></p-cascadeSelect>
+            <label for="location">Location</label>
+          </span>
+        </div>
+        <!-- <div class="p-field p-col-12 md:col-12 p-md-3 mt-3">
+            <span class="p-float-label">
+              <p-autoComplete
+                inputId="autocomplete"
+                [suggestions]="filteredManager"
+                (completeMethod)="searchManager($event)"
+                field="name"
+              ></p-autoComplete>
+              <label for="autocomplete">Department</label>
+            </span>
+          </div>
+          <div class="p-field p-col-12 md:col-12 p-md-3 mt-1">
+            <div class="p-field-checkbox">
+              <p-checkbox [binary]="true" inputId="binary"></p-checkbox>
+              <label for="binary">
+                Can see all tickets from associated departments
+              </label>
+            </div>
+          </div> -->
+        <!-- <div class="p-field p-col-12 md:col-12 p-md-3 mt-3">
+            <span class="p-float-label">
+              <p-autoComplete
+                inputId="autocomplete"
+                [suggestions]="filteredManager"
+                (completeMethod)="searchManager($event)"
+                field="name"
+              ></p-autoComplete>
+              <label for="autocomplete">Reporting Manager</label>
+            </span>
+          </div> -->
+        <div class="p-field p-col-12 md:col-12 p-md-3 mt-3">
+          <span class="p-float-label">
+            <textarea
+              inputId="textarea"
+              rows="3"
+              style="resize: none"
+              cols="30"
+              pInputTextarea
+              formControlName="address"
+            ></textarea>
+            <label for="address">Address</label>
+          </span>
+        </div>
+        <!-- <div class="p-field p-col-12 md:col-12 p-md-3 mt-3">
+            <span class="p-float-label">
+              <textarea
+                inputId="textarea"
+                rows="3"
+                style="resize: none"
+                cols="30"
+                pInputTextarea
+              ></textarea>
+              <label for="backgroundinformation">Background Information</label>
+            </span>
+          </div> -->
+        <!-- <div
+            class="p-field p-col-12 md:col-12 p-md-3 mb-2"
+            style="background: #f5f7f9"
+          >
+            <label>Groups</label>
+            <div class="p-field p-col-12 md:col-1 p-md-4 mb-2 ml-10">
+              <button
+                pButton
+                label="Add"
+                type="button"
+                icon="pi pi-plus"
+                class="p-button-success"
+                (click)="addMultipleGroups()"
+              ></button>
+            </div>
+            <p-table [value]="groups">
+              <ng-template pTemplate="body" let-group>
+                <tr style="display: table-row">
+                  <td>
+                    <button
+                      pButton
+                      pRipple
+                      type="button"
+                      icon="pi pi-minus"
+                      class="p-button-rounded p-button-danger"
+                      (click)="deleteGroup()"
+                    ></button>
+                  </td>
+                  <td>
+                    <p-dropdown
+                      [options]="groupsdropDown"
+                      optionLabel="group"
+                      [showClear]="false"
+                    ></p-dropdown>
+                  </td></tr
+              ></ng-template>
+            </p-table>
+            <label>Roles</label>
+            <div class="p-field p-col-12 md:col-1 p-md-4 mb-2 ml-10">
+              <button
+                pButton
+                pRipple
+                label="Add"
+                type="button"
+                icon="pi pi-plus"
+                class="p-button-success"
+                (click)="addMultipleRoles()"
+              ></button>
+            </div>
+            <p-table [value]="roles">
+              <ng-template pTemplate="body" let-role>
+                <tr style="display: table-row">
+                  <td>
+                    <button
+                      pButton
+                      pRipple
+                      type="button"
+                      icon="pi pi-minus"
+                      class="p-button-rounded p-button-danger"
+                      (click)="deleteRole()"
+                    ></button>
+                  </td>
+                  <td>
+                    <p-dropdown
+                      [options]="rolesObj"
+                      optionLabel="label"
+                      [showClear]="false"
+                    ></p-dropdown>
+                  </td>
+                  <td>
+                    <p-dropdown
+                      [options]="groupsdropDown"
+                      optionLabel="group"
+                      [showClear]="false"
+                    ></p-dropdown>
+                  </td></tr
+              ></ng-template>
+            </p-table>
+          </div> -->
+        <div class="p-field p-col-12 md:col-12 p-md-4 mb-2 ml-10">
+          <button
+            pButton
+            pRipple
+            label="Update"
+            type="submit"
+            style="float: right !important"
+          ></button>
+          <p-toast></p-toast>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+</p-card>

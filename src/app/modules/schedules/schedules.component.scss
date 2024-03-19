@@ -1,0 +1,196 @@
+.status
+{
+    float: left;
+    width: 32%;
+    xbackground-color: rgb(255, 255, 255);
+    padding-right: 4px;
+    xborder: 1px solid #dddd;
+    margin-right: 4px;
+    margin-bottom: 12px;
+}
+.status-span
+{
+    float: left;
+    margin: 4px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+span.Assigned
+{
+  background-color: #09B2C7;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+
+}
+span.UnAssigned
+{
+  background-color:#FFA726;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+
+}
+span.Assigned
+{
+  background-color:#00acc1;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+
+}
+span.WIP
+{
+  background-color:#7D3C98;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+  
+}
+span.Onhold
+{
+  background-color: #FF33CC;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.MergeClosed
+{
+  background-color: #e40101;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.select-status {
+  float: left;
+  width: 100%;
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #218ec9;
+  background-color: #f8f9fa;
+  border-radius: 3px;
+  padding: 5px;
+}
+span.CustomerWorking
+{
+  background-color: #00FFCC;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.TechincalWorking
+{
+  background-color: #0f7d67;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.ToBeMoveToPROD
+{
+  background-color: #7d0f3d;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.InputRequired
+{
+  background-color: #210f7d;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.WaitingforApproval
+{
+  background-color: #e09a30;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.FinalConfirmation
+{
+  background-color: #2eab0c;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.Closed
+{
+  background-color: #c93737;
+    color: rgb(255, 253, 253);
+    padding: 2px 3px;
+    border-radius: 4px;
+}
+span.Duplicate
+{
+  background-color: #676b6f;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.Resolved
+{
+  background-color: #85C1E9;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.Open
+{
+  background-color: #33691E;
+  color: rgb(255, 253, 253);
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+span.abs {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: 0;
+  bottom: 0px;
+}
+
+p-progressspinner{
+  position: absolute;
+  top: 50%;
+  bottom: 0px;
+  left: 50%;
+  right: 0;
+}
+#overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: block; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgb(0 0 0 / 9%); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}
+.active-sec
+{
+  font-size: 12px;
+}
+a.checkall {
+  background-color: green;
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 9px;
+  text-decoration: none;
+  font-size: 13px;
+  margin-left: 10px;
+}
+a.clearall {
+  background-color: #cb3838;
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 9px;
+  text-decoration: none;
+  font-size: 13px;
+  margin-left: 10px;
+}
+.p-editor-content.ql-container.ql-snow {
+  height: 200px;
+}

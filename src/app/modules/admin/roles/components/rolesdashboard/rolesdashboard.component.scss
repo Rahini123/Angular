@@ -1,0 +1,15 @@
+:host ::ng-deep .dark-panel .p-tabview {
+  .p-tabview-nav {
+    border: 1px solid #dee2e6;
+
+  }
+  .p-tabview-panels {
+    padding-bottom: 0rem !important;
+    padding-top: 0rem !important;
+  }
+  // .p-tabview-nav-container {
+  //   padding-left: 1rem;
+  //   position: relative;
+  //   padding-right: 1rem;
+  // }
+}

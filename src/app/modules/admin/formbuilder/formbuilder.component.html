@@ -1,0 +1,40 @@
+
+<div class="col-8">
+<p-dropdown [options]="projectactive" 
+name="All" 
+optionLabel="projectName" optionValue="projectName" [filter]="true"
+  [showClear]="true" dropdownIcon="pi pi-caret-down" filterBy="projectDescription"
+  [placeholder]="emailPlaceholderText" (onChange)="onChange($event)"></p-dropdown></div>
+
+<div id="fb-editor"></div>
+<!-- <div class="save-all-wrap">
+  <button id="save-all" type="button" >Save All</button></div> -->
+<div id="fb-rendered-form">
+
+  
+</div>
+<span style="
+width: 100%;
+float: left;
+color: #6a6969;
+font-size: 11px;
+">Note: Submit the Form Field's once you delete the Field's</span>
+<button (click)="get()" type="button" class="submit-class">Submit</button>
+
+<!-- <div *ngFor="let formvalues of formfields" >
+  <div *ngFor="let formvaluescustom of formvalues.customFields|keyvalue" >
+    {{formvaluescustom.key}}:{{formvaluescustom.value.split(',')[1]}}:{{formvaluescustom.value.split(',')[0]}}
+  </div>
+
+</div> -->
+<!-- <div class="progress-spinner" *ngIf="showspinner">
+  <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+</div> -->
+<div id="overlay" *ngIf="progressbar">
+  <span class="abs"> <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i></span>
+ 
+  <!-- <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8"  animationDuration=".5s"></p-progressSpinner> -->
+   
+</div>
+<p-toast ></p-toast>
+<!-- <pre>{{this.formfieldlist|json}}</pre> -->

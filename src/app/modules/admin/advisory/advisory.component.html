@@ -1,0 +1,693 @@
+
+
+<p-table
+  #dt
+  [value]="advisory"
+  [loading]="isLoading"
+  [rowsPerPageOptions]="[5, 10, 25, 50, 100]"
+  [rows]="5"
+  [paginator]="true"
+  responsiveLayout="scroll"
+
+  [rowHover]="true"
+  dataKey="projectId"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  [showCurrentPageReport]="true"
+  [globalFilterFields]="['projectId', 'clientName', 'projectName', 'groupName']"
+>
+<ng-template pTemplate="caption">
+  <div class="card">
+    <div class="card-container purple-container overflow-hidden">
+      <div class="flex">
+        <div
+          class="flex-1 flex align-items-center justify-content-start font-bold text-white m-2 border-round"
+        >
+          <div class="div-tab">
+            <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+          </div>
+        </div>
+
+        <div
+          class="flex-1 flex align-items-center justify-content-end font-bold text-white m-2 border-round"
+        >
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              type="text"
+              (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+              placeholder="Search..."
+              (keydown.enter)="search($event.target.value)"
+            />
+          </span>
+          <button
+            pButton
+            pRipple
+            label="Add"
+            icon="pi pi-plus-circle"
+            class="p-button-success mr-2"
+            (click)="openNext()"
+          ></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template pTemplate="header">
+  <tr>
+    <th style="width: 5%" rowspan="2">
+      <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
+    </th>
+    <th style="width: 10%">ID</th>
+    <th style="width: 10%">TicketNo</th>
+    <th style="width: 20%" rowspan="2">AdvisoryType</th>
+    <th style="width: 15%" rowspan="2">Project Name</th>
+    <th style="width: 15%" rowspan="2">Status</th>
+ 
+   
+    <th style="width: 20%" rowspan="2">Location</th>
+   
+  
+    <th style="width: 15%; text-align: center">Actions</th>
+    <th></th>
+  </tr>
+</ng-template>
+<ng-template pTemplate="body" let-advisory>
+  <tr>
+    <td>
+      <!-- <p-tableCheckbox [value]="project"></p-tableCheckbox> -->
+    </td>
+    <!-- <td>{{ project.clientId }}</td> -->
+    <td>{{ advisory.advisory_Id }}</td>
+    <td>{{ advisory.ticketNo }}</td>
+    <td>{{ advisory.advisoryType }}</td>
+    <td>{{ advisory.projectName }}</td>
+    <td>{{ advisory.status }}</td>
+    <td>{{ advisory.location }}</td>
+
+
+
+    <!-- <td>{{ project.end_date | date : "medium" }}</td> -->
+    
+  
+
+    <td>
+      <button
+        pButton
+        pRipple
+        [style]="{ float: 'right' }"
+        icon="pi pi-pencil"
+        class="p-button-rounded p-button-success"
+        (click)="editAdvisory(advisory)"
+      ></button>
+   
+    </td>
+    <td>&nbsp;</td>
+  </tr>
+</ng-template>
+<ng-template pTemplate="summary">
+  <div class="p-d-flex p-ai-center p-jc-between">
+    In total there are {{ advisory ? advisory.length : 0 }} Advisory.
+  </div>
+</ng-template>
+</p-table>
+<p-dialog
+    #pdFront
+    [(visible)]="AdvisoryDialog"
+    [responsive]="true"
+    header="Add Advisory Details"
+    [modal]="true"
+    (onHide)="cancel()"
+    [autoZIndex]="true"
+    (click)="pdFront.moveOnTop()"
+  >
+<div class="margin-widths">
+  <form
+  class="p-fluid p-grid"
+  (ngSubmit)="addAdvisory()"
+  [formGroup]="advisoryForm"
+>
+<p-accordion [(activeIndex)]="index" (onChange)="switchHeaders($event);" (onClose)="onClose($event)">
+    <p-accordionTab >
+        <ng-template pTemplate="header" class="header">
+           
+            <div *ngIf="activeTab===0">
+               Change Request Info</div>
+        </ng-template>
+<div class="tab1">
+    <div class="col-12">
+        <div class="grid">
+            <div class="col-2" style="line-height: 44px;">Project:</div>
+            <div class="col-6">  
+                <p-dropdown #projectvalue   appendTo="body" [autoDisplayFirst]="false"  [options]="emailTickets" optionLabel="projectName" optionValue="projectId" [filter]="true"
+                [showClear]="false" dropdownIcon="pi pi-caret-down"   [autoDisplayFirst]="true"    placeholder="Select Advisory" filterMatchMode="startsWith" 
+                [style]="{'width':'100%'}"     (onChange)="onChangeproject($event,projectvalue.label)"  formControlName="projectName" filterBy="projectName"></p-dropdown>
+            </div>
+        </div>
+    </div>
+  <div class="col-12">
+    <div class="grid">
+        <div class="col-2" style="line-height: 44px;">Status:</div>
+        <div class="col-6">  
+            <p-dropdown [options]="status" appendTo="body" optionLabel="status" optionValue="status" [filter]="true"
+            [showClear]="true" dropdownIcon="pi pi-caret-down"   [autoDisplayFirst]="true"  filterBy="status" filterMatchMode="startsWith"     placeholder="Select Status"
+            [style]="{'width':'100%'}"  formControlName="status"></p-dropdown>
+        </div>
+    </div>
+</div>
+
+    <div class="col-12">
+        <div class="grid">
+            <div class="col-2" style="line-height: 44px;">   Advisory:</div>
+            <div class="col-6">  
+                  <p-dropdown [options]="cols" optionLabel="field" optionValue="field" [filter]="true"
+                [showClear]="true" dropdownIcon="pi pi-caret-down"   [autoDisplayFirst]="true"    placeholder="Select Advisory"
+                (onChange)="onChangetickettype($event)"  formControlName="advisoryType" filterMatchMode="startsWith" filterBy="field" filterMatchMode="startsWith"   last></p-dropdown>
+            </div>
+        </div>
+    </div>
+ 
+
+ 
+    <div *ngIf="togggleindicants">
+    <div class="col-12">
+        <div class="grid">
+          <div class="col-4 col-auto" style="line-height: 44px;text-align: left">RefReq / INC No :</div>
+          <div class="col-6">
+            <input type="text"   formControlName="ticketNo">
+          </div>
+        </div>
+    </div>
+    </div>
+    <div *ngIf="togggleinfo">
+      <div class="col-12">
+        <div class="grid">
+          <div class="col-4 col-auto" style="line-height: 44px;text-align: left">Broadcast Message:</div>
+          <div class="col-6">
+            <input type="text" formControlName="broadcastMessage"> 
+          </div>
+        </div>
+    </div>
+        </div>
+</div>
+    </p-accordionTab>
+    <p-accordionTab >
+        <ng-template pTemplate="header" class="header">
+            <div *ngIf="activeTab!==1"><span>Background info</span></div>
+            <div *ngIf="activeTab===1"><span><i class="pi pi-pencil" style="font-size: 1rem"></i> Background info</span></div>
+        </ng-template>
+        <div class="tab2">
+        <div class="col-12">
+            <div class="grid">
+              <div class="col-12" style="line-height: 44px;">Application:</div>
+              <div class="col-12">
+                <input type="text"  formControlName="application" >
+              </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="grid">
+              <div class="col-12" style="line-height: 44px;">Location :</div>
+              <div class="col-12">
+                <input type="text" formControlName="location" >
+              </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="grid">
+                <div class="col-4 p-0">
+                    <div class="col-12" style="line-height: 44px;">Start Date :</div>
+                    <div class="col-12">           
+                      <!-- <p-calendar [(ngModel)]="date" [showIcon]="true" formControlName="startDate" ></p-calendar> -->
+                      <input
+                      class="end_date"
+                      type="date"
+                      name="date"
+                      formControlName="startDate"
+                      [(ngModel)]="date"
+                    />
+                    </div>
+                </div>
+                <div class="col-4 p-0">
+                    <div class="col-12" style="line-height: 44px;">Hours/Min :</div>
+                    <div class="col-12"> 
+                      <input type="time"   formControlName="hoursMin"    [(ngModel)]="calendarVal"/>
+                      <!-- <p-calendar [showTime]="true"
+                      [timeOnly]="true"
+                      hourFormat="24"
+                      [(ngModel)]="calendarVal"
+                      formControlName="hoursMin"  >
+          </p-calendar> -->
+        </div>
+                  </div>
+                  <div class="col-4">  
+                    <div class="col-12" style="line-height: 44px;">&nbsp;</div>
+                    <div class="col-12"> {{date}} {{calendarVal}}</div>
+                  </div>
+                <!-- <div class="col-2 p-0">
+                    <div class="col-12" style="line-height: 44px;">Min :</div>
+                    <div class="col-12">   <input type="text" value="00:00"/> </div></div> -->
+                <!-- <div class="col-4 p-0">
+                    <div class="col-12" style="line-height: 44px;">AM/PM</div>
+                    <div class="col-12"> 
+                    <p-dropdown [options]="timeformat" optionLabel="field" optionValue="field" [filter]="true"
+                    [showClear]="true" dropdownIcon="pi pi-caret-down"   [autoDisplayFirst]="true"    [placeholder]="statusplaceholder"
+                    [style]="{'width':'100%'}"></p-dropdown></div>
+                
+                </div> -->
+          
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="grid">
+                <div class="col-4 p-0">
+                    <div class="col-12" style="line-height: 44px;">End Date :</div>
+                    <div class="col-12">           
+                      <!-- <p-calendar [(ngModel)]="date2" [showIcon]="true"   formControlName="endDate"></p-calendar> -->
+                      <input
+                      class="end_date"
+                      type="date"
+                      name="date"
+                      formControlName="endDate"
+                      [(ngModel)]="date2"
+                    />
+                    </div>
+                </div>
+                <div class="col-4 p-0">
+                    <div class="col-12" style="line-height: 44px;">Hours/Min :</div>
+                    <div class="col-12"> 
+                      <input type="time"   formControlName="endHoursMin"    [(ngModel)]="calendarVal2"/>
+                        <!-- <p-calendar [showTime]="true"
+                      [timeOnly]="true"
+                      hourFormat="24"
+                      [(ngModel)]="calendarVal2"
+                      formControlName="endHoursMin">
+          </p-calendar> --></div>
+                  </div>
+                  <div class="col-4">
+                    <div class="col-12" style="line-height: 44px;">&nbsp;</div>
+                    <div class="col-12"> {{date2}} {{calendarVal2}}</div>
+                  </div>
+                <!-- <div class="col-2 p-0">
+                    <div class="col-12" style="line-height: 44px;">Min :</div>
+                    <div class="col-12">   <input type="text" value="00:00"/> </div></div> -->
+                <!-- <div class="col-4 p-0">
+                    <div class="col-12" style="line-height: 44px;">AM/PM</div>
+                    <div class="col-12"> 
+                    <p-dropdown [options]="timeformat" optionLabel="field" optionValue="field" [filter]="true"
+                    [showClear]="true" dropdownIcon="pi pi-caret-down"   [autoDisplayFirst]="true"    [placeholder]="statusplaceholder"
+                    [style]="{'width':'100%'}"></p-dropdown></div>
+                
+                </div> -->
+          
+            </div>
+        </div>
+
+       </div>
+    </p-accordionTab>
+    <p-accordionTab >
+        <ng-template pTemplate="header" class="header">
+            <div *ngIf="activeTab!==2"><span>Advisory Info</span></div>
+            <div *ngIf="activeTab===2"><span><i class="pi pi-pencil" style="font-size: 1rem"></i> Advisory Info</span></div>
+        </ng-template>
+        <div class="tab3">
+        <div class="col-12">
+            <div class="grid">
+              <div class="col-12 pb-0" style="line-height: 44px;">Summary :</div>
+              <div class="col-12 pb-0 pt-0">
+                <input type="text"  formControlName="summary" >
+              </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="grid">
+              <div class="col-12 pb-0" style="line-height: 44px;">Situation/Background :</div>
+              <div class="col-12 pb-0">
+                <input type="text" formControlName="background">
+              </div>
+              <span class="col-12" style="font-size: 13px;">Brief description of problem and corrective action</span>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="grid">
+              <div class="col-12 pb-0" style="line-height: 44px;">Business Impact :</div>
+              <div class="col-12 pb-0">
+                <input type="text" formControlName="businessImpact" >
+              </div>
+              <span class="col-12" style="font-size: 13px;">Please explain how the event affects the bussiness</span>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="grid">
+              <div class="col-12 pb-0" style="line-height: 44px;">Action Required By Users :</div>
+              <div class="col-12 pb-0">
+                <input type="text" formControlName="actionRequired">
+              </div>
+              
+            </div>
+        </div>
+        <div class="col-12">
+          <div class="grid">
+            <div class="col-12 pb-0" style="line-height: 44px;">From Address:</div>
+            <div class="col-12 pb-0">
+              <input type="text"  formControlName="fromAddress" disabled="true">
+            </div>
+            
+          </div>
+      </div>
+        </div>
+    </p-accordionTab>
+    <p-accordionTab >
+      <ng-template pTemplate="header" class="header">
+          <div *ngIf="activeTab!==2"><span>Recipient Info</span></div>
+          <div *ngIf="activeTab===2"><span><i class="pi pi-pencil" style="font-size: 1rem"></i> Advisory Info</span></div>
+      </ng-template>
+      <div class="tab3">
+      <div class="col-12">
+          <div class="grid">
+            <div class="col-12 pb-0" style="line-height: 44px;">Email ID :</div>
+            <div class="col-12 pb-0 pt-0">
+              <input type="text"  formControlName="emailId">
+            </div>
+            <span class="col-12" style="font-size: 13px;">Please enter Multiple Email Id's Seperated by semi colon ;</span>
+          </div>
+      </div>
+  
+   
+    
+      </div>
+  </p-accordionTab>
+</p-accordion>
+<div class="p-field grid abs-pos">
+  <div class="col-12">
+    <button
+      pButton
+      label="Save"
+      type="submit"
+      style="float: right !important"
+    ></button>
+  </div>
+</div>
+</form>
+</div>
+</p-dialog>
+<p-dialog
+ 
+    [(visible)]="AdvisoryDialogedit"
+    [responsive]="true"
+    header="Edit Advisory Details"
+    [modal]="true"
+   
+    [autoZIndex]="true"
+  
+  >
+<div class="margin-widths">
+  <form
+  class="p-fluid p-grid"
+  (ngSubmit)="updateAdvisory()"
+  [formGroup]="advisoryForm"
+>
+<p-accordion [(activeIndex)]="index" (onChange)="switchHeaders($event);" (onClose)="onClose($event)">
+    <p-accordionTab >
+        <ng-template pTemplate="header" class="header">
+           
+            <div *ngIf="activeTab===0">
+               Change Request Info</div>
+        </ng-template>
+<div class="tab1">
+  <div class="col-12" style="display: none;">
+    <div class="grid">
+      <div class="col-4 col-auto" style="line-height: 44px;text-align: left">Advisory Id</div>
+      <div class="col-6">
+        <input type="text"   formControlName="advisory_Id">
+      </div>
+    </div>
+</div>
+    <div class="col-12">
+        <div class="grid">
+            <div class="col-2" style="line-height: 44px;">Project: </div>
+            <div class="col-6" style="line-height: 45px;">  
+              {{this.dropvalue}}
+                <!-- <p-dropdown #projectvalueedit   appendTo="body" [autoDisplayFirst]="true"  [options]="emailTickets"
+                 optionLabel="projectName" 
+                 optionValue="projectId"
+                  [filter]="true"
+                [showClear]="true"
+                 dropdownIcon="pi pi-caret-down"  
+                  [autoDisplayFirst]="true"  
+                    placeholder="Select Advisory"
+                [style]="{'width':'100%'}"    
+                [placeholder]="dropvalue" 
+                 (onChange)="onChangeproject($event,projectvalueedit.label)"  formControlName="projectName" filterBy="projectName"></p-dropdown> -->
+            </div>
+        </div>
+    </div>
+  <div class="col-12">
+    <div class="grid">
+        <div class="col-2" style="line-height: 44px;">Status:</div>
+        <div class="col-6">  
+            <p-dropdown [options]="status" appendTo="body" optionLabel="status" optionValue="status" [filter]="true"
+            [showClear]="true" dropdownIcon="pi pi-caret-down"   [autoDisplayFirst]="false"    placeholder="Select Status"
+            [style]="{'width':'100%'}"  formControlName="status"    filterMatchMode="startsWith"  filterBy="status"       [placeholder]="dropstatus" ></p-dropdown>
+        </div>
+    </div>
+</div>
+
+    <div class="col-12">
+        <div class="grid">
+            <div class="col-2" style="line-height: 44px;">   Advisory:</div>
+            <div class="col-6" style="line-height: 42px">  {{this.dropadvisory}}
+                  <!-- <p-dropdown [options]="cols" optionLabel="field" optionValue="field" [filter]="true"
+                [showClear]="true" dropdownIcon="pi pi-caret-down"   [autoDisplayFirst]="false"    placeholder="Select Advisory"
+                (onChange)="onChangetickettype($event)"  [placeholder]="dropadvisory" formControlName="advisoryType" last></p-dropdown> -->
+            </div>
+        </div>
+    </div>
+ 
+
+ 
+    <div *ngIf="togggleindicants">
+    <div class="col-12">
+        <div class="grid">
+          <div class="col-4 col-auto" style="line-height: 44px;text-align: left">RefReq / INC No :</div>
+          <div class="col-6" style="line-height:42px">
+            {{this.ticketNo}}
+            <!-- <input type="text"   formControlName="ticketNo"> -->
+          </div>
+        </div>
+    </div>
+    </div>
+    <div *ngIf="togggleinfo">
+      <div class="col-12">
+        <div class="grid">
+          <div class="col-4 col-auto" style="line-height: 44px;text-align: left">Broadcast Message:</div>
+          <div class="col-6" style="line-height:42px">
+            {{this.broadcastMessage}}
+            <!-- <input type="text" formControlName="broadcastMessage">  -->
+          </div>
+        </div>
+    </div>
+        </div>
+</div>
+    </p-accordionTab>
+    <p-accordionTab >
+        <ng-template pTemplate="header" class="header">
+            <div *ngIf="activeTab!==1"><span>Background info</span></div>
+            <div *ngIf="activeTab===1"><span><i class="pi pi-pencil" style="font-size: 1rem"></i> Background info</span></div>
+        </ng-template>
+        <div class="tab2">
+        <div class="col-12">
+            <div class="grid">
+              <div class="col-12" style="line-height: 44px;">Application:</div>
+              <div class="col-12">
+                <input type="text"     pInputText formControlName="application" >
+              </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="grid">
+              <div class="col-12" style="line-height: 44px;">Location :</div>
+              <div class="col-12">
+                <input type="text" formControlName="location" >
+              </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="grid">
+                <div class="col-4 p-0">
+                    <div class="col-12" style="line-height: 44px;">Start Date :</div>
+                    <div class="col-12">           
+                      <!-- <p-calendar [(ngModel)]="date" [showIcon]="true" formControlName="startDate" ></p-calendar> -->
+                      <input
+                      class="end_date"
+                      type="date"
+                      name="date"
+                      formControlName="startDate"
+                      [(ngModel)]="date"
+                    />
+                    </div>
+                </div>
+                <div class="col-4 p-0">
+                    <div class="col-12" style="line-height: 44px;">Hours/Min :</div>
+                    <div class="col-12"> 
+                      <input type="time"   formControlName="hoursMin"    [(ngModel)]="calendarVal"/>
+                      <!-- <p-calendar [showTime]="true"
+                      [timeOnly]="true"
+                      hourFormat="24"
+                      [(ngModel)]="calendarVal"
+                      formControlName="hoursMin"  >
+          </p-calendar> -->
+        </div>
+                  </div>
+                  <div class="col-4">  
+                    <div class="col-12" style="line-height: 44px;">&nbsp;</div>
+                    <div class="col-12"> {{date | date:'dd-MMM-yyyy'}} - {{calendarVal}}</div>
+                  </div>
+                <!-- <div class="col-2 p-0">
+                    <div class="col-12" style="line-height: 44px;">Min :</div>
+                    <div class="col-12">   <input type="text" value="00:00"/> </div></div> -->
+                <!-- <div class="col-4 p-0">
+                    <div class="col-12" style="line-height: 44px;">AM/PM</div>
+                    <div class="col-12"> 
+                    <p-dropdown [options]="timeformat" optionLabel="field" optionValue="field" [filter]="true"
+                    [showClear]="true" dropdownIcon="pi pi-caret-down"   [autoDisplayFirst]="true"    [placeholder]="statusplaceholder"
+                    [style]="{'width':'100%'}"></p-dropdown></div>
+                
+                </div> -->
+          
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="grid">
+                <div class="col-4 p-0">
+                    <div class="col-12" style="line-height: 44px;">End Date :</div>
+                    <div class="col-12">           
+                      <!-- <p-calendar [(ngModel)]="date2" [showIcon]="true"   formControlName="endDate"></p-calendar> -->
+                      <input
+                      class="end_date"
+                      type="date"
+                      name="date"
+                      formControlName="endDate"
+                      [(ngModel)]="date2"
+                    />
+                    </div>
+                </div>
+                <div class="col-4 p-0">
+                    <div class="col-12" style="line-height: 44px;">Hours/Min :</div>
+                    <div class="col-12"> 
+                      <input type="time"   formControlName="endHoursMin"    [(ngModel)]="calendarVal2"/>
+                        <!-- <p-calendar [showTime]="true"
+                      [timeOnly]="true"
+                      hourFormat="24"
+                      [(ngModel)]="calendarVal2"
+                      formControlName="endHoursMin">
+          </p-calendar> --></div>
+                  </div>
+                  <div class="col-4">
+                    <div class="col-12" style="line-height: 44px;">&nbsp;</div>
+                    <div class="col-12"> {{date2 | date:'dd-MMM-yyyy'}} {{calendarVal2 }}</div>
+                  </div>
+                <!-- <div class="col-2 p-0">
+                    <div class="col-12" style="line-height: 44px;">Min :</div>
+                    <div class="col-12">   <input type="text" value="00:00"/> </div></div> -->
+                <!-- <div class="col-4 p-0">
+                    <div class="col-12" style="line-height: 44px;">AM/PM</div>
+                    <div class="col-12"> 
+                    <p-dropdown [options]="timeformat" optionLabel="field" optionValue="field" [filter]="true"
+                    [showClear]="true" dropdownIcon="pi pi-caret-down"   [autoDisplayFirst]="true"    [placeholder]="statusplaceholder"
+                    [style]="{'width':'100%'}"></p-dropdown></div>
+                
+                </div> -->
+          
+            </div>
+        </div>
+
+       </div>
+    </p-accordionTab>
+    <p-accordionTab >
+        <ng-template pTemplate="header" class="header">
+            <div *ngIf="activeTab!==2"><span>Advisory Info</span></div>
+            <div *ngIf="activeTab===2"><span><i class="pi pi-pencil" style="font-size: 1rem"></i> Advisory Info</span></div>
+        </ng-template>
+        <div class="tab3">
+        <div class="col-12">
+            <div class="grid">
+              <div class="col-12 pb-0" style="line-height: 44px;">Summary :</div>
+              <div class="col-12 pb-0 pt-0">
+                <input type="text"  formControlName="summary" >
+              </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="grid">
+              <div class="col-12 pb-0" style="line-height: 44px;">Situation/Background :</div>
+              <div class="col-12 pb-0">
+                <input type="text" formControlName="background">
+              </div>
+              <span class="col-12" style="font-size: 13px;">Brief description of problem and corrective action</span>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="grid">
+              <div class="col-12 pb-0" style="line-height: 44px;">Business Impact :</div>
+              <div class="col-12 pb-0">
+                <input type="text" formControlName="businessImpact" >
+              </div>
+              <span class="col-12" style="font-size: 13px;">Please explain how the event affects the bussiness</span>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="grid">
+              <div class="col-12 pb-0" style="line-height: 44px;">Action Required By Users :</div>
+              <div class="col-12 pb-0">
+                <input type="text" formControlName="actionRequired">
+              </div>
+              
+            </div>
+        </div>
+        <div class="col-12">
+          <div class="grid">
+            <div class="col-12 pb-0" style="line-height: 44px;">From Address:</div>
+            <div class="col-12 pb-0">
+              <input type="text"  formControlName="fromAddress" disabled="true">
+            </div>
+            
+          </div>
+      </div>
+        </div>
+    </p-accordionTab>
+    <p-accordionTab >
+      <ng-template pTemplate="header" class="header">
+          <div *ngIf="activeTab!==2"><span>Recipient Info</span></div>
+          <div *ngIf="activeTab===2"><span><i class="pi pi-pencil" style="font-size: 1rem"></i> Advisory Info</span></div>
+      </ng-template>
+      <div class="tab3">
+      <div class="col-12">
+          <div class="grid">
+            <div class="col-12 pb-0" style="line-height: 44px;">Email ID :</div>
+            <div class="col-12 pb-0 pt-0">
+              <input type="text"  formControlName="emailId">
+            </div>
+            <span class="col-12" style="font-size: 13px;">Please enter Multiple Email Id's Seperated by semi colon ;</span>
+          </div>
+      </div>
+  
+   
+    
+      </div>
+  </p-accordionTab>
+</p-accordion>
+<div class="p-field grid abs-pos">
+  <div class="col-12">
+    <button
+      pButton
+      label="Update"
+      type="submit"
+      style="float: right !important"
+    ></button>
+  </div>
+</div>
+</form>
+</div>
+</p-dialog>
+<p-toast></p-toast>
